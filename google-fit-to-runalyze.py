@@ -1,7 +1,10 @@
+import datetime
+import pprint
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 import os
+import googleapiclient.discovery
 
 def authorize_with_google(SCOPES, credentials_cache_file):
    credentials = None
@@ -25,9 +28,34 @@ def authorize_with_google(SCOPES, credentials_cache_file):
    
    return credentials
 
-SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read"]
+SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read", 
+          "https://www.googleapis.com/auth/fitness.location.read"]
 credentials_cache_file = "credentials.json"
 
 credentials = authorize_with_google(SCOPES, credentials_cache_file)
+print("Successfully authorized with Google")
+
+fitness_service = googleapiclient.discovery.build('fitness', 'v1', credentials=credentials)
+data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
+tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
+
+result = fitness_service.users().dataset().aggregate(
+   userId='me',
+   body={
+      'aggregateBy': [{
+         "dataSourceId": data_source_id
+      }],
+      'bucketByTime': {"period": {
+         "type": "day",
+         "value": 1,
+         "timeZoneId": "Europe/Berlin"}
+    },
+      'startTimeMillis': datetime.datetime(2023, 8, 12, 0, 0, tzinfo=tz_info).timestamp() * 1000,
+      'endTimeMillis': datetime.datetime(2023, 8, 14, 0, 0, tzinfo=tz_info).timestamp() * 1000
+   }
+).execute()
+
+pp = pprint.PrettyPrinter(indent=1)
+pp.pprint(result)
 
 print("Done")
