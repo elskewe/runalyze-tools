@@ -49,6 +49,7 @@ def get_aggregated_data_from_google_fit(credentials, data_source_id, start_time,
     
    return aggregated_data
 
+
 SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read", 
           "https://www.googleapis.com/auth/fitness.location.read"]
 credentials_cache_file = "credentials.json"
