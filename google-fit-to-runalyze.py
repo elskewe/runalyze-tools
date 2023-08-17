@@ -127,6 +127,4 @@ for date, distance in distance_data.items():
 pp = pprint.PrettyPrinter(indent=1)
 pp.pprint(aggregated_data)
 
-#https://www.geeksforgeeks.org/reading-and-writing-xml-files-in-python/
-
 print("Done")
