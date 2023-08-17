@@ -1,5 +1,8 @@
 import datetime
+import json
 import pprint
+
+import requests
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -71,6 +74,15 @@ def create_tcx(date, distance):
    tcx_string += '</Activity></Activities></TrainingCenterDatabase>\n'
    return tcx_string
 
+def upload_activity_to_runalyze(tcx_string, credentials):
+   RUNALYZE_API_ENDPOINT = "https://api.runalyze.com/api/v1/"
+   r = requests.post(RUNALYZE_API_ENDPOINT + "activities/uploads",
+                     headers=credentials,
+                     files={"file": tcx_string})
+   print(r.text)
+   if r.status_code != 201:
+      raise Exception("Error uploading activity to Runalyze")
+
 
 SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read", 
           "https://www.googleapis.com/auth/fitness.location.read"]
@@ -78,6 +90,8 @@ credentials_cache_file = "credentials.json"
 
 credentials = authorize_with_google(SCOPES, credentials_cache_file)
 print("Successfully authorized with Google")
+with open("runalyze_credentials.json", "r") as file:
+   credentials_runalyze = json.load(file)
 
 data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
 tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
@@ -108,7 +122,7 @@ for date, distance in distance_data.items():
          continue
       
    tcx_string = create_tcx(date, distance)
-   upload_activity_to_runalyze(tcx_string)
+   upload_activity_to_runalyze(tcx_string, credentials_runalyze)
 
 pp = pprint.PrettyPrinter(indent=1)
 pp.pprint(aggregated_data)
