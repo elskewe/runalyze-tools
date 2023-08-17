@@ -96,9 +96,12 @@ with open("runalyze_credentials.json", "r") as file:
    credentials_runalyze = json.load(file)
 
 data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
+
 tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
-start_time = datetime.datetime(2023, 8, 12, 0, 0, tzinfo=tz_info)
-end_time = datetime.datetime(2023, 8, 14, 0, 0, tzinfo=tz_info)
+with open("config.txt", "r") as file:
+   start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d", tzinfo=tz_info)
+# for testing purposes, start with two days later than the start time
+end_time = start_time + datetime.timedelta(days=2)
 
 aggregated_data = get_aggregated_data_from_google_fit(credentials, data_source_id, start_time, end_time)
 
@@ -126,7 +129,7 @@ for date, distance in distance_data.items():
    tcx_string = create_tcx(date, distance)
    upload_activity_to_runalyze(tcx_string, credentials_runalyze)
 
-pp = pprint.PrettyPrinter(indent=1)
-pp.pprint(aggregated_data)
+with open("config.txt", "w") as file:
+   file.write(end_time.strftime("%Y-%m-%d"))
 
 print("Done")
