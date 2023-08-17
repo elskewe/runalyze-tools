@@ -49,6 +49,20 @@ def get_aggregated_data_from_google_fit(credentials, data_source_id, start_time,
     
    return aggregated_data
 
+def extract_distance_data_from_aggregated_data(aggregated_data):
+   distance_data = {}
+   for bucket in aggregated_data['bucket']:
+      dataset = bucket['dataset']
+      if len(dataset) > 1:
+         raise Exception("More than one point in dataset")
+      # get date by using the average of the start and end time which should be the right date for timezones around utc
+      date = datetime.datetime.fromtimestamp(
+         (int(bucket['startTimeMillis']) + int(bucket['endTimeMillis'])) / 2 / 1000)
+      if date in distance_data.keys():
+         raise Exception("Duplicate date in dataset")
+      distance_data[date] = int(dataset[0]['point'][0]['value'][0]['fpVal'])
+   return distance_data
+
 
 SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read", 
           "https://www.googleapis.com/auth/fitness.location.read"]
@@ -64,7 +78,33 @@ end_time = datetime.datetime(2023, 8, 14, 0, 0, tzinfo=tz_info)
 
 aggregated_data = get_aggregated_data_from_google_fit(credentials, data_source_id, start_time, end_time)
 
+distance_data = extract_distance_data_from_aggregated_data(aggregated_data)
+
+for date, distance in distance_data.items():
+   if distance > 10000:
+      while True:
+         # ask user to confirm the distance, give the correct distance or skip the day
+         answer = input("On " + date.strftime("%Y-%m-%d") + " you walked "
+                        + str(distance/1000) + " km. Is this correct? yes/skip/edit")
+         if answer == "yes":
+            break
+         elif answer == "skip":
+            break
+         elif answer == "edit":
+            distance = float(input("Please enter the correct distance in km: "))
+            break
+         else:
+            print("Please enter yes, skip or edit")
+            continue
+      if answer == "skip":
+         continue
+      
+   tcx_string = create_tcx(date, distance)
+   upload_activity_to_runalyze(tcx_string)
+
 pp = pprint.PrettyPrinter(indent=1)
 pp.pprint(aggregated_data)
+
+#https://www.geeksforgeeks.org/reading-and-writing-xml-files-in-python/
 
 print("Done")
