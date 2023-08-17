@@ -39,7 +39,7 @@ fitness_service = googleapiclient.discovery.build('fitness', 'v1', credentials=c
 data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
 tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
 
-result = fitness_service.users().dataset().aggregate(
+aggregated_data = fitness_service.users().dataset().aggregate(
    userId='me',
    body={
       'aggregateBy': [{
@@ -49,13 +49,13 @@ result = fitness_service.users().dataset().aggregate(
          "type": "day",
          "value": 1,
          "timeZoneId": "Europe/Berlin"}
-    },
+      },
       'startTimeMillis': datetime.datetime(2023, 8, 12, 0, 0, tzinfo=tz_info).timestamp() * 1000,
       'endTimeMillis': datetime.datetime(2023, 8, 14, 0, 0, tzinfo=tz_info).timestamp() * 1000
    }
 ).execute()
 
 pp = pprint.PrettyPrinter(indent=1)
-pp.pprint(result)
+pp.pprint(aggregated_data)
 
 print("Done")
