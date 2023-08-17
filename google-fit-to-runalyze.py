@@ -108,7 +108,7 @@ aggregated_data = get_aggregated_data_from_google_fit(credentials, data_source_i
 distance_data = extract_distance_data_from_aggregated_data(aggregated_data)
 
 for date, distance in distance_data.items():
-   if distance > 10000:
+   if distance > 8000:
       while True:
          # ask user to confirm the distance, give the correct distance or skip the day
          answer = input("On " + date.strftime("%Y-%m-%d") + " you walked "
