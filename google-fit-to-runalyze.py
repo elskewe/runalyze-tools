@@ -118,7 +118,7 @@ for date, distance in distance_data.items():
          elif answer == "skip":
             break
          elif answer == "edit":
-            distance = float(input("Please enter the correct distance in km: "))
+            distance = float(input("Please enter the correct distance in km: "))*1000
             break
          else:
             print("Please enter yes, skip or edit")
