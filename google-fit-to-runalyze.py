@@ -75,7 +75,7 @@ def create_tcx(date, distance):
    return tcx_string
 
 def upload_activity_to_runalyze(tcx_string, credentials):
-   RUNALYZE_API_ENDPOINT = "https://api.runalyze.com/api/v1/"
+   RUNALYZE_API_ENDPOINT = "https://runalyze.com/api/v1/"
    r = requests.post(RUNALYZE_API_ENDPOINT + "activities/uploads",
                      headers=credentials,
                      files={"file": tcx_string})
