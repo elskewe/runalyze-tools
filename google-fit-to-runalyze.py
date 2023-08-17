@@ -63,7 +63,10 @@ def extract_distance_data_from_aggregated_data(aggregated_data):
          (int(bucket['startTimeMillis']) + int(bucket['endTimeMillis'])) / 2 / 1000)
       if date in distance_data.keys():
          raise Exception("Duplicate date in dataset")
-      distance_data[date] = int(dataset[0]['point'][0]['value'][0]['fpVal'])
+      point = dataset[0]['point']
+      if len(point) == 0:
+         continue
+      distance_data[date] = int(point[0]['value'][0]['fpVal'])
    return distance_data
 
 def create_tcx(date, distance):
