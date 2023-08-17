@@ -103,8 +103,8 @@ data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge
 tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
 with open("config.txt", "r") as file:
    start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d").replace(tzinfo=tz_info)
-# for testing purposes, start with two days later than the start time
-end_time = start_time + datetime.timedelta(days=2)
+# end with today at midnight (as in general there will be additional walking today)
+end_time = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=tz_info)
 
 aggregated_data = get_aggregated_data_from_google_fit(credentials, data_source_id, start_time, end_time)
 
