@@ -99,7 +99,7 @@ data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge
 
 tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
 with open("config.txt", "r") as file:
-   start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d", tzinfo=tz_info)
+   start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d").replace(tzinfo=tz_info)
 # for testing purposes, start with two days later than the start time
 end_time = start_time + datetime.timedelta(days=2)
 
