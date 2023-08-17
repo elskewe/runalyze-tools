@@ -90,6 +90,8 @@ credentials_cache_file = "credentials.json"
 
 credentials = authorize_with_google(SCOPES, credentials_cache_file)
 print("Successfully authorized with Google")
+
+# load credentials for runalyze
 with open("runalyze_credentials.json", "r") as file:
    credentials_runalyze = json.load(file)
 
