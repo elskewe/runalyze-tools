@@ -70,7 +70,7 @@ def create_tcx(date, distance):
    tcx_string = '<?xml version="1.0" encoding="UTF-8"?>\n'
    tcx_string += '<TrainingCenterDatabase><Activities><Activity Sport="Other">\n'
    tcx_string += '<Id>' + date.strftime("%Y-%m-%dT%H:%M:%SZ") + '</Id>\n'
-   tcx_string += '<Lap><TotalTimeSeconds>' + str(int(distance / 100)) + '</TotalTimeSeconds></Lap>\n'
+   tcx_string += '<Lap><TotalTimeSeconds>' + str(int(distance / 100 * 60)) + '</TotalTimeSeconds></Lap>\n'
    tcx_string += '</Activity></Activities></TrainingCenterDatabase>\n'
    return tcx_string
 
