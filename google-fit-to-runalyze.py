@@ -112,7 +112,7 @@ for date, distance in distance_data.items():
       while True:
          # ask user to confirm the distance, give the correct distance or skip the day
          answer = input("On " + date.strftime("%Y-%m-%d") + " you walked "
-                        + str(distance/1000) + " km. Is this correct? yes/skip/edit")
+                        + str(distance/1000) + " km. Is this correct? yes/skip/edit: ")
          if answer == "yes":
             break
          elif answer == "skip":
