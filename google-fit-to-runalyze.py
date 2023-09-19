@@ -1,6 +1,6 @@
 import datetime
 import json
-import pprint
+import warnings
 
 import requests
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -19,8 +19,12 @@ def authorize_with_google(SCOPES, credentials_cache_file):
    # if credentials are not cached or expired, ask for user to log in
    if not credentials or not credentials.valid:
       if credentials and credentials.expired and credentials.refresh_token:
-         credentials.refresh(Request())
-      else:
+         try:
+            credentials.refresh(Request())
+         except:
+            credentials = None
+            warnings.warn("Failed to refresh credentials")
+      if not credentials:
          flow = InstalledAppFlow.from_client_secrets_file(
          "client_secret.json", SCOPES)
          credentials = flow.run_local_server(port=8081)
