@@ -11,7 +11,7 @@ import googleapiclient.discovery
 
 SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read", 
           "https://www.googleapis.com/auth/fitness.location.read"]
-CREDENTIALS_CACHE_FILE = "credentials.json"
+GOOGLE_CREDENTIALS_CACHE_FILE = "google_credentials.json"
 
 
 def authorize_with_google(SCOPES, credentials_cache_file):
@@ -97,7 +97,7 @@ def upload_activity_to_runalyze(tcx_string, credentials):
 
 def main():
 
-   credentials = authorize_with_google(SCOPES, CREDENTIALS_CACHE_FILE)
+   credentials = authorize_with_google(SCOPES, GOOGLE_CREDENTIALS_CACHE_FILE)
    print("Successfully authorized with Google")
 
    # load credentials for runalyze
