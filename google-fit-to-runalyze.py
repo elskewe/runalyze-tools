@@ -141,7 +141,7 @@ def main():
       tcx_string = create_tcx(date, distance)
       upload_activity_to_runalyze(tcx_string, credentials_runalyze)
 
-   with open("config.txt", "w") as file:
+   with open(CONFIG_FILE, "w") as file:
       file.write(end_time.strftime("%Y-%m-%d"))
 
    print("Done")
