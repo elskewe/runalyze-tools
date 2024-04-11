@@ -9,6 +9,11 @@ from google.oauth2.credentials import Credentials
 import os
 import googleapiclient.discovery
 
+SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read", 
+          "https://www.googleapis.com/auth/fitness.location.read"]
+CREDENTIALS_CACHE_FILE = "credentials.json"
+
+
 def authorize_with_google(SCOPES, credentials_cache_file):
    credentials = None
    # Check if credentials are already cached
@@ -90,53 +95,53 @@ def upload_activity_to_runalyze(tcx_string, credentials):
    if r.status_code != 201:
       raise Exception("Error uploading activity to Runalyze")
 
+def main():
 
-SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read", 
-          "https://www.googleapis.com/auth/fitness.location.read"]
-credentials_cache_file = "credentials.json"
+   credentials = authorize_with_google(SCOPES, CREDENTIALS_CACHE_FILE)
+   print("Successfully authorized with Google")
 
-credentials = authorize_with_google(SCOPES, credentials_cache_file)
-print("Successfully authorized with Google")
+   # load credentials for runalyze
+   with open("runalyze_credentials.json", "r") as file:
+      credentials_runalyze = json.load(file)
 
-# load credentials for runalyze
-with open("runalyze_credentials.json", "r") as file:
-   credentials_runalyze = json.load(file)
+   data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
 
-data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
+   tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
+   with open("config.txt", "r") as file:
+      start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d").replace(tzinfo=tz_info)
+   # end with today at midnight (as in general there will be additional walking today)
+   end_time = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=tz_info)
 
-tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
-with open("config.txt", "r") as file:
-   start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d").replace(tzinfo=tz_info)
-# end with today at midnight (as in general there will be additional walking today)
-end_time = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=tz_info)
+   aggregated_data = get_aggregated_data_from_google_fit(credentials, data_source_id, start_time, end_time)
 
-aggregated_data = get_aggregated_data_from_google_fit(credentials, data_source_id, start_time, end_time)
+   distance_data = extract_distance_data_from_aggregated_data(aggregated_data)
 
-distance_data = extract_distance_data_from_aggregated_data(aggregated_data)
-
-for date, distance in distance_data.items():
-   if distance > 8000:
-      while True:
-         # ask user to confirm the distance, give the correct distance or skip the day
-         answer = input("On " + date.strftime("%Y-%m-%d") + " you walked "
-                        + str(distance/1000) + " km. Is this correct? yes/skip/edit: ")
-         if answer == "yes":
-            break
-         elif answer == "skip":
-            break
-         elif answer == "edit":
-            distance = float(input("Please enter the correct distance in km: "))*1000
-            break
-         else:
-            print("Please enter yes, skip or edit")
+   for date, distance in distance_data.items():
+      if distance > 8000:
+         while True:
+            # ask user to confirm the distance, give the correct distance or skip the day
+            answer = input("On " + date.strftime("%Y-%m-%d") + " you walked "
+                           + str(distance/1000) + " km. Is this correct? yes/skip/edit: ")
+            if answer == "yes":
+               break
+            elif answer == "skip":
+               break
+            elif answer == "edit":
+               distance = float(input("Please enter the correct distance in km: "))*1000
+               break
+            else:
+               print("Please enter yes, skip or edit")
+               continue
+         if answer == "skip":
             continue
-      if answer == "skip":
-         continue
-      
-   tcx_string = create_tcx(date, distance)
-   upload_activity_to_runalyze(tcx_string, credentials_runalyze)
+         
+      tcx_string = create_tcx(date, distance)
+      upload_activity_to_runalyze(tcx_string, credentials_runalyze)
 
-with open("config.txt", "w") as file:
-   file.write(end_time.strftime("%Y-%m-%d"))
+   with open("config.txt", "w") as file:
+      file.write(end_time.strftime("%Y-%m-%d"))
 
-print("Done")
+   print("Done")
+
+if __name__ == "__main__":
+   main()
