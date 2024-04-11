@@ -17,7 +17,7 @@ CONFIG_FILE = "config.json"
 MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000 # maximum walking distance which is synced without user confirmation
 
 
-def authorize_with_google(SCOPES, credentials_cache_file):
+def authorize_with_google(SCOPES: list[str], credentials_cache_file: str):
    credentials = None
    # Check if credentials are already cached
    if os.path.exists(credentials_cache_file):
@@ -64,7 +64,7 @@ def get_aggregated_data_from_google_fit(credentials, data_source_id, start_time,
     
    return aggregated_data
 
-def extract_distance_data_from_aggregated_data(aggregated_data):
+def extract_distance_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.datetime, int]:
    distance_data = {}
    for bucket in aggregated_data['bucket']:
       dataset = bucket['dataset']
@@ -81,7 +81,7 @@ def extract_distance_data_from_aggregated_data(aggregated_data):
       distance_data[date] = int(point[0]['value'][0]['fpVal'])
    return distance_data
 
-def create_tcx(date, distance):
+def create_tcx(date: datetime.datetime, distance: int) -> str:
    tcx_string = '<?xml version="1.0" encoding="UTF-8"?>\n'
    tcx_string += '<TrainingCenterDatabase><Activities><Activity Sport="Other">\n'
    tcx_string += '<Id>' + date.strftime("%Y-%m-%dT%H:%M:%SZ") + '</Id>\n'
@@ -89,7 +89,7 @@ def create_tcx(date, distance):
    tcx_string += '</Activity></Activities></TrainingCenterDatabase>\n'
    return tcx_string
 
-def upload_activity_to_runalyze(tcx_string, credentials):
+def upload_activity_to_runalyze(tcx_string: str, credentials):
    RUNALYZE_API_ENDPOINT = "https://runalyze.com/api/v1/"
    r = requests.post(RUNALYZE_API_ENDPOINT + "activities/uploads",
                      headers=credentials,
@@ -130,7 +130,7 @@ def main():
             elif answer == "skip":
                break
             elif answer == "edit":
-               distance = float(input("Please enter the correct distance in km: "))*1000
+               distance = int(float(input("Please enter the correct distance in km: "))*1000)
                break
             else:
                print("Please enter yes, skip or edit")
