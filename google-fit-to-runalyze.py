@@ -13,6 +13,7 @@ SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read",
           "https://www.googleapis.com/auth/fitness.location.read"]
 GOOGLE_CREDENTIALS_CACHE_FILE = "google_credentials.json"
 RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
+CONFIG_FILE = "config.json"
 
 
 def authorize_with_google(SCOPES, credentials_cache_file):
@@ -108,7 +109,7 @@ def main():
    data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
 
    tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
-   with open("config.txt", "r") as file:
+   with open(CONFIG_FILE, "r") as file:
       start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d").replace(tzinfo=tz_info)
    # end with today at midnight (as in general there will be additional walking today)
    end_time = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=tz_info)
