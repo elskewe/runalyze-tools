@@ -12,6 +12,7 @@ import googleapiclient.discovery
 SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read", 
           "https://www.googleapis.com/auth/fitness.location.read"]
 GOOGLE_CREDENTIALS_CACHE_FILE = "google_credentials.json"
+RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
 
 
 def authorize_with_google(SCOPES, credentials_cache_file):
@@ -101,7 +102,7 @@ def main():
    print("Successfully authorized with Google")
 
    # load credentials for runalyze
-   with open("runalyze_credentials.json", "r") as file:
+   with open(RUNALYZE_CREDENTIALS_FILE, "r") as file:
       credentials_runalyze = json.load(file)
 
    data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
