@@ -14,6 +14,7 @@ SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read",
 GOOGLE_CREDENTIALS_CACHE_FILE = "google_credentials.json"
 RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
 CONFIG_FILE = "config.json"
+MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000 # maximum walking distance which is synced without user confirmation
 
 
 def authorize_with_google(SCOPES, credentials_cache_file):
@@ -119,7 +120,7 @@ def main():
    distance_data = extract_distance_data_from_aggregated_data(aggregated_data)
 
    for date, distance in distance_data.items():
-      if distance > 8000:
+      if distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
          while True:
             # ask user to confirm the distance, give the correct distance or skip the day
             answer = input("On " + date.strftime("%Y-%m-%d") + " you walked "
