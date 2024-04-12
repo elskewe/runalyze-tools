@@ -131,9 +131,8 @@ def main():
    # end with today at midnight (as in general there will be additional walking today)
    end_time = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=tz_info)
 
-   aggregated_data = get_aggregated_data_from_google_fit(credentials, distance_data_source_id, start_time, end_time)
-
-   distance_data = extract_data_from_aggregated_data(aggregated_data)
+   aggregated_distance_data = get_aggregated_data_from_google_fit(credentials, distance_data_source_id, start_time, end_time)
+   distance_data = extract_data_from_aggregated_data(aggregated_distance_data)
 
    for date, distance_list in distance_data.items():
       distance = int(distance_list[0]) # use first and only element and cast it to int
