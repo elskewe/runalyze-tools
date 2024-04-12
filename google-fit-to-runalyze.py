@@ -62,7 +62,7 @@ def get_aggregated_data_from_google_fit(credentials, data_source_id, start_time,
     
    return aggregated_data
 
-def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.datetime, list[int | float]]:
+def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.datetime, list[list[int | float]]]:
    data = {}
    for bucket in aggregated_data['bucket']:
       dataset = bucket['dataset']
@@ -76,8 +76,8 @@ def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.da
       point = dataset[0]['point']
       if len(point) == 0:
          continue
-      # convert list of dicts into a list with either the `fpVal` or `intVal` values
-      data[date] = [e.get("fpVal", e.get("intVal")) for e in point[0]['value']]
+      # convert list of dicts within a dict within a list into a list of lists with either the `fpVal` or `intVal` values
+      data[date] = [[e.get("fpVal", e.get("intVal")) for e in p["value"]] for p in point]
    return data
 
 def create_tcx(date: datetime.datetime, distance: int) -> str:
@@ -139,7 +139,7 @@ def main():
    activity_data = extract_data_from_aggregated_data(aggregated_activity_data)
 
    for date, distance_list in distance_data.items():
-      distance = int(distance_list[0]) # use first and only element and cast it to int
+      distance = int(distance_list[0][0]) # use first and only element and cast it to int
       if distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
          answer, mode = get_user_confirmation(f"On {date.strftime('%Y-%m-%d')} you walked "
                      + f"{str(distance/1000)} km. Is this correct? ",
