@@ -63,7 +63,7 @@ def get_aggregated_data_from_google_fit(credentials, data_source_id, start_time,
    return aggregated_data
 
 def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.datetime, list[int | float]]:
-   distance_data = {}
+   data = {}
    for bucket in aggregated_data['bucket']:
       dataset = bucket['dataset']
       if len(dataset) > 1:
@@ -71,14 +71,14 @@ def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.da
       # get date by using the average of the start and end time which should be the right date for timezones around utc
       date = datetime.datetime.fromtimestamp(
          (int(bucket['startTimeMillis']) + int(bucket['endTimeMillis'])) / 2 / 1000)
-      if date in distance_data.keys():
+      if date in data.keys():
          raise Exception("Duplicate date in dataset")
       point = dataset[0]['point']
       if len(point) == 0:
          continue
       # convert list of dicts into a list with either the `fpVal` or `intVal` values
-      distance_data[date] = [e.get("fpVal", e.get("intVal")) for e in point[0]['value']]
-   return distance_data
+      data[date] = [e.get("fpVal", e.get("intVal")) for e in point[0]['value']]
+   return data
 
 def create_tcx(date: datetime.datetime, distance: int) -> str:
    tcx_string = '<?xml version="1.0" encoding="UTF-8"?>\n'
