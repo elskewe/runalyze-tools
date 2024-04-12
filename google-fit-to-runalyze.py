@@ -124,6 +124,7 @@ def main():
       credentials_runalyze = json.load(file)
 
    distance_data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
+   activity_summary_data_source_id = "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments"
 
    tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
    with open(CONFIG_FILE, "r") as file:
@@ -133,6 +134,9 @@ def main():
 
    aggregated_distance_data = get_aggregated_data_from_google_fit(credentials, distance_data_source_id, start_time, end_time)
    distance_data = extract_data_from_aggregated_data(aggregated_distance_data)
+
+   aggregated_activity_data = get_aggregated_data_from_google_fit(credentials, activity_summary_data_source_id, start_time, end_time)
+   activity_data = extract_data_from_aggregated_data(aggregated_activity_data)
 
    for date, distance_list in distance_data.items():
       distance = int(distance_list[0]) # use first and only element and cast it to int
