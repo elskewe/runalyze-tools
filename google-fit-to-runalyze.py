@@ -95,6 +95,23 @@ def upload_activity_to_runalyze(tcx_string: str, credentials):
    print(r.text)
    if r.status_code != 201:
       raise Exception("Error uploading activity to Runalyze")
+   
+def get_user_confirmation(base_prompt: str, edit_prompt: str) -> tuple[int, str]:
+   answer = None
+   while True:
+      # ask user to confirm the distance, give the correct distance or skip the day
+      mode = input(base_prompt + "yes/skip/edit: ")
+      if mode == "yes":
+         break
+      elif mode == "skip":
+         break
+      elif mode == "edit":
+         answer = input(edit_prompt)
+         break
+      else:
+         print("Please enter yes, skip or edit")
+         continue
+   return (answer, mode)
 
 def main():
 
@@ -119,22 +136,13 @@ def main():
 
    for date, distance in distance_data.items():
       if distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
-         while True:
-            # ask user to confirm the distance, give the correct distance or skip the day
-            answer = input("On " + date.strftime("%Y-%m-%d") + " you walked "
-                           + str(distance/1000) + " km. Is this correct? yes/skip/edit: ")
-            if answer == "yes":
-               break
-            elif answer == "skip":
-               break
-            elif answer == "edit":
-               distance = int(float(input("Please enter the correct distance in km: "))*1000)
-               break
-            else:
-               print("Please enter yes, skip or edit")
-               continue
-         if answer == "skip":
+         answer, mode = get_user_confirmation("On " + date.strftime("%Y-%m-%d") + " you walked "
+                     + str(distance/1000) + " km. Is this correct? ",
+                     "Please enter the correct distance in km: ")
+         if mode == "skip":
             continue
+         elif mode == "edit":
+            distance = int(float(answer)*1000)
          
       tcx_string = create_tcx(date, distance)
       upload_activity_to_runalyze(tcx_string, credentials_runalyze)
