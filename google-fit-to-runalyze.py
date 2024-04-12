@@ -136,8 +136,8 @@ def main():
 
    for date, distance in distance_data.items():
       if distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
-         answer, mode = get_user_confirmation("On " + date.strftime("%Y-%m-%d") + " you walked "
-                     + str(distance/1000) + " km. Is this correct? ",
+         answer, mode = get_user_confirmation(f"On {date.strftime('%Y-%m-%d')} you walked "
+                     + f"{str(distance/1000)} km. Is this correct? ",
                      "Please enter the correct distance in km: ")
          if mode == "skip":
             continue
