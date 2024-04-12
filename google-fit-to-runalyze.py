@@ -105,7 +105,7 @@ def main():
    with open(RUNALYZE_CREDENTIALS_FILE, "r") as file:
       credentials_runalyze = json.load(file)
 
-   data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
+   distance_data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
 
    tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
    with open(CONFIG_FILE, "r") as file:
@@ -113,7 +113,7 @@ def main():
    # end with today at midnight (as in general there will be additional walking today)
    end_time = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=tz_info)
 
-   aggregated_data = get_aggregated_data_from_google_fit(credentials, data_source_id, start_time, end_time)
+   aggregated_data = get_aggregated_data_from_google_fit(credentials, distance_data_source_id, start_time, end_time)
 
    distance_data = extract_distance_data_from_aggregated_data(aggregated_data)
 
