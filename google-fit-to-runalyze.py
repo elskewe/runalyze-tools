@@ -62,7 +62,7 @@ def get_aggregated_data_from_google_fit(credentials, data_source_id, start_time,
     
    return aggregated_data
 
-def extract_distance_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.datetime, int]:
+def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.datetime, int]:
    distance_data = {}
    for bucket in aggregated_data['bucket']:
       dataset = bucket['dataset']
@@ -133,7 +133,7 @@ def main():
 
    aggregated_data = get_aggregated_data_from_google_fit(credentials, distance_data_source_id, start_time, end_time)
 
-   distance_data = extract_distance_data_from_aggregated_data(aggregated_data)
+   distance_data = extract_data_from_aggregated_data(aggregated_data)
 
    for date, distance_list in distance_data.items():
       distance = int(distance_list[0]) # use first and only element and cast it to int
