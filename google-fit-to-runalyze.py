@@ -76,7 +76,8 @@ def extract_distance_data_from_aggregated_data(aggregated_data: dict) -> dict[da
       point = dataset[0]['point']
       if len(point) == 0:
          continue
-      distance_data[date] = int(point[0]['value'][0]['fpVal'])
+      # convert list of dicts into a list with either the `fpVal` or `intVal` values
+      distance_data[date] = [e.get("fpVal", e.get("intVal")) for e in point[0]['value']]
    return distance_data
 
 def create_tcx(date: datetime.datetime, distance: int) -> str:
@@ -134,7 +135,8 @@ def main():
 
    distance_data = extract_distance_data_from_aggregated_data(aggregated_data)
 
-   for date, distance in distance_data.items():
+   for date, distance_list in distance_data.items():
+      distance = int(distance_list[0]) # use first and only element and cast it to int
       if distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
          answer, mode = get_user_confirmation(f"On {date.strftime('%Y-%m-%d')} you walked "
                      + f"{str(distance/1000)} km. Is this correct? ",
