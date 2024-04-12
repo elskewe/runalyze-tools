@@ -62,7 +62,7 @@ def get_aggregated_data_from_google_fit(credentials, data_source_id, start_time,
     
    return aggregated_data
 
-def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.datetime, int]:
+def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.datetime, list[int | float]]:
    distance_data = {}
    for bucket in aggregated_data['bucket']:
       dataset = bucket['dataset']
