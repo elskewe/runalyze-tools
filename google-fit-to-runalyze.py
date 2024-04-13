@@ -16,7 +16,9 @@ RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
 CONFIG_FILE = "config.json"
 MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000 # maximum walking distance which is synced without user confirmation
 
-BIKING_ACTIVITY_ID = 1 # https://developers.google.com/fit/rest/v1/reference/activity-types
+# https://developers.google.com/fit/rest/v1/reference/activity-types
+BIKING_ACTIVITY_ID = 1
+WALKING_ACTIVITY_ID = 7
 
 def authorize_with_google(SCOPES: list[str], credentials_cache_file: str):
    credentials = None
@@ -145,6 +147,7 @@ def main():
    aggregated_activity_data = get_aggregated_data_from_google_fit(credentials, activity_summary_data_source_id, start_time, end_time)
    activity_data = extract_data_from_aggregated_data(aggregated_activity_data)
    biking_data = extract_acitivity_segment_data(activity_data, BIKING_ACTIVITY_ID)
+   walking_data = extract_acitivity_segment_data(activity_data, WALKING_ACTIVITY_ID)
 
    for date, distance_list in distance_data.items():
       distance = int(distance_list[0][0]) # use first and only element and cast it to int
