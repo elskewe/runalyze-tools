@@ -89,7 +89,7 @@ def extract_acitivity_segment_data(data: dict[datetime.datetime, list[list[int |
                                    , activity_id: int) -> dict[datetime.datetime, dict[str, int | float]]:
    """"Takes the output of `extract_data_from_aggregated_data` and returns a list of dicts which
    only contains the data for the selected activity ID in readable form"""
-   return {k: {"duration": l[1], "num_segments": l[2]} for k, v in data.items() for l in v if l[0] == activity_id}
+   return {date: {"duration": l[1], "num_segments": l[2]} for date, v in data.items() for l in v if l[0] == activity_id}
 
 def create_tcx(date: datetime.datetime, distance: int) -> str:
    tcx_string = '<?xml version="1.0" encoding="UTF-8"?>\n'
