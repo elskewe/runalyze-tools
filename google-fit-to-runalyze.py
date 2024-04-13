@@ -152,9 +152,12 @@ def main():
    for date, distance_list in distance_data.items():
       distance = int(distance_list[0][0]) # use first and only element and cast it to int
       if distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
-         answer, mode = get_user_confirmation(f"On {date.strftime('%Y-%m-%d')} you walked "
-                     + f"{str(distance/1000)} km. Is this correct? ",
-                     "Please enter the correct distance in km: ")
+         confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {str(distance/1000)} km. Is this correct? "
+      else:
+         confirmation_str = None
+
+      if confirmation_str:
+         answer, mode = get_user_confirmation(confirmation_str, "Please enter the correct distance in km: ")
          if mode == "skip":
             continue
          elif mode == "edit":
