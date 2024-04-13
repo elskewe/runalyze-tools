@@ -19,8 +19,8 @@ MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000 # maximum walking distance which is syn
 FASTEST_NORMAL_WALKING_PACE = 8.0 # in minutes per kilometer
 
 # https://developers.google.com/fit/rest/v1/reference/activity-types
-BIKING_ACTIVITY_ID = 1
-WALKING_ACTIVITY_ID = 7
+BIKING_ACTIVITY_IDS = [1]
+WALKING_ACTIVITY_IDS = [7, 8] # running and walking
 
 def authorize_with_google(SCOPES: list[str], credentials_cache_file: str):
    credentials = None
@@ -86,10 +86,20 @@ def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.da
    return data
 
 def extract_acitivity_segment_data(data: dict[datetime.datetime, list[list[int | float]]]
-                                   , activity_id: int) -> dict[datetime.datetime, dict[str, int | float]]:
+                                   , activity_ids: list[int]) -> dict[datetime.datetime, dict[str, int | float]]:
    """"Takes the output of `extract_data_from_aggregated_data` and returns a list of dicts which
    only contains the data for the selected activity ID in readable form"""
-   return {date: {"duration": l[1], "num_segments": l[2]} for date, v in data.items() for l in v if l[0] == activity_id}
+   # doing this with a single list comprehension would probably come at the cost of a much worse
+   # time complexity (c.f. https://stackoverflow.com/a/62315234)
+   tuple_data = [(date, {"duration": l[1], "num_segments": l[2]}) for date, v in data.items() for l in v if l[0] in activity_ids]
+   output = {}
+   for date, value in tuple_data:
+      if date in output.keys():
+         for k, v in value.items():
+            output[date][k] += v
+      else:
+         output[date] = value
+   return output
 
 def create_tcx(date: datetime.datetime, distance: int) -> str:
    tcx_string = '<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -148,8 +158,8 @@ def main():
 
    aggregated_activity_data = get_aggregated_data_from_google_fit(credentials, activity_summary_data_source_id, start_time, end_time)
    activity_data = extract_data_from_aggregated_data(aggregated_activity_data)
-   biking_data = extract_acitivity_segment_data(activity_data, BIKING_ACTIVITY_ID)
-   walking_data = extract_acitivity_segment_data(activity_data, WALKING_ACTIVITY_ID)
+   biking_data = extract_acitivity_segment_data(activity_data, BIKING_ACTIVITY_IDS)
+   walking_data = extract_acitivity_segment_data(activity_data, WALKING_ACTIVITY_IDS)
 
    for date, distance_list in distance_data.items():
       distance = int(distance_list[0][0]) # use first and only element and cast it to int
