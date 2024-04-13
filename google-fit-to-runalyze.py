@@ -16,6 +16,7 @@ RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
 CONFIG_FILE = "config.json"
 MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000 # maximum walking distance which is synced without user confirmation
 
+BIKING_ACTIVITY_ID = 1 # https://developers.google.com/fit/rest/v1/reference/activity-types
 
 def authorize_with_google(SCOPES: list[str], credentials_cache_file: str):
    credentials = None
@@ -80,6 +81,12 @@ def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.da
       data[date] = [[e.get("fpVal", e.get("intVal")) for e in p["value"]] for p in point]
    return data
 
+def extract_acitivity_segment_data(data: dict[datetime.datetime, list[list[int | float]]]
+                                   , activity_id: int) -> dict[datetime.datetime, dict[str, int | float]]:
+   """"Takes the output of `extract_data_from_aggregated_data` and returns a list of dicts which
+   only contains the data for the selected activity ID in readable form"""
+   return {k: {"duration": l[1], "num_segments": l[2]} for k, v in data.items() for l in v if l[0] == activity_id}
+
 def create_tcx(date: datetime.datetime, distance: int) -> str:
    tcx_string = '<?xml version="1.0" encoding="UTF-8"?>\n'
    tcx_string += '<TrainingCenterDatabase><Activities><Activity Sport="Other">\n'
@@ -137,6 +144,7 @@ def main():
 
    aggregated_activity_data = get_aggregated_data_from_google_fit(credentials, activity_summary_data_source_id, start_time, end_time)
    activity_data = extract_data_from_aggregated_data(aggregated_activity_data)
+   biking_data = extract_acitivity_segment_data(activity_data, BIKING_ACTIVITY_ID)
 
    for date, distance_list in distance_data.items():
       distance = int(distance_list[0][0]) # use first and only element and cast it to int
