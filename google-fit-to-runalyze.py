@@ -157,7 +157,7 @@ def main():
       if date in biking_data.keys():
          confirmation_str = f"On {date.strftime('%Y-%m-%d')} you biked {biking_data[date]['num_segments']} times for a " + \
                             f"total of {humanize.precisedelta(datetime.timedelta(milliseconds=biking_data[date]['duration']))}. " + \
-                            f"Is the total distance of {distance/1000} correct nevertheless? "
+                            f"Is the total distance of {distance/1000} km correct nevertheless? "
       elif distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
          confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km. Is this correct? "
       elif date in walking_data.keys():
