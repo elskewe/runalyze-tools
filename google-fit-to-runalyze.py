@@ -153,6 +153,7 @@ def main():
 
    for date, distance_list in distance_data.items():
       distance = int(distance_list[0][0]) # use first and only element and cast it to int
+      confirmation_str = None
       if date in biking_data.keys():
          confirmation_str = f"On {date.strftime('%Y-%m-%d')} you biked {biking_data[date]['num_segments']} times for a " + \
                             f"total of {humanize.precisedelta(datetime.timedelta(milliseconds=biking_data[date]['duration']))}. " + \
@@ -163,8 +164,6 @@ def main():
          pace = (walking_data[date]['duration']/1000/60) / (distance/1000)
          if pace < FASTEST_NORMAL_WALKING_PACE:
             confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km at {pace} min/km. Is this correct? "
-      else:
-         confirmation_str = None
 
       if confirmation_str:
          answer, mode = get_user_confirmation(confirmation_str, "Please enter the correct distance in km: ")
