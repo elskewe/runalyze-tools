@@ -8,6 +8,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 import os
 import googleapiclient.discovery
+import humanize
 
 SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read", 
           "https://www.googleapis.com/auth/fitness.location.read"]
@@ -15,6 +16,7 @@ GOOGLE_CREDENTIALS_CACHE_FILE = "google_credentials.json"
 RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
 CONFIG_FILE = "config.json"
 MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000 # maximum walking distance which is synced without user confirmation
+FASTEST_NORMAL_WALKING_PACE = 8.0 # in minutes per kilometer
 
 # https://developers.google.com/fit/rest/v1/reference/activity-types
 BIKING_ACTIVITY_ID = 1
@@ -151,8 +153,16 @@ def main():
 
    for date, distance_list in distance_data.items():
       distance = int(distance_list[0][0]) # use first and only element and cast it to int
-      if distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
-         confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {str(distance/1000)} km. Is this correct? "
+      if date in biking_data.keys():
+         confirmation_str = f"On {date.strftime('%Y-%m-%d')} you biked {biking_data[date]['num_segments']} times for a " + \
+                            f"total of {humanize.precisedelta(datetime.timedelta(milliseconds=biking_data[date]['duration']))}. " + \
+                            f"Is the total distance of {distance/1000} correct nevertheless? "
+      elif distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
+         confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km. Is this correct? "
+      elif date in walking_data.keys():
+         pace = (walking_data[date]['duration']/1000/60) / (distance/1000)
+         if pace < FASTEST_NORMAL_WALKING_PACE:
+            confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km at {pace} min/km. Is this correct? "
       else:
          confirmation_str = None
 
