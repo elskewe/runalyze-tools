@@ -123,11 +123,11 @@ def get_user_confirmation(base_prompt: str, edit_prompt: str) -> tuple[int, str]
    while True:
       # ask user to confirm the distance, give the correct distance or skip the day
       mode = input(base_prompt + "yes/skip/edit: ")
-      if mode == "yes":
+      if mode == "yes" or mode == "y":
          break
-      elif mode == "skip":
+      elif mode == "skip" or mode == "s":
          break
-      elif mode == "edit":
+      elif mode == "edit" or mode == "e":
          answer = input(edit_prompt)
          break
       else:
