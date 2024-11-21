@@ -26,11 +26,11 @@ BIKING_ACTIVITY_IDS = [1]
 WALKING_ACTIVITY_IDS = [7, 8] # running and walking
 
 
-def authorize_with_google(SCOPES: list[str], credentials_cache_file: str):
+def authorize_with_google(scopes: list[str], credentials_cache_file: str):
     credentials = None
     # Check if credentials are already cached
     if os.path.exists(credentials_cache_file):
-        credentials = Credentials.from_authorized_user_file(credentials_cache_file, SCOPES)
+        credentials = Credentials.from_authorized_user_file(credentials_cache_file, scopes)
 
     # if credentials are not cached or expired, ask for user to log in
     if not credentials or not credentials.valid:
@@ -41,7 +41,7 @@ def authorize_with_google(SCOPES: list[str], credentials_cache_file: str):
                 credentials = None
                 warnings.warn("Failed to refresh credentials")
         if not credentials:
-            flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", scopes)
             credentials = flow.run_local_server(port=8081)
 
         # save credentials to file
