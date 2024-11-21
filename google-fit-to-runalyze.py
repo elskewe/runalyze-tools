@@ -185,7 +185,8 @@ def main():
             pace = (walking_data[date]['duration']/1000/60) / (distance/1000)
             if pace < FASTEST_NORMAL_WALKING_PACE:
                 confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km in " + \
-                                   humanize.precisedelta(datetime.timedelta(milliseconds=walking_data[date]['duration']), format="%.1f",  minimum_unit="minutes") + \
+                                   humanize.precisedelta(datetime.timedelta(milliseconds=walking_data[date]['duration']), 
+                                                         format="%.1f", minimum_unit="minutes") + \
                                    f" at {pace:.1f} min/km. Is this correct? "
 
         if confirmation_str:
