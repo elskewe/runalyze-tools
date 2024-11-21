@@ -79,7 +79,7 @@ def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.da
         #  get date by using the average of the start and end time which should be the right date for timezones around utc
         date = datetime.datetime.fromtimestamp(
             (int(bucket['startTimeMillis']) + int(bucket['endTimeMillis'])) / 2 / 1000)
-        if date in data.keys():
+        if date in data:
             raise ValueError("Duplicate date in dataset")
         point = dataset[0]['point']
         if len(point) == 0:
@@ -174,13 +174,13 @@ def main():
     for date, distance_list in distance_data.items():
         distance = int(distance_list[0][0]) # use first and only element and cast it to int
         confirmation_str = None
-        if date in biking_data.keys():
+        if date in biking_data:
             confirmation_str = f"On {date.strftime('%Y-%m-%d')} you biked {biking_data[date]['num_segments']} times for a " + \
                                f"total of {humanize.precisedelta(datetime.timedelta(milliseconds=biking_data[date]['duration']))}. " + \
                                f"Is the total distance of {distance/1000} km correct nevertheless? "
         elif distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
             confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km. Is this correct? "
-        elif date in walking_data.keys():
+        elif date in walking_data:
             pace = (walking_data[date]['duration']/1000/60) / (distance/1000)
             if pace < FASTEST_NORMAL_WALKING_PACE:
                 confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km in " + \
