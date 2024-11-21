@@ -42,7 +42,7 @@ def authorize_with_google(SCOPES: list[str], credentials_cache_file: str):
             credentials = flow.run_local_server(port=8081)
 
         # save credentials to file
-        with open(credentials_cache_file, "w") as file:
+        with open(credentials_cache_file, "w", encoding="utf-8") as file:
             file.write(credentials.to_json())
 
     return credentials
@@ -151,14 +151,14 @@ def main():
     print("Successfully authorized with Google")
 
     # load credentials for runalyze
-    with open(RUNALYZE_CREDENTIALS_FILE, "r") as file:
+    with open(RUNALYZE_CREDENTIALS_FILE, "r", encoding="utf-8") as file:
         credentials_runalyze = json.load(file)
 
     distance_data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
     activity_summary_data_source_id = "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments"
 
     tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
-    with open(CONFIG_FILE, "r") as file:
+    with open(CONFIG_FILE, "r", encoding="utf-8") as file:
         start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d").replace(tzinfo=tz_info)
     # end with today at midnight (as in general there will be additional walking today)
     end_time = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=tz_info)
@@ -197,7 +197,7 @@ def main():
         tcx_string = create_tcx(date, distance)
         upload_activity_to_runalyze(tcx_string, credentials_runalyze)
 
-    with open(CONFIG_FILE, "w") as file:
+    with open(CONFIG_FILE, "w", encoding="utf-8") as file:
         file.write(end_time.strftime("%Y-%m-%d"))
 
     print("Done")
