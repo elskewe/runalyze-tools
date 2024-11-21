@@ -16,6 +16,9 @@ GOOGLE_CREDENTIALS_CACHE_FILE = "google_credentials.json"
 RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
 CONFIG_FILE = "config.txt"
 MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000  # maximum walking distance which is synced without user confirmation
+# minimum walking distance for which the user is asked for confirmation (below this the distance is so negligible that
+# asking the user is not worth it)
+MIN_DISTANCE_FOR_CONFIRMATION = 500
 FASTEST_NORMAL_WALKING_PACE = 7.5  # in minutes per kilometer
 
 # https://developers.google.com/fit/rest/v1/reference/activity-types
@@ -189,7 +192,8 @@ def main():
                                                          format="%.1f", minimum_unit="minutes") + \
                                    f" at {pace:.1f} min/km. Is this correct? "
 
-        if confirmation_str:
+        # if there was an irregularity, let the user confirm the distance, but only if it is above a certain threshold
+        if confirmation_str and distance > MIN_DISTANCE_FOR_CONFIRMATION:
             answer, mode = get_user_confirmation(confirmation_str, "Please enter the correct distance in km: ")
             if mode == "skip":
                 continue
