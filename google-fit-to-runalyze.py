@@ -15,8 +15,8 @@ SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read",
 GOOGLE_CREDENTIALS_CACHE_FILE = "google_credentials.json"
 RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
 CONFIG_FILE = "config.txt"
-MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000 # maximum walking distance which is synced without user confirmation
-FASTEST_NORMAL_WALKING_PACE = 7.5 # in minutes per kilometer
+MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000  # maximum walking distance which is synced without user confirmation
+FASTEST_NORMAL_WALKING_PACE = 7.5  # in minutes per kilometer
 
 # https://developers.google.com/fit/rest/v1/reference/activity-types
 BIKING_ACTIVITY_IDS = [1]
