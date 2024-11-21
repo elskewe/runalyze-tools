@@ -175,9 +175,10 @@ def main():
         distance = int(distance_list[0][0])  # use first and only element and cast it to int
         confirmation_str = None
         if date in biking_data:
-            confirmation_str = f"On {date.strftime('%Y-%m-%d')} you biked {biking_data[date]['num_segments']} times for a " + \
-                               f"total of {humanize.precisedelta(datetime.timedelta(milliseconds=biking_data[date]['duration']))}. " + \
-                               f"Is the total distance of {distance/1000} km correct nevertheless? "
+            confirmation_str = \
+                f"On {date.strftime('%Y-%m-%d')} you biked {biking_data[date]['num_segments']} times for a " + \
+                f"total of {humanize.precisedelta(datetime.timedelta(milliseconds=biking_data[date]['duration']))}. " + \
+                f"Is the total distance of {distance/1000} km correct nevertheless? "
         elif distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
             confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km. Is this correct? "
         elif date in walking_data:
