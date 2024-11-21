@@ -152,14 +152,14 @@ def main():
 
     # load credentials for runalyze
     with open(RUNALYZE_CREDENTIALS_FILE, "r") as file:
-       credentials_runalyze = json.load(file)
+        credentials_runalyze = json.load(file)
 
     distance_data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
     activity_summary_data_source_id = "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments"
 
     tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
     with open(CONFIG_FILE, "r") as file:
-       start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d").replace(tzinfo=tz_info)
+        start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d").replace(tzinfo=tz_info)
     # end with today at midnight (as in general there will be additional walking today)
     end_time = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=tz_info)
 
@@ -172,7 +172,7 @@ def main():
     walking_data = extract_acitivity_segment_data(activity_data, WALKING_ACTIVITY_IDS)
 
     for date, distance_list in distance_data.items():
-        distance = int(distance_list[0][0]) # use first and only element and cast it to int
+        distance = int(distance_list[0][0])  # use first and only element and cast it to int
         confirmation_str = None
         if date in biking_data:
             confirmation_str = f"On {date.strftime('%Y-%m-%d')} you biked {biking_data[date]['num_segments']} times for a " + \
