@@ -127,7 +127,7 @@ def upload_activity_to_runalyze(tcx_string: str, credentials):
                       files={"file": ("activity.tcx", tcx_string)})
     print(r.text)
     if r.status_code != 201:
-        raise Exception("Error uploading activity to Runalyze")
+        raise requests.exceptions.RequestException("Error uploading activity to Runalyze")
 
 
 def get_user_confirmation(base_prompt: str, edit_prompt: str) -> tuple[str, str]:
