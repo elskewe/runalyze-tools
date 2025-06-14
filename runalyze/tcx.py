@@ -34,3 +34,23 @@ def create_from_distance_and_pace(date: datetime.datetime, distance: int, pace=1
         str: The content of the tcx file.
     """
     return create(date, int(distance * (pace/1000) * 60), activity_type=activity_type)
+
+
+def translate_activity_type(activity_type: str) -> str:
+    """Translates the German activity name to the English tcx name.
+
+    Args:
+        activity_type (str): The activity type in German.
+
+    Returns:
+        str: The activity type in English.
+    """
+    mapping = {
+        "Laufen": "Running",
+        "Radfahren": "Biking"
+    }
+
+    try:
+        return mapping[activity_type]
+    except KeyError as e:
+        raise ValueError(f"Unknown activity type: {activity_type}") from e
