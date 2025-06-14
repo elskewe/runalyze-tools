@@ -128,8 +128,8 @@ def upload_activity_to_runalyze(tcx_string: str, credentials):
         raise Exception("Error uploading activity to Runalyze")
 
 
-def get_user_confirmation(base_prompt: str, edit_prompt: str) -> tuple[int, str]:
-    answer = None
+def get_user_confirmation(base_prompt: str, edit_prompt: str) -> tuple[str, str]:
+    answer = ""
     while True:
         # ask user to confirm the distance, give the correct distance or skip the day
         mode = input(base_prompt + "yes/skip/edit: ")
