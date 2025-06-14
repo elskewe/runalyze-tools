@@ -15,8 +15,8 @@ def create(date: datetime.datetime, duration: int, activity_type: str = "Other")
     """
     tcx_string = '<?xml version="1.0" encoding="UTF-8"?>\n'
     tcx_string += f'<TrainingCenterDatabase><Activities><Activity Sport="{activity_type}">\n'
-    tcx_string += '<Id>' + date.strftime("%Y-%m-%dT%H:%M:%SZ") + '</Id>\n'
-    tcx_string += '<Lap><TotalTimeSeconds>' + str(duration) + '</TotalTimeSeconds></Lap>\n'
+    tcx_string += f'<Id>{date.strftime("%Y-%m-%dT%H:%M:%SZ")}</Id>\n'
+    tcx_string += f'<Lap><TotalTimeSeconds>{duration}</TotalTimeSeconds></Lap>\n'
     tcx_string += '</Activity></Activities></TrainingCenterDatabase>\n'
     return tcx_string
 
