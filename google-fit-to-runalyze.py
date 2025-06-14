@@ -178,25 +178,25 @@ def main():
 
     for date, distance_list in distance_data.items():
         distance = int(distance_list[0][0])  # use first and only element and cast it to int
-        confirmation_str = None
+        confirmation = None
         if date in biking_data:
-            confirmation_str = \
+            confirmation = \
                 f"On {date.strftime('%Y-%m-%d')} you biked {biking_data[date]['num_segments']} times for a " + \
-                f"total of {humanize.precisedelta(datetime.timedelta(milliseconds=biking_data[date]['duration']))}. " + \
-                f"Is the total distance of {distance/1000} km correct nevertheless? "
+                f"total of {humanize.precisedelta(datetime.timedelta(milliseconds=biking_data[date]['duration']))}." + \
+                f" Is the total distance of {distance/1000} km correct nevertheless? "
         elif distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
-            confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km. Is this correct? "
+            confirmation = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km. Is this correct? "
         elif date in walking_data:
             pace = (walking_data[date]['duration']/1000/60) / (distance/1000)
             if pace < FASTEST_NORMAL_WALKING_PACE:
-                confirmation_str = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km in " + \
-                                   humanize.precisedelta(datetime.timedelta(milliseconds=walking_data[date]['duration']),
-                                                         format="%.1f", minimum_unit="minutes") + \
-                                   f" at {pace:.1f} min/km. Is this correct? "
+                confirmation = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km in " + \
+                               humanize.precisedelta(datetime.timedelta(milliseconds=walking_data[date]['duration']),
+                                                     format="%.1f", minimum_unit="minutes") + \
+                               f" at {pace:.1f} min/km. Is this correct? "
 
         # if there was an irregularity, let the user confirm the distance, but only if it is above a certain threshold
-        if confirmation_str and distance > MIN_DISTANCE_FOR_CONFIRMATION:
-            answer, mode = get_user_confirmation(confirmation_str, "Please enter the correct distance in km: ")
+        if confirmation and distance > MIN_DISTANCE_FOR_CONFIRMATION:
+            answer, mode = get_user_confirmation(confirmation, "Please enter the correct distance in km: ")
             if mode == "skip":
                 continue
             elif mode == "edit":
