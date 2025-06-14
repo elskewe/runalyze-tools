@@ -17,7 +17,7 @@ SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read",
           "https://www.googleapis.com/auth/fitness.location.read"]
 GOOGLE_CREDENTIALS_CACHE_FILE = "google_credentials.json"
 RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
-CONFIG_FILE = "config.txt"
+CONFIG_FILE = "google-fit-to-runalyze-config.txt"
 MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000  # maximum walking distance which is synced without user confirmation
 # minimum walking distance for which the user is asked for confirmation (below this the distance is so negligible that
 # asking the user is not worth it)
