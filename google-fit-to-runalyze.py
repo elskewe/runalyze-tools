@@ -10,7 +10,7 @@ from google.oauth2.credentials import Credentials
 import googleapiclient.discovery
 import humanize
 
-SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read", 
+SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read",
           "https://www.googleapis.com/auth/fitness.location.read"]
 GOOGLE_CREDENTIALS_CACHE_FILE = "google_credentials.json"
 RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
@@ -23,7 +23,7 @@ FASTEST_NORMAL_WALKING_PACE = 7.0  # in minutes per kilometer
 
 # https://developers.google.com/fit/rest/v1/reference/activity-types
 BIKING_ACTIVITY_IDS = [1]
-WALKING_ACTIVITY_IDS = [7, 8] # running and walking
+WALKING_ACTIVITY_IDS = [7, 8]  # running and walking
 
 
 def authorize_with_google(scopes: list[str], credentials_cache_file: str):
@@ -79,7 +79,8 @@ def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.da
         dataset = bucket['dataset']
         if len(dataset) > 1:
             raise ValueError("More than one point in dataset")
-        #  get date by using the average of the start and end time which should be the right date for timezones around utc
+        # get date by using the average of the start and end time which should be the right date for
+        # timezones around utc
         date = datetime.datetime.fromtimestamp(
             (int(bucket['startTimeMillis']) + int(bucket['endTimeMillis'])) / 2 / 1000)
         if date in data:
@@ -87,13 +88,14 @@ def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.da
         point = dataset[0]['point']
         if len(point) == 0:
             continue
-        #  convert list of dicts within a dict within a list into a list of lists with either the `fpVal` or `intVal` values
+        # convert list of dicts within a dict within a list into a list of lists with either the
+        # `fpVal` or `intVal` values
         data[date] = [[e.get("fpVal", e.get("intVal")) for e in p["value"]] for p in point]
     return data
 
 
-def extract_acitivity_segment_data(data: dict[datetime.datetime, list[list[int | float]]]
-                                   , activity_ids: list[int]) -> dict[datetime.datetime, dict[str, int | float]]:
+def extract_acitivity_segment_data(data: dict[datetime.datetime, list[list[int | float]]],
+                                   activity_ids: list[int]) -> dict[datetime.datetime, dict[str, int | float]]:
     """"Takes the output of `extract_data_from_aggregated_data` and returns a list of dicts which
     only contains the data for the selected activity ID in readable form"""
     # doing this with a single list comprehension would probably come at the cost of a much worse
