@@ -19,7 +19,7 @@ MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000  # maximum walking distance which is sy
 # minimum walking distance for which the user is asked for confirmation (below this the distance is so negligible that
 # asking the user is not worth it)
 MIN_DISTANCE_FOR_CONFIRMATION = 500
-FASTEST_NORMAL_WALKING_PACE = 7.5  # in minutes per kilometer
+FASTEST_NORMAL_WALKING_PACE = 7.0  # in minutes per kilometer
 
 # https://developers.google.com/fit/rest/v1/reference/activity-types
 BIKING_ACTIVITY_IDS = [1]
