@@ -3,12 +3,13 @@ import json
 import warnings
 import os
 
-import requests
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 import googleapiclient.discovery
 import humanize
+
+from runalyze.api import upload_activity
 
 SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read",
           "https://www.googleapis.com/auth/fitness.location.read"]
@@ -120,16 +121,6 @@ def create_tcx(date: datetime.datetime, distance: int) -> str:
     return tcx_string
 
 
-def upload_activity_to_runalyze(tcx_string: str, credentials):
-    RUNALYZE_API_ENDPOINT = "https://runalyze.com/api/v1/"
-    r = requests.post(RUNALYZE_API_ENDPOINT + "activities/uploads",
-                      headers=credentials,
-                      files={"file": ("activity.tcx", tcx_string)})
-    print(r.text)
-    if r.status_code != 201:
-        raise requests.exceptions.RequestException("Error uploading activity to Runalyze")
-
-
 def get_user_confirmation(base_prompt: str, edit_prompt: str) -> tuple[str, str]:
     answer = ""
     while True:
@@ -206,7 +197,7 @@ def main():
                 distance = int(float(answer)*1000)
 
         tcx_string = create_tcx(date, distance)
-        upload_activity_to_runalyze(tcx_string, credentials_runalyze)
+        upload_activity(tcx_string, credentials_runalyze)
 
     with open(CONFIG_FILE, "w", encoding="utf-8") as file:
         file.write(end_time.strftime("%Y-%m-%d"))
