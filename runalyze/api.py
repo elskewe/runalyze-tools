@@ -12,3 +12,11 @@ def upload_activity(tcx_string: str, credentials, title: str = "", note: str = "
     print(r.text)
     if r.status_code != 201:
         raise requests.exceptions.RequestException("Error uploading activity to Runalyze")
+
+
+def get_activities(credentials):
+    """Returns the last 100 activities."""
+    r = requests.get(RUNALYZE_API_ENDPOINT + "activity",
+                     headers=credentials,
+                     params={"page": 1, "order[id]": "desc"})
+    return r.json()
