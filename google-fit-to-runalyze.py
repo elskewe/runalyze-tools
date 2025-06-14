@@ -6,6 +6,7 @@ import os
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+from google.auth.exceptions import RefreshError
 import googleapiclient.discovery
 import humanize
 
@@ -38,7 +39,7 @@ def authorize_with_google(scopes: list[str], credentials_cache_file: str):
         if credentials and credentials.expired and credentials.refresh_token:
             try:
                 credentials.refresh(Request())
-            except:
+            except RefreshError:
                 credentials = None
                 warnings.warn("Failed to refresh credentials")
         if not credentials:
