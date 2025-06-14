@@ -160,7 +160,8 @@ def main():
         credentials_runalyze = json.load(file)
 
     distance_data_source_id = "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta"
-    activity_summary_data_source_id = "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments"
+    activity_summary_data_source_id = \
+        "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments"
 
     tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
     with open(CONFIG_FILE, "r", encoding="utf-8") as file:
@@ -168,10 +169,12 @@ def main():
     # end with today at midnight (as in general there will be additional walking today)
     end_time = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=tz_info)
 
-    aggregated_distance_data = get_aggregated_data_from_google_fit(credentials, distance_data_source_id, start_time, end_time)
+    aggregated_distance_data = \
+        get_aggregated_data_from_google_fit(credentials, distance_data_source_id, start_time, end_time)
     distance_data = extract_data_from_aggregated_data(aggregated_distance_data)
 
-    aggregated_activity_data = get_aggregated_data_from_google_fit(credentials, activity_summary_data_source_id, start_time, end_time)
+    aggregated_activity_data = \
+        get_aggregated_data_from_google_fit(credentials, activity_summary_data_source_id, start_time, end_time)
     activity_data = extract_data_from_aggregated_data(aggregated_activity_data)
     biking_data = extract_acitivity_segment_data(activity_data, BIKING_ACTIVITY_IDS)
     walking_data = extract_acitivity_segment_data(activity_data, WALKING_ACTIVITY_IDS)
