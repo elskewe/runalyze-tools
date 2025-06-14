@@ -11,6 +11,7 @@ import googleapiclient.discovery
 import humanize
 
 from runalyze.api import upload_activity
+from runalyze.tcx import create_from_distance_and_pace
 
 SCOPES = ["https://www.googleapis.com/auth/fitness.activity.read",
           "https://www.googleapis.com/auth/fitness.location.read"]
@@ -113,15 +114,6 @@ def extract_acitivity_segment_data(data: dict[datetime.datetime, list[list[int |
     return output
 
 
-def create_tcx(date: datetime.datetime, distance: int) -> str:
-    tcx_string = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    tcx_string += '<TrainingCenterDatabase><Activities><Activity Sport="Other">\n'
-    tcx_string += '<Id>' + date.strftime("%Y-%m-%dT%H:%M:%SZ") + '</Id>\n'
-    tcx_string += '<Lap><TotalTimeSeconds>' + str(int(distance / 100 * 60)) + '</TotalTimeSeconds></Lap>\n'
-    tcx_string += '</Activity></Activities></TrainingCenterDatabase>\n'
-    return tcx_string
-
-
 def get_user_confirmation(base_prompt: str, edit_prompt: str) -> tuple[str, str]:
     answer = ""
     while True:
@@ -197,7 +189,7 @@ def main():
             elif mode == "edit":
                 distance = int(float(answer)*1000)
 
-        tcx_string = create_tcx(date, distance)
+        tcx_string = create_from_distance_and_pace(date, distance)
         upload_activity(tcx_string, credentials_runalyze)
 
     with open(CONFIG_FILE, "w", encoding="utf-8") as file:
