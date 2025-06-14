@@ -1,0 +1,1 @@
+This folder contains experiments which are used to tests APIs etc., but are not formal (unit) tests.

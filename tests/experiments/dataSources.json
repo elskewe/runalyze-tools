@@ -1,0 +1,4314 @@
+{
+  "dataSource": [
+    {
+      "dataStreamId": "derived:com.google.active_minutes:com.google.android.fit:Google:Pixel 6 Pro:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.active_minutes",
+        "field": [
+          {
+            "name": "duration",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Pixel 6 Pro",
+        "manufacturer": "Google"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.active_minutes:com.google.android.fit:Xiaomi:Redmi Note 4:10318a76:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.active_minutes",
+        "field": [
+          {
+            "name": "duration",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.active_minutes:com.google.android.fit:Xiaomi:Redmi Note 8:3521d4aa:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.active_minutes",
+        "field": [
+          {
+            "name": "duration",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.active_minutes:com.google.android.fit:Xiaomi:Redmi Note 9S:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.active_minutes",
+        "field": [
+          {
+            "name": "duration",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 9S",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.active_minutes:com.google.android.gms:merge_active_minutes",
+      "dataStreamName": "merge_active_minutes",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.active_minutes",
+        "field": [
+          {
+            "name": "duration",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.fitnesskeeper.runkeeper.pro:session_activity_segment",
+      "dataStreamName": "session_activity_segment",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.fitnesskeeper.runkeeper.pro"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.apps.fitness:session_activity_segment",
+      "dataStreamName": "session_activity_segment",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.fit:Google:Pixel 6 Pro:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Pixel 6 Pro",
+        "manufacturer": "Google"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.fit:Xiaomi:Redmi Note 4:10318a76:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.fit:Xiaomi:Redmi Note 8:3521d4aa:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.fit:Xiaomi:Redmi Note 9S:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 9S",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:Google:Pixel 6 Pro:e57adbdc:from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Google:Pixel 6 Pro:e57adbdc:detailed",
+      "dataStreamName": "from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Google:Pixel 6 Pro:e57adbdc:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Pixel 6 Pro",
+        "manufacturer": "Google"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:2a8cf879:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:2a8cf879:from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:OnePlus:A0001:2a8cf879:detailed",
+      "dataStreamName": "from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:OnePlus:A0001:2a8cf879:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:2a8cf879:from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:2a8cf879:detailed",
+      "dataStreamName": "from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:2a8cf879:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:6768884b:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "6768884b",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:6768884b:from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:OnePlus:A0001:6768884b:detailed",
+      "dataStreamName": "from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:OnePlus:A0001:6768884b:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "6768884b",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:a20b1fee:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "a20b1fee",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:a20b1fee:from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:a20b1fee:detailed",
+      "dataStreamName": "from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:a20b1fee:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "a20b1fee",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:e88dbbaf:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e88dbbaf",
+        "type": "tablet",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:e88dbbaf:from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:e88dbbaf:detailed",
+      "dataStreamName": "from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:e88dbbaf:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e88dbbaf",
+        "type": "tablet",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:ceacfd25:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "ceacfd25",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:ceacfd25:from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:ceacfd25:detailed",
+      "dataStreamName": "from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:ceacfd25:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "ceacfd25",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:9b52361e:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "9b52361e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:9b52361e:from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:9b52361e:detailed",
+      "dataStreamName": "from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:9b52361e:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "9b52361e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:2fa2979e:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2fa2979e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:OnePlus:A0001:2fa2979e:from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:2fa2979e:detailed",
+      "dataStreamName": "from_sample\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:2fa2979e:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2fa2979e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:detailed",
+      "dataStreamName": "from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "673f00c7",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:detailed",
+      "dataStreamName": "from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "673f00c7",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "1d883a38",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:detailed",
+      "dataStreamName": "from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "1d883a38",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms",
+        "version": "1"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:activity_from_steps",
+      "dataStreamName": "activity_from_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:detailed",
+      "dataStreamName": "from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:Xiaomi:Redmi Note 9S:e57adbdc:from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Xiaomi:Redmi Note 9S:e57adbdc:detailed",
+      "dataStreamName": "from_activity_samples\u003c-derived:com.google.activity.samples:com.google.android.gms:Xiaomi:Redmi Note 9S:e57adbdc:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 9S",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments",
+      "dataStreamName": "merge_activity_segments",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments_local",
+      "dataStreamName": "merge_activity_segments_local",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:overlay_user_input_local",
+      "dataStreamName": "overlay_user_input_local",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.gms:session_activity_segment",
+      "dataStreamName": "session_activity_segment",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.google.android.maps.mytracks:session_activity_segment",
+      "dataStreamName": "session_activity_segment",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.maps.mytracks"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.runtastic.android.pro2:",
+      "name": "Runtastic PRO",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android.pro2"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.runtastic.android.pro2:session_activity_segment",
+      "dataStreamName": "session_activity_segment",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android.pro2"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.runtastic.android:",
+      "name": "Runtastic",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.runtastic.android:session_activity_segment",
+      "dataStreamName": "session_activity_segment",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.strava:session_activity_segment",
+      "dataStreamName": "session_activity_segment",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.strava"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.segment:com.urbandroid.sleep:session_activity_segment",
+      "dataStreamName": "session_activity_segment",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.urbandroid.sleep"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.activity.summary:com.fitnesskeeper.runkeeper.pro:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.activity.summary",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          },
+          {
+            "name": "duration",
+            "format": "integer"
+          },
+          {
+            "name": "num_segments",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.fitnesskeeper.runkeeper.pro"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.bmr:com.google.android.gms:merged",
+      "dataStreamName": "merged",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.bmr",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.expended:com.fitnesskeeper.runkeeper.pro:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.fitnesskeeper.runkeeper.pro"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.expended:com.google.android.fit:Google:Pixel 6 Pro:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Pixel 6 Pro",
+        "manufacturer": "Google"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.expended:com.google.android.fit:Xiaomi:Redmi Note 4:10318a76:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.expended:com.google.android.fit:Xiaomi:Redmi Note 8:3521d4aa:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.expended:com.google.android.fit:Xiaomi:Redmi Note 9S:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 9S",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.expended:com.google.android.gms:default_calories_expended",
+      "dataStreamName": "default_calories_expended",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.expended:com.google.android.gms:merge_calories_expended",
+      "dataStreamName": "merge_calories_expended",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.expended:com.runtastic.android.pro2:",
+      "name": "Runtastic PRO",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android.pro2"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.expended:com.runtastic.android:",
+      "name": "Runtastic",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.calories.expended:com.strava:",
+      "name": "strava-calories",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.strava"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.fitnesskeeper.runkeeper.pro:from_third_party_location\u003c-raw:com.google.location.sample:com.fitnesskeeper.runkeeper.pro:",
+      "dataStreamName": "from_third_party_location\u003c-raw:com.google.location.sample:com.fitnesskeeper.runkeeper.pro:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.fitnesskeeper.runkeeper.pro"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.fit:Google:Pixel 6 Pro:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Pixel 6 Pro",
+        "manufacturer": "Google"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.fit:Xiaomi:Redmi Note 4:10318a76:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.fit:Xiaomi:Redmi Note 8:3521d4aa:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.fit:Xiaomi:Redmi Note 9S:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 9S",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:2a8cf879:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:2a8cf879:from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:2a8cf879:",
+      "dataStreamName": "from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:2a8cf879:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:2a8cf879:from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:2a8cf879:live_location",
+      "dataStreamName": "from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:2a8cf879:live_location",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:2a8cf879:from_location\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:2a8cf879:",
+      "dataStreamName": "from_location\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:2a8cf879:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:2a8cf879:from_location\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:2a8cf879:live_location",
+      "dataStreamName": "from_location\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:2a8cf879:live_location",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:a20b1fee:from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:a20b1fee:",
+      "dataStreamName": "from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:a20b1fee:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "a20b1fee",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:a20b1fee:from_location\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:a20b1fee:",
+      "dataStreamName": "from_location\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:a20b1fee:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "a20b1fee",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:e88dbbaf:from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:e88dbbaf:",
+      "dataStreamName": "from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:e88dbbaf:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e88dbbaf",
+        "type": "tablet",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:e88dbbaf:from_location\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:e88dbbaf:",
+      "dataStreamName": "from_location\u003c-raw:com.google.location.sample:com.google.android.gms:OnePlus:A0001:e88dbbaf:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e88dbbaf",
+        "type": "tablet",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:ceacfd25:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "ceacfd25",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:2fa2979e:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2fa2979e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:OnePlus:A0001:2fa2979e:from_activity\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:2fa2979e:detailed",
+      "dataStreamName": "from_activity\u003c-derived:com.google.activity.sample:com.google.android.gms:OnePlus:A0001:2fa2979e:detailed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2fa2979e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:live_location",
+      "dataStreamName": "from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:live_location",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:from_location\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:live_location",
+      "dataStreamName": "from_location\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:live_location",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:live_location",
+      "dataStreamName": "from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:live_location",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "673f00c7",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:from_location\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:live_location",
+      "dataStreamName": "from_location\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:live_location",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "673f00c7",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:live_location",
+      "dataStreamName": "from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:live_location",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "1d883a38",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms",
+        "version": "1"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:from_location\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:live_location",
+      "dataStreamName": "from_location\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:live_location",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "1d883a38",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms",
+        "version": "1"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:live_location",
+      "dataStreamName": "from_activity\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:live_location",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:from_location\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:live_location",
+      "dataStreamName": "from_location\u003c-raw:com.google.location.sample:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:live_location",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:from_high_accuracy_location\u003c-derived:com.google.location.sample:com.google.android.gms:merge_high_fidelity",
+      "dataStreamName": "from_high_accuracy_location\u003c-derived:com.google.location.sample:com.google.android.gms:merge_high_fidelity",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:from_third_party_location\u003c-derived:com.google.location.sample:com.runtastic.android.pro2:",
+      "dataStreamName": "from_third_party_location\u003c-derived:com.google.location.sample:com.runtastic.android.pro2:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:from_third_party_location\u003c-raw:com.google.location.sample:com.fitnesskeeper.runkeeper.pro:",
+      "dataStreamName": "from_third_party_location\u003c-raw:com.google.location.sample:com.fitnesskeeper.runkeeper.pro:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:from_third_party_location\u003c-raw:com.google.location.sample:com.google.android.maps.mytracks:",
+      "dataStreamName": "from_third_party_location\u003c-raw:com.google.location.sample:com.google.android.maps.mytracks:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:merge_distance_delta",
+      "dataStreamName": "merge_distance_delta",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:third_party_from_activity\u003c-derived:com.google.location.sample:com.runtastic.android.pro2:",
+      "dataStreamName": "third_party_from_activity\u003c-derived:com.google.location.sample:com.runtastic.android.pro2:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:third_party_from_activity\u003c-raw:com.google.location.sample:com.fitnesskeeper.runkeeper.pro:",
+      "dataStreamName": "third_party_from_activity\u003c-raw:com.google.location.sample:com.fitnesskeeper.runkeeper.pro:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.google.android.gms:third_party_from_activity\u003c-raw:com.google.location.sample:com.google.android.maps.mytracks:",
+      "dataStreamName": "third_party_from_activity\u003c-raw:com.google.location.sample:com.google.android.maps.mytracks:",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.runtastic.android.pro2:",
+      "name": "Runtastic PRO",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android.pro2"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.runtastic.android:",
+      "name": "Runtastic",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.distance.delta:com.strava:",
+      "name": "strava-distance",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.strava"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_minutes:com.google.android.fit:Google:Pixel 6 Pro:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_minutes",
+        "field": [
+          {
+            "name": "intensity",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Pixel 6 Pro",
+        "manufacturer": "Google"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_minutes:com.google.android.fit:Xiaomi:Redmi Note 4:10318a76:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_minutes",
+        "field": [
+          {
+            "name": "intensity",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_minutes:com.google.android.fit:Xiaomi:Redmi Note 8:3521d4aa:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_minutes",
+        "field": [
+          {
+            "name": "intensity",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_minutes:com.google.android.fit:Xiaomi:Redmi Note 9S:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_minutes",
+        "field": [
+          {
+            "name": "intensity",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 9S",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_minutes:com.google.android.gms:bout_filtered_5min\u003c-merge_heart_minutes",
+      "dataStreamName": "bout_filtered_5min\u003c-merge_heart_minutes",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_minutes",
+        "field": [
+          {
+            "name": "intensity",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_minutes:com.google.android.gms:from_heart_rate\u003c-interpolated_heart_rate",
+      "dataStreamName": "from_heart_rate\u003c-interpolated_heart_rate",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_minutes",
+        "field": [
+          {
+            "name": "intensity",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms",
+        "version": "1"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_minutes:com.google.android.gms:from_heart_rate\u003c-merge_heart_rate_bpm",
+      "dataStreamName": "from_heart_rate\u003c-merge_heart_rate_bpm",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_minutes",
+        "field": [
+          {
+            "name": "intensity",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms",
+        "version": "1"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_minutes:com.google.android.gms:merge_heart_minutes",
+      "dataStreamName": "merge_heart_minutes",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_minutes",
+        "field": [
+          {
+            "name": "intensity",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_minutes:com.google.android.gms:normalised\u003c-bout_filtered_5min",
+      "dataStreamName": "normalised\u003c-bout_filtered_5min",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_minutes",
+        "field": [
+          {
+            "name": "intensity",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms",
+        "version": "1"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm",
+      "dataStreamName": "merge_heart_rate_bpm",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_rate.bpm",
+        "field": [
+          {
+            "name": "bpm",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_rate.summary:com.fitnesskeeper.runkeeper.pro:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_rate.summary",
+        "field": [
+          {
+            "name": "average",
+            "format": "floatPoint"
+          },
+          {
+            "name": "max",
+            "format": "floatPoint"
+          },
+          {
+            "name": "min",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.fitnesskeeper.runkeeper.pro"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_rate.summary:com.runtastic.android.pro2:",
+      "name": "Runtastic PRO",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_rate.summary",
+        "field": [
+          {
+            "name": "average",
+            "format": "floatPoint"
+          },
+          {
+            "name": "max",
+            "format": "floatPoint"
+          },
+          {
+            "name": "min",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android.pro2"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.heart_rate.summary:com.runtastic.android:",
+      "name": "Runtastic",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.heart_rate.summary",
+        "field": [
+          {
+            "name": "average",
+            "format": "floatPoint"
+          },
+          {
+            "name": "max",
+            "format": "floatPoint"
+          },
+          {
+            "name": "min",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.height:com.google.android.gms:merge_height",
+      "dataStreamName": "merge_height",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.height",
+        "field": [
+          {
+            "name": "height",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.sleep.segment:com.google.android.gms:merged",
+      "dataStreamName": "merged",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.sleep.segment",
+        "field": [
+          {
+            "name": "sleep_segment_type",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed.summary:com.fitnesskeeper.runkeeper.pro:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed.summary",
+        "field": [
+          {
+            "name": "average",
+            "format": "floatPoint"
+          },
+          {
+            "name": "max",
+            "format": "floatPoint"
+          },
+          {
+            "name": "min",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.fitnesskeeper.runkeeper.pro"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed.summary:com.runtastic.android.pro2:",
+      "name": "Runtastic PRO",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed.summary",
+        "field": [
+          {
+            "name": "average",
+            "format": "floatPoint"
+          },
+          {
+            "name": "max",
+            "format": "floatPoint"
+          },
+          {
+            "name": "min",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android.pro2"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed.summary:com.runtastic.android:",
+      "name": "Runtastic",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed.summary",
+        "field": [
+          {
+            "name": "average",
+            "format": "floatPoint"
+          },
+          {
+            "name": "max",
+            "format": "floatPoint"
+          },
+          {
+            "name": "min",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.runtastic.android"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed:com.google.android.fit:Google:Pixel 6 Pro:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed",
+        "field": [
+          {
+            "name": "speed",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Pixel 6 Pro",
+        "manufacturer": "Google"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed:com.google.android.fit:Xiaomi:Redmi Note 4:10318a76:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed",
+        "field": [
+          {
+            "name": "speed",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed:com.google.android.fit:Xiaomi:Redmi Note 8:3521d4aa:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed",
+        "field": [
+          {
+            "name": "speed",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed:com.google.android.fit:Xiaomi:Redmi Note 9S:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed",
+        "field": [
+          {
+            "name": "speed",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 9S",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed:com.google.android.gms:OnePlus:A0001:2a8cf879:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed",
+        "field": [
+          {
+            "name": "speed",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed:com.google.android.gms:OnePlus:A0001:a20b1fee:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed",
+        "field": [
+          {
+            "name": "speed",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "a20b1fee",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed:com.google.android.gms:OnePlus:A0001:e88dbbaf:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed",
+        "field": [
+          {
+            "name": "speed",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e88dbbaf",
+        "type": "tablet",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed:com.google.android.gms:OnePlus:A0001:ceacfd25:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed",
+        "field": [
+          {
+            "name": "speed",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "ceacfd25",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed:com.google.android.gms:OnePlus:A0001:2fa2979e:",
+      "dataStreamName": "",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed",
+        "field": [
+          {
+            "name": "speed",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2fa2979e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.speed:com.google.android.gms:merge_speed",
+      "dataStreamName": "merge_speed",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.speed",
+        "field": [
+          {
+            "name": "speed",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.fit:Google:Pixel 6 Pro:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Pixel 6 Pro",
+        "manufacturer": "Google"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.fit:Xiaomi:Redmi Note 4:10318a76:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.fit:Xiaomi:Redmi Note 8:3521d4aa:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.fit:Xiaomi:Redmi Note 9S:e57adbdc:top_level",
+      "dataStreamName": "top_level",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 9S",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.fit"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:Google:Pixel 6 Pro:e57adbdc:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Google:Pixel 6 Pro:e57adbdc:pedometer  Non-wakeup",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Google:Pixel 6 Pro:e57adbdc:pedometer  Non-wakeup",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Pixel 6 Pro",
+        "manufacturer": "Google"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:OnePlus:A0001:2a8cf879:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:2a8cf879:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:2a8cf879:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:OnePlus:A0001:6768884b:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:6768884b:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:6768884b:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "6768884b",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:OnePlus:A0001:a20b1fee:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:a20b1fee:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:a20b1fee:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "a20b1fee",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:OnePlus:A0001:e88dbbaf:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:e88dbbaf:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:e88dbbaf:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e88dbbaf",
+        "type": "tablet",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:OnePlus:A0001:ceacfd25:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:ceacfd25:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:ceacfd25:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "ceacfd25",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:OnePlus:A0001:9b52361e:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:9b52361e:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:9b52361e:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "9b52361e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:OnePlus:A0001:2fa2979e:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:2fa2979e:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:2fa2979e:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2fa2979e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:Xiaomi:Redmi Note 4:10318a76:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:10318a76:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:10318a76:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:Xiaomi:Redmi Note 4:673f00c7:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:673f00c7:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:673f00c7:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "673f00c7",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:1d883a38:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:1d883a38:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "1d883a38",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms",
+        "version": "1"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:Xiaomi:Redmi Note 4:1d883a38:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:1d883a38:Step Counter -Wakeup Secondary",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:1d883a38:Step Counter -Wakeup Secondary",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "1d883a38",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms",
+        "version": "1"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:Xiaomi:Redmi Note 8:3521d4aa:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 8:3521d4aa:pedometer  Non-wakeup",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 8:3521d4aa:pedometer  Non-wakeup",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:Xiaomi:Redmi Note 9S:e57adbdc:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 9S:e57adbdc:pedometer  Non-wakeup",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 9S:e57adbdc:pedometer  Non-wakeup",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 9S",
+        "manufacturer": "Xiaomi"
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:2fa2979e:Step Counter",
+      "dataStreamName": "derive_step_deltas\u003c-raw:com.google.step_count.cumulative:OnePlus:A0001:2fa2979e:Step Counter",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps",
+      "dataStreamName": "estimated_steps",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas",
+      "dataStreamName": "merge_step_deltas",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas_local",
+      "dataStreamName": "merge_step_deltas_local",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "derived:com.google.weight:com.google.android.gms:merge_weight",
+      "dataStreamName": "merge_weight",
+      "type": "derived",
+      "dataType": {
+        "name": "com.google.weight",
+        "field": [
+          {
+            "name": "weight",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.gms"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.activity.segment:com.google.android.apps.fitness:OnePlus:A0001:2a8cf879:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.activity.segment:com.google.android.apps.fitness:OnePlus:A0001:e88dbbaf:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e88dbbaf",
+        "type": "tablet",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.activity.segment:com.google.android.apps.fitness:OnePlus:A0001:ceacfd25:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "ceacfd25",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.activity.segment:com.google.android.apps.fitness:OnePlus:A0001:2fa2979e:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2fa2979e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.activity.segment:com.google.android.apps.fitness:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.activity.segment:com.google.android.maps.mytracks:",
+      "name": "My Tracks",
+      "dataStreamName": "",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.activity.segment",
+        "field": [
+          {
+            "name": "activity",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.maps.mytracks"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.calories.expended:com.fitnesskeeper.runkeeper.pro:",
+      "dataStreamName": "",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.fitnesskeeper.runkeeper.pro"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.calories.expended:com.google.android.apps.fitness:OnePlus:A0001:e88dbbaf:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.calories.expended",
+        "field": [
+          {
+            "name": "calories",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e88dbbaf",
+        "type": "tablet",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.distance.delta:com.dsi.ant.plugins.antplus:AntPlus.0.124",
+      "name": "Generic ANT+ Sensor",
+      "dataStreamName": "AntPlus.0.124",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.dsi.ant.plugins.antplus"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.distance.delta:com.google.android.apps.fitness:OnePlus:A0001:e88dbbaf:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e88dbbaf",
+        "type": "tablet",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.distance.delta:com.xiaomi.hm.health:GoogleFitSyncHelper- distance",
+      "dataStreamName": "GoogleFitSyncHelper- distance",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.distance.delta",
+        "field": [
+          {
+            "name": "distance",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.xiaomi.hm.health"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.heart_rate.bpm:com.dsi.ant.plugins.antplus:AntPlus.0.120",
+      "name": "Generic ANT+ Sensor",
+      "dataStreamName": "AntPlus.0.120",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.heart_rate.bpm",
+        "field": [
+          {
+            "name": "bpm",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.dsi.ant.plugins.antplus"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.heart_rate.bpm:si.modula.android.instantheartrate:",
+      "name": "Instant Heart Rate",
+      "dataStreamName": "",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.heart_rate.bpm",
+        "field": [
+          {
+            "name": "bpm",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "si.modula.android.instantheartrate"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.height:com.google.android.apps.fitness:OnePlus:A0001:2a8cf879:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.height",
+        "field": [
+          {
+            "name": "height",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.height:com.google.android.apps.fitness:OnePlus:A0001:a20b1fee:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.height",
+        "field": [
+          {
+            "name": "height",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "a20b1fee",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.height:com.google.android.apps.fitness:OnePlus:A0001:9b52361e:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.height",
+        "field": [
+          {
+            "name": "height",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "9b52361e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.height:com.google.android.apps.fitness:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.height",
+        "field": [
+          {
+            "name": "height",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.nutrition:com.myfitnesspal.android:",
+      "name": "MyFitnessPal",
+      "dataStreamName": "",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.nutrition",
+        "field": [
+          {
+            "name": "nutrients",
+            "format": "map"
+          },
+          {
+            "name": "meal_type",
+            "format": "integer",
+            "optional": true
+          },
+          {
+            "name": "food_item",
+            "format": "string",
+            "optional": true
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.myfitnesspal.android"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:Google:Pixel 6 Pro:e57adbdc:pedometer  Non-wakeup",
+      "dataStreamName": "pedometer  Non-wakeup",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Pixel 6 Pro",
+        "manufacturer": "Google"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:OnePlus:A0001:2a8cf879:Step Counter",
+      "dataStreamName": "Step Counter",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {},
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:OnePlus:A0001:6768884b:Step Counter",
+      "dataStreamName": "Step Counter",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "6768884b",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:OnePlus:A0001:a20b1fee:Step Counter",
+      "dataStreamName": "Step Counter",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "a20b1fee",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:OnePlus:A0001:e88dbbaf:Step Counter",
+      "dataStreamName": "Step Counter",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e88dbbaf",
+        "type": "tablet",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {},
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:OnePlus:A0001:ceacfd25:Step Counter",
+      "dataStreamName": "Step Counter",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "ceacfd25",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {},
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:OnePlus:A0001:9b52361e:Step Counter",
+      "dataStreamName": "Step Counter",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "9b52361e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:OnePlus:A0001:2fa2979e:Step Counter",
+      "dataStreamName": "Step Counter",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2fa2979e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {},
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:10318a76:Step Counter",
+      "dataStreamName": "Step Counter",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "10318a76",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:673f00c7:Step Counter",
+      "dataStreamName": "Step Counter",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "673f00c7",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:1d883a38:Step Counter",
+      "dataStreamName": "Step Counter",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "1d883a38",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 4:1d883a38:Step Counter -Wakeup Secondary",
+      "dataStreamName": "Step Counter -Wakeup Secondary",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "1d883a38",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 4",
+        "manufacturer": "Xiaomi"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 8:3521d4aa:pedometer  Non-wakeup",
+      "dataStreamName": "pedometer  Non-wakeup",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "3521d4aa",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 8",
+        "manufacturer": "Xiaomi"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.cumulative:Xiaomi:Redmi Note 9S:e57adbdc:pedometer  Non-wakeup",
+      "dataStreamName": "pedometer  Non-wakeup",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.cumulative",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "e57adbdc",
+        "type": "phone",
+        "version": "",
+        "model": "Redmi Note 9S",
+        "manufacturer": "Xiaomi"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.delta:com.dsi.ant.plugins.antplus:AntPlus.0.124",
+      "name": "Generic ANT+ Sensor",
+      "dataStreamName": "AntPlus.0.124",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.dsi.ant.plugins.antplus"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.delta:com.xiaomi.hm.health:GoogleFitSyncHelper- steps",
+      "dataStreamName": "GoogleFitSyncHelper- steps",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.xiaomi.hm.health"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.delta:de.j4velin.pedometer:",
+      "name": "Pedometer - step count",
+      "dataStreamName": "",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "de.j4velin.pedometer"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.step_count.delta:de.j4velin.pedometer:OnePlus:A0001:2a8cf879:",
+      "name": "Pedometer - step count",
+      "dataStreamName": "",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.step_count.delta",
+        "field": [
+          {
+            "name": "steps",
+            "format": "integer"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "de.j4velin.pedometer"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.weight:com.google.android.apps.fitness:OnePlus:A0001:2a8cf879:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.weight",
+        "field": [
+          {
+            "name": "weight",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "2a8cf879",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.weight:com.google.android.apps.fitness:OnePlus:A0001:a20b1fee:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.weight",
+        "field": [
+          {
+            "name": "weight",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "a20b1fee",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.weight:com.google.android.apps.fitness:OnePlus:A0001:9b52361e:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.weight",
+        "field": [
+          {
+            "name": "weight",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "device": {
+        "uid": "9b52361e",
+        "type": "phone",
+        "version": "",
+        "model": "A0001",
+        "manufacturer": "OnePlus"
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.weight:com.google.android.apps.fitness:user_input",
+      "dataStreamName": "user_input",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.weight",
+        "field": [
+          {
+            "name": "weight",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.google.android.apps.fitness"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.weight:com.myfitnesspal.android:",
+      "name": "MyFitnessPal",
+      "dataStreamName": "",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.weight",
+        "field": [
+          {
+            "name": "weight",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.myfitnesspal.android"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.weight:com.withings.wiscale2:com.google.weight-Withings",
+      "dataStreamName": "com.google.weight-Withings",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.weight",
+        "field": [
+          {
+            "name": "weight",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.withings.wiscale2"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.weight:com.xiaomi.hm.health:",
+      "dataStreamName": "",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.weight",
+        "field": [
+          {
+            "name": "weight",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.xiaomi.hm.health"
+      },
+      "dataQualityStandard": []
+    },
+    {
+      "dataStreamId": "raw:com.google.weight:com.xiaomi.hm.health:GoogleFitSyncHelper - weight",
+      "dataStreamName": "GoogleFitSyncHelper - weight",
+      "type": "raw",
+      "dataType": {
+        "name": "com.google.weight",
+        "field": [
+          {
+            "name": "weight",
+            "format": "floatPoint"
+          }
+        ]
+      },
+      "application": {
+        "packageName": "com.xiaomi.hm.health"
+      },
+      "dataQualityStandard": []
+    }
+  ]
+}

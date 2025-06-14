@@ -1,0 +1,146 @@
+{
+  "bucket": [
+    {
+      "startTimeMillis": "1712275200000",
+      "endTimeMillis": "1712361600000",
+      "dataset": [
+        {
+          "dataSourceId": "derived:com.google.activity.summary:com.google.android.gms:aggregated",
+          "point": [
+            {
+              "startTimeNanos": "1712303177121000000",
+              "endTimeNanos": "1712350034627000000",
+              "dataTypeName": "com.google.activity.summary",
+              "originDataSourceId": "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments",
+              "value": [
+                {
+                  "intVal": 7,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 2905981,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 24,
+                  "mapVal": []
+                }
+              ]
+            },
+            {
+              "startTimeNanos": "1712303177121000000",
+              "endTimeNanos": "1712350034627000000",
+              "dataTypeName": "com.google.activity.summary",
+              "originDataSourceId": "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments",
+              "value": [
+                {
+                  "intVal": 8,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 490581,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 25,
+                  "mapVal": []
+                }
+              ]
+            },
+            {
+              "startTimeNanos": "1712310017705000000",
+              "endTimeNanos": "1712310412222000000",
+              "dataTypeName": "com.google.activity.summary",
+              "originDataSourceId": "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments",
+              "value": [
+                {
+                  "intVal": 0,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 394517,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 1,
+                  "mapVal": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "startTimeMillis": "1712361600000",
+      "endTimeMillis": "1712448000000",
+      "dataset": [
+        {
+          "dataSourceId": "derived:com.google.activity.summary:com.google.android.gms:aggregated",
+          "point": [
+            {
+              "startTimeNanos": "1712390177147000000",
+              "endTimeNanos": "1712407077408000000",
+              "dataTypeName": "com.google.activity.summary",
+              "originDataSourceId": "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments",
+              "value": [
+                {
+                  "intVal": 1,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 11085896,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 3,
+                  "mapVal": []
+                }
+              ]
+            },
+            {
+              "startTimeNanos": "1712391298020000000",
+              "endTimeNanos": "1712410870302000000",
+              "dataTypeName": "com.google.activity.summary",
+              "originDataSourceId": "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments",
+              "value": [
+                {
+                  "intVal": 0,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 2566627,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 2,
+                  "mapVal": []
+                }
+              ]
+            },
+            {
+              "startTimeNanos": "1712392546246000000",
+              "endTimeNanos": "1712413551825000000",
+              "dataTypeName": "com.google.activity.summary",
+              "originDataSourceId": "derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments",
+              "value": [
+                {
+                  "intVal": 7,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 465980,
+                  "mapVal": []
+                },
+                {
+                  "intVal": 7,
+                  "mapVal": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
