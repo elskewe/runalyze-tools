@@ -22,7 +22,7 @@ def create(date: datetime.datetime, duration: int, activity_type: str = "Other")
 
 
 def create_from_distance_and_pace(date: datetime.datetime, distance: int, pace=10.0, activity_type="Other") -> str:
-    """Creates a tcx from the distance and pace.
+    """Creates a tcx from the distance and pace (but only the duration is in the tcx file).
 
     Args:
         date (datetime.datetime): The date of the activity.
