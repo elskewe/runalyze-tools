@@ -15,8 +15,12 @@ def upload_activity(tcx_string: str, credentials, title: str = "", note: str = "
 
 
 def get_activities(credentials, page=1):
-def get_activities(credentials):
-    """Returns the last 100 activities."""
+    """Returns the last 100 activities.
+
+    Args:
+        credentials (dict): The credentials for the Runalyze API.
+        page (int, optional): The page to get. Defaults to 1.
+    """
     r = requests.get(RUNALYZE_API_ENDPOINT + "activity",
                      headers=credentials,
                      params={"page": page, "order[id]": "desc"})
