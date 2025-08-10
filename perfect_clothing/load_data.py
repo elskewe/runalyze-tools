@@ -54,10 +54,18 @@ def clean_data(data: list[api.ActivityType]) -> list[api.ActivityType]:
 def valid_activity(activity: api.ActivityType) -> bool:
     """Checks if the activity is valid.
 
+    This means:
+        - The activity is a run
+        - The activity has a temperature recorded
+
     Returns:
         bool: True if the activity is valid, False otherwise.
     """
-    return True  # TODO: implement
+    is_valid = (
+        isinstance(s := activity.get("sport"), dict) and s.get("name") == "Laufen"
+        and "temperature" in activity
+    )
+    return is_valid
 
 
 def purge_fields(activity: api.ActivityType) -> None:
