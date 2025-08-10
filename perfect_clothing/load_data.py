@@ -26,7 +26,7 @@ def load_data():
 
     Path(CACHE_FILE).mkdir(parents=True, exist_ok=True)
     with open(CACHE_FILE, "w", encoding="utf-8") as f:
-        json.dump(activities, f)
+        json.dump(activities, f, indent=4)
 
     return activities
 
@@ -37,7 +37,7 @@ def clean_file():
         data = json.load(f)
     data = clean_data(data)
     with open(CACHE_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=4)
 
 
 def clean_data(data: list[api.ActivityType]) -> list[api.ActivityType]:
