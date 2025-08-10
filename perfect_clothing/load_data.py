@@ -3,6 +3,7 @@ from pathlib import Path
 from rich.progress import Progress, MofNCompleteColumn, TimeElapsedColumn
 from runalyze import api
 
+
 def load_data():
     with open("runalyze_credentials.json", "r", encoding="utf-8") as f:
         credentials = json.load(f)
