@@ -9,7 +9,7 @@ def load_data():
         credentials = json.load(f)
 
     page = 1
-    activities = []
+    activities: api.ActivitiesType = []
 
     with Progress(*Progress.get_default_columns(), MofNCompleteColumn(), TimeElapsedColumn()) as p:
         task_id = p.add_task("Loading activities", total=None)

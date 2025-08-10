@@ -2,6 +2,10 @@ import requests
 
 RUNALYZE_API_ENDPOINT = "https://runalyze.com/api/v1/"
 
+PossibleDictValueTypes = int | float | str | bool
+# return type of the `activity` endpoint
+ActivitiesType = list[dict[str, PossibleDictValueTypes | dict[str, PossibleDictValueTypes]]]
+
 
 def upload_activity(tcx_string: str, credentials, title: str = "", note: str = ""):
     """Uploads an activity to Runalyze."""
@@ -14,7 +18,7 @@ def upload_activity(tcx_string: str, credentials, title: str = "", note: str = "
         raise requests.exceptions.RequestException("Error uploading activity to Runalyze")
 
 
-def get_activities(credentials, page=1):
+def get_activities(credentials, page=1) -> ActivitiesType:
     """Returns the last 100 activities.
 
     Args:
