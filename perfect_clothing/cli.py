@@ -1,4 +1,5 @@
 import click
+from perfect_clothing import load_data as ld
 
 
 @click.group()
@@ -9,7 +10,7 @@ def cli():
 @cli.command()
 def load_data():
     """Loads the data from Runalyze for training."""
-    raise NotImplementedError
+    ld.load_data()
 
 
 @cli.command()
