@@ -31,6 +31,15 @@ def load_data():
     return activities
 
 
+def clean_file():
+    """Calls `clean_data` on the cache file."""
+    with open(CACHE_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    data = clean_data(data)
+    with open(CACHE_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f)
+
+
 def clean_data(data: list[api.ActivityType]) -> list[api.ActivityType]:
     """Removes activities which are not useful as well as keys which are not needed
 
