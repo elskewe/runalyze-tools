@@ -70,4 +70,12 @@ def valid_activity(activity: api.ActivityType) -> bool:
 
 def purge_fields(activity: api.ActivityType) -> None:
     """Removes fields which are not needed in place."""
-    pass  # TODO: implement
+    # these are checked with `startswith`
+    useless_fields = [
+        "aerobic_decoupling_", "max_hr_drop", "stamina_", "fit_performance_condition", "hrv",
+        "groundcontact", "vertical_", "stride_length", "cadence",
+        "partner"
+    ]
+    for k in list(activity.keys()):
+        if any(k.startswith(f) for f in useless_fields):
+            del activity[k]
