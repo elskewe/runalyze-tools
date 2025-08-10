@@ -27,3 +27,28 @@ def load_data():
         json.dump(activities, f)
 
     return activities
+
+
+def clean_data(data: list[api.ActivityType]) -> list[api.ActivityType]:
+    """Removes activities which are not useful as well as keys which are not needed
+
+    The former is defined in `valid_activity`, the later in `purge_fields`.
+    """
+    output = [e for e in data if valid_activity(e)]
+    for e in output:
+        purge_fields(e)
+    return output
+
+
+def valid_activity(activity: api.ActivityType) -> bool:
+    """Checks if the activity is valid.
+
+    Returns:
+        bool: True if the activity is valid, False otherwise.
+    """
+    return True  # TODO: implement
+
+
+def purge_fields(activity: api.ActivityType) -> None:
+    """Removes fields which are not needed in place."""
+    pass  # TODO: implement
