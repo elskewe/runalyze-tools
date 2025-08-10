@@ -3,6 +3,8 @@ from pathlib import Path
 from rich.progress import Progress, MofNCompleteColumn, TimeElapsedColumn
 from runalyze import api
 
+CACHE_FILE = "cache/activities.json"
+
 
 def load_data():
     with open("runalyze_credentials.json", "r", encoding="utf-8") as f:
@@ -22,8 +24,8 @@ def load_data():
             page += 1
             p.update(task_id, advance=1)
 
-    Path("cache").mkdir(parents=True, exist_ok=True)
-    with open("cache/activities.json", "w", encoding="utf-8") as f:
+    Path(CACHE_FILE).mkdir(parents=True, exist_ok=True)
+    with open(CACHE_FILE, "w", encoding="utf-8") as f:
         json.dump(activities, f)
 
     return activities
