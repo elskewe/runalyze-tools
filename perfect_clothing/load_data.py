@@ -25,3 +25,4 @@ def load_data():
     with open("cache/activities.json", "w", encoding="utf-8") as f:
         json.dump(activities, f)
 
+    return activities
