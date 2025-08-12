@@ -8,7 +8,6 @@ from datetime import datetime
 def train():
     # basic steps:
     # 3. add radiance data (including cloud cover)
-    #    2. correct location
     #    3. adjust time to reflect activity duration
     # 4. compute apparent temperature? Ask ChatGPT
     # 5. train (steps 3)-6) in https://chatgpt.com/c/689769a2-3eb8-832b-acdc-4423c037fa03, needs more clarification. Maybe ask non-reasoning model a similar prompt?)
@@ -34,6 +33,16 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
         e["date_time"] = datetime.fromisoformat(e["date_time"])  # type: ignore
         e["location"], e["latitude"], e["longitude"] = (
             assumptions.get_location(e["date_time"], e.get("recurring_route")))  # type: ignore
+
+    for i, e in enumerate(data):
+        if e["latitude"] == 0 and e["longitude"] == 0:
+            # use older data point (list starts with newest activities)
+            e["latitude"] = data[i + 1]["latitude"]
+            e["longitude"] = data[i + 1]["longitude"]
+            if e["latitude"] == 0 and e["longitude"] == 0:
+                # use newer data point as alternative
+                e["latitude"] = data[i - 1]["latitude"]
+                e["longitude"] = data[i - 1]["longitude"]
 
     return pd.DataFrame(data)
 
