@@ -7,3 +7,4 @@ click
 rich
 pandas
 pvlib
+geopy
