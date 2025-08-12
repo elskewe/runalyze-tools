@@ -1,7 +1,7 @@
 """Contains functions related to weather (e.g. sun radiation)."""
 
 from datetime import datetime
-from typing import OrderedDict, cast
+from typing import cast
 import pvlib
 import pandas as pd
 
