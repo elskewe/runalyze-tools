@@ -24,6 +24,8 @@ def load_data():
             page += 1
             p.update(task_id, advance=1)
 
+    activities = clean_data(activities)
+
     Path(CACHE_FILE).parent.mkdir(parents=True, exist_ok=True)
     with open(CACHE_FILE, "w", encoding="utf-8") as f:
         json.dump(activities, f, indent=4)
