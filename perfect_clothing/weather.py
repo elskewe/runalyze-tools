@@ -3,6 +3,7 @@
 from datetime import datetime
 from typing import OrderedDict, cast
 import pvlib
+import pandas as pd
 
 
 def get_radiance(latitude: float, longitude: float, date: datetime, cloud_cover: int) -> float:
@@ -19,8 +20,8 @@ def get_radiance(latitude: float, longitude: float, date: datetime, cloud_cover:
     """
     location = pvlib.location.Location(latitude, longitude)
     # cast is valid assuming a scalar input (instead of a pandas series)
-    clearsky = cast(OrderedDict, location.get_clearsky(date))
-    ghi = cloud_cover_to_ghi_linear(cloud_cover, clearsky["ghi"])
+    clearsky = cast(pd.DataFrame, location.get_clearsky(pd.to_datetime([date])))
+    ghi = cloud_cover_to_ghi_linear(cloud_cover, float(clearsky.iloc[0]["ghi"]))
     return ghi
 
 
