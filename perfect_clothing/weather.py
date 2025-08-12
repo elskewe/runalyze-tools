@@ -1,10 +1,12 @@
 """Contains functions related to weather (e.g. sun radiation)."""
 
 from datetime import datetime
-from typing import cast
+from typing import cast, TypeVar
 import pvlib
 import pandas as pd
+import numpy as np
 
+NumericType = TypeVar("NumericType", float, np.ndarray)
 
 def get_radiance(latitude: float, longitude: float, date: datetime, cloud_cover: int) -> float:
     """Returns the sun radiation for a given location and date.
@@ -25,7 +27,7 @@ def get_radiance(latitude: float, longitude: float, date: datetime, cloud_cover:
     return ghi
 
 
-def cloud_cover_to_ghi_linear(cloud_cover: float, ghi_clear: float, offset=35):
+def cloud_cover_to_ghi_linear(cloud_cover: NumericType, ghi_clear: NumericType, offset=35) -> NumericType:
     """
     Convert cloud cover to GHI using a linear relationship. 0% cloud cover returns ghi_clear. 100%
     cloud cover returns offset*ghi_clear.
