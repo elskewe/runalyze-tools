@@ -9,7 +9,7 @@ import numpy as np
 NumericType = TypeVar("NumericType", float, np.ndarray)
 
 
-def get_radiance(latitude: float, longitude: float, dates: pd.DatetimeIndex | datetime, 
+def get_radiation(latitude: float, longitude: float, dates: pd.DatetimeIndex | datetime, 
                  cloud_cover: np.ndarray) -> np.ndarray:
     """Returns the sun radiation for a given location and dates.
 

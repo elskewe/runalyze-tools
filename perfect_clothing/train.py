@@ -46,7 +46,7 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
 
 def get_radiation_data(data: pd.DataFrame) -> pd.Series:
     """Returns the radiation data for a given data frame. Assumes that the location is identical for each row."""
-    return pd.Series(weather.get_radiance(
+    return pd.Series(weather.get_radiation(
         data["latitude"].iloc[0], data["longitude"].iloc[0],
         pd.to_datetime(data["date_time"].to_list()), data["cloud_cover"].to_numpy()),
         index=data.index)
