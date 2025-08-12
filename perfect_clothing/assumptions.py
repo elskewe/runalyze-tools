@@ -1,5 +1,5 @@
 """This module contains the assumptions used for the data."""
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def get_cloud_cover(condition: str) -> int:
@@ -34,4 +34,6 @@ def get_location(date: datetime, recurring_route: dict) -> tuple[float, float]:
     Returns:
         tuple[float, float]: The latitude and longitude.
     """
-    return 47, 9  #TODO: find a better location
+    if date < datetime(2020, 1, 1, tzinfo=timezone.utc):
+        return 48.5, 8.8
+    return 47.7, 9.15  #TODO: find a better location
