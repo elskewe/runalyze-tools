@@ -73,4 +73,4 @@ def lookup_location(name: str) -> tuple[float, float]:
     with open(GEOPY_CACHE, "w", encoding="utf-8") as f:
         json.dump(locations, f, indent=4)
     time.sleep(1)  # to satisfy the rate limit in ToS
-    return locations[name].latitude, locations[name].longitude  # type: ignore
+    return locations[name]["latitude"], locations[name]["longitude"]  # type: ignore
