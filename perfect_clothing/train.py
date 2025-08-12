@@ -1,0 +1,45 @@
+from typing import cast
+import pandas as pd
+from perfect_clothing import load_data, weather, assumptions
+from runalyze import api
+from datetime import datetime
+
+
+def train():
+    # basic steps:
+    # 3. add radiance data (including cloud cover)
+    #    1. find improve performance?
+    #    2. correct location
+    #    3. adjust time to reflect activity duration
+    # 4. compute apparent temperature? Ask ChatGPT
+    # 5. train (steps 3)-6) in https://chatgpt.com/c/689769a2-3eb8-832b-acdc-4423c037fa03, needs more clarification. Maybe ask non-reasoning model a similar prompt?)
+
+    data = load_data.get_data()
+    data_df = convert_to_df(data)
+    data_df = clean_data(data_df)
+    data_df["ghi"] = data_df.apply(get_radiation_data, axis=1)
+    data_df
+
+
+def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
+    """Converts the json data to a pandas dataframe."""
+    for e in data:
+        e["sport"] = e["sport"]["name"]  # type: ignore
+        if isinstance(t := e.get("type"), dict):
+            e["type"] = t["name"]
+        e["date_time"] = datetime.fromisoformat(e["date_time"])  # type: ignore
+
+    return pd.DataFrame(data)
+
+
+def clean_data(data: pd.DataFrame) -> pd.DataFrame:
+    """Removes activities with missing data"""
+    data = data[~data["weather_condition"].str.contains("unknown")]  # missing weather
+    return data
+
+
+def get_radiation_data(row: pd.Series) -> float:
+    """Returns the radiation data for a given row."""
+    cloud_cover = assumptions.get_cloud_cover(row["weather_condition"])
+    latitude, longitude = assumptions.get_location(row["date_time"], row["recurring_route"])
+    return weather.get_radiance(latitude, longitude, row["date_time"], cloud_cover)

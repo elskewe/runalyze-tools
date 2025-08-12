@@ -1,5 +1,6 @@
 import click
 from perfect_clothing import load_data as ld
+from perfect_clothing import train as tr
 
 
 @click.group()
@@ -26,7 +27,7 @@ def clean_data():
 @cli.command()
 def train():
     """Trains the model."""
-    raise NotImplementedError
+    tr.train()
 
 
 @cli.command()
