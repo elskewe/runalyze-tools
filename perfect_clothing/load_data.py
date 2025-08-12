@@ -7,6 +7,7 @@ CACHE_FILE = "cache/activities.json"
 
 
 def load_data():
+    """Loads the data from Runalyze."""
     with open("runalyze_credentials.json", "r", encoding="utf-8") as f:
         credentials = json.load(f)
 
