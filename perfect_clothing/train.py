@@ -32,7 +32,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
         if isinstance(t := e.get("type"), dict):
             e["type"] = t["name"]
         e["date_time"] = datetime.fromisoformat(e["date_time"])  # type: ignore
-        e["latitude"], e["longitude"] = (
+        e["location"], e["latitude"], e["longitude"] = (
             assumptions.get_location(e["date_time"], e.get("recurring_route")))  # type: ignore
 
     return pd.DataFrame(data)

@@ -28,7 +28,7 @@ def get_cloud_cover(condition: str) -> int:
             raise ValueError(f"Unknown weather condition: {condition}")
 
 
-def get_location(date: datetime, recurring_route: dict) -> tuple[float, float]:
+def get_location(date: datetime, recurring_route: dict) -> tuple[str, float, float]:
     """Tries to guess the location.
 
     If there is a recurring route, this is used, otherwise the location is guessed based on the date.
@@ -38,11 +38,12 @@ def get_location(date: datetime, recurring_route: dict) -> tuple[float, float]:
         recurring_route (dict): The recurring route dict.
 
     Returns:
-        tuple[float, float]: The latitude and longitude.
+        tuple[str, float, float]: The name, latitude and longitude.
     """
-    if date < datetime(2020, 1, 1, tzinfo=timezone.utc):
-        return 48.5, 8.8
-    return 47.7, 9.15  #TODO: find a better location
+    if recurring_route and recurring_route.get("name"):
+        return (recurring_route["name"],) + lookup_location(recurring_route["name"])
+    else:
+        return "", 0, 0
 
 
 @lru_cache(maxsize=None)
