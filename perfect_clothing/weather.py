@@ -17,7 +17,7 @@ def get_radiance(latitude: float, longitude: float, date: datetime, cloud_cover:
     Returns:
         float: The sun radiation in W/m2.
     """
-    location = pvlib.location.Location(latitude, longitude, tz=date.tzinfo)
+    location = pvlib.location.Location(latitude, longitude)
     # cast is valid assuming a scalar input (instead of a pandas series)
     clearsky = cast(OrderedDict, location.get_clearsky(date))
     ghi = cloud_cover_to_ghi_linear(cloud_cover, clearsky["ghi"])
