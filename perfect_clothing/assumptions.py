@@ -54,11 +54,13 @@ SORTED_CLOTHING = {
 
 ALL_CLOTHING_ITEMS = [e for v in SORTED_CLOTHING.values() for e in v]
 
-
 # the key is replaced by the value
 CLOTHING_REPLACEMENTS = {
     "2. Langarmshirt": "Langarmshirt"  # only because Runalyze can't handle multiple entries of the same item
 }
+
+TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
+OK_TEMPERATURE_LABEL = "ok"
 
 
 def get_cloud_cover(condition: str) -> int:

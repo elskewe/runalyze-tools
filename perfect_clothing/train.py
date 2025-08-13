@@ -30,6 +30,7 @@ def prepare_data(data: list[api.ActivityType]) -> pd.DataFrame:
         ["latitude", "longitude", "timezone_offset"],
         sort=False, group_keys=False).apply(get_radiation_data)
     data_df = encode_clothing_layers(data_df)
+    data_df["comfort_int"] = data_df["comfort"].map(assumptions.TEMPERATURE_LABEL_MAPPING)
     return data_df
 
 
@@ -48,6 +49,13 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
             e["equipment"] = assumptions.convert_equipment(equipment)  # type: ignore
             e |= assumptions.split_equipment(e["equipment"])
         e["is_race"] = True if e.get("race_result") else False
+        # if there is a comfort label use it, otherwise use ok
+        e["comfort"] = next(
+            (tag["tag"]
+             for tag in e.get("tags", [])  # type: ignore
+             if assumptions.TEMPERATURE_LABEL_MAPPING.get(tag["tag"]) is not None),
+            assumptions.OK_TEMPERATURE_LABEL
+        )
 
     # try filling missing location data
     for i, e in enumerate(data):
