@@ -34,6 +34,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
         e["location"], e["latitude"], e["longitude"] = (
             assumptions.get_location(e["date_time"], e.get("recurring_route")))  # type: ignore
 
+    # try filling missing location data
     for i, e in enumerate(data):
         if e["latitude"] == 0 and e["longitude"] == 0:
             # use older data point (list starts with newest activities)
