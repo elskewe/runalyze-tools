@@ -1,5 +1,5 @@
 """This module contains the assumptions used for the data."""
-from datetime import datetime, timezone
+from datetime import datetime
 from functools import lru_cache
 import json
 import time
