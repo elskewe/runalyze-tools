@@ -35,6 +35,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
             assumptions.get_location(e["date_time"], e.get("recurring_route")))  # type: ignore
         if isinstance(equipment := e.get("equipment"), list):
             e["equipment"] = assumptions.convert_equipment(equipment)  # type: ignore
+            e |= assumptions.split_equipment(e["equipment"])
         e["is_race"] = True if e.get("race_result") else False
 
     # try filling missing location data

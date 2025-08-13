@@ -139,3 +139,16 @@ def convert_equipment(equipment: list[dict[str, str | int]]) -> list[str]:
     # apply replacements and remove everything that is not a clothing item
     return [CLOTHING_REPLACEMENTS.get(name, name) for d in equipment
             if (name := d.get("name")) in ALL_CLOTHING_ITEMS or name in INVALID_CLOTHING]
+
+
+def split_equipment(equipment: list[str]) -> dict[str, list[str]]:
+    """Splits the equipment into categories.
+
+    Args:
+        equipment (list[str]): The equipment as list of strings.
+
+    Returns:
+        dict[str, list[str]]: The equipment split into categories. The keys are the categories and
+                              the values are the items in the category.
+    """
+    return {k: [e for e in equipment if e in v] for k, v in SORTED_CLOTHING.items()}
