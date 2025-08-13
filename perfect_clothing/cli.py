@@ -1,6 +1,7 @@
 import click
 from perfect_clothing import load_data as ld
 from perfect_clothing import train as tr
+from perfect_clothing import predict as pr
 
 
 @click.group()
@@ -31,6 +32,6 @@ def train():
 
 
 @cli.command()
-def evaluate():
+def predict():
     """Returns the perfect clothing"""
-    raise NotImplementedError
+    pr.predict({"wind_chill": -5, "x_gap": 12, "ghi": 300, "is_race": False})
