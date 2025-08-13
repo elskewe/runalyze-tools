@@ -21,8 +21,15 @@ def train():
     data_df, encoded_clothing_columns = prepare_data(data)
     save_candidate_outfits(data_df, encoded_clothing_columns)
 
-    x = data_df[[*assumptions.INPUT_COLUMNS, *encoded_clothing_columns]]
-    y = data_df["comfort_int"]
+    train_core(data_df, encoded_clothing_columns)
+
+    return None
+
+
+def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str]):
+    """Actually train the model."""
+    x = data[[*assumptions.INPUT_COLUMNS, *encoded_clothing_columns]]
+    y = data["comfort_int"]
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 
     base = lgb.LGBMClassifier(n_estimators=300, random_state=42)
@@ -43,7 +50,6 @@ def train():
     plt.show()
 
     return None
-
 
 def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]:
     """Prepares the data by converting the json data to a pandas dataframe.
