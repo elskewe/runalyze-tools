@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 from perfect_clothing import load_data, weather, assumptions
 from runalyze import api
@@ -11,6 +12,7 @@ def train():
 
     data = load_data.get_data()
     data_df, encoded_clothing_columns = prepare_data(data)
+    save_candidate_outfits(data_df, encoded_clothing_columns)
 
     data_df
 
@@ -110,3 +112,11 @@ def encode_clothing_layers(data: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]
         data[column_names] = pd.DataFrame(encoded_clothing.to_list(), index=data.index)
 
     return data, new_columns
+
+
+def save_candidate_outfits(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> None:
+    """Saves the candidate outfits to a json file for later use."""
+    d = data[encoded_clothing_columns].drop_duplicates().to_dict(orient='records')
+
+    with open(assumptions.CANDIDATE_OUTFITS_FILENAME, "w", encoding="utf-8") as f:
+        json.dump(d, f, indent=4)

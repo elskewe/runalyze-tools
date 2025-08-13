@@ -6,6 +6,8 @@ import time
 from geopy.geocoders import Nominatim
 
 GEOPY_CACHE = "cache/geopy.json"
+MODEL_FILENAME = "cache/model.pickle"
+CANDIDATE_OUTFITS_FILENAME = "cache/candidate_outfits.json"
 
 INVALID_CLOTHING = [
     "Kompressionsstrümpfe",  # only for injury reasons
