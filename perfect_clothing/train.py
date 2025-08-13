@@ -30,7 +30,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
             e["type"] = t["name"]
         e["date_time"] = (datetime.fromisoformat(e["date_time"])  # type: ignore
                           # move time to approximate middle of activity
-                          + timedelta(seconds=e["elapsed_time"]/2))  # type: ignore
+                          + timedelta(seconds=e.get("elapsed_time", e.get("duration"))/2))  # type: ignore
         e["location"], e["latitude"], e["longitude"] = (
             assumptions.get_location(e["date_time"], e.get("recurring_route")))  # type: ignore
         if isinstance(equipment := e.get("equipment"), list):
