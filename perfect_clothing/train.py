@@ -1,4 +1,3 @@
-from typing import cast
 import pandas as pd
 from perfect_clothing import load_data, weather, assumptions
 from runalyze import api
