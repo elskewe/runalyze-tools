@@ -128,3 +128,14 @@ def lookup_location(name: str) -> tuple[float, float]:
         json.dump(locations, f, indent=4)
     time.sleep(1)  # to satisfy the rate limit in ToS
     return locations[name]["latitude"], locations[name]["longitude"]  # type: ignore
+
+
+def convert_equipment(equipment: list[dict[str, str | int]]) -> list[str]:
+    """Converts the equipment to a list of strings.
+    
+    Also filters the data by removing everything that is not a clothing item and applying the
+    specified conversions
+    """
+    # apply replacements and remove everything that is not a clothing item
+    return [CLOTHING_REPLACEMENTS.get(name, name) for d in equipment
+            if (name := d.get("name")) in ALL_CLOTHING_ITEMS]
