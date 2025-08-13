@@ -19,6 +19,7 @@ def train():
         # grouping by timezone is necessary to construct a pd.DatetimeIndex object
         ["latitude", "longitude", "timezone_offset"],
         sort=False, group_keys=False).apply(get_radiation_data)
+    data_df = encode_clothing_layers(data_df)
     data_df
 
 
@@ -72,3 +73,18 @@ def get_radiation_data(data: pd.DataFrame) -> pd.Series:
         data["latitude"].iloc[0], data["longitude"].iloc[0],
         pd.to_datetime(data["date_time"].to_list()), data["cloud_cover"].to_numpy()),
         index=data.index)
+
+
+def encode_clothing_layers(data: pd.DataFrame) -> pd.DataFrame:
+    """Encodes the clothing layers into ints for each category."""
+    for category, items in assumptions.SORTED_CLOTHING.items():
+        n_layers = int(data[category].str.len().max())  # number of layers needed
+        column_names = [f"{category}_layer{i}" for i in range(1, n_layers + 1)]
+        # clothing sorted descending from warmer to less warm
+        encoded_clothing = data[category].apply(lambda e: sorted(e, key=items.index, reverse=True)).apply(
+            # encode clothing as layers, with 0 meaning nothing in this layer and a number mapping
+            # to the 1-based index in `items`
+            lambda clothes: [items.index(clothes[i])+1 if i < len(clothes) else 0 for i in range(n_layers)])
+        data[column_names] = pd.DataFrame(encoded_clothing.to_list(), index=data.index)
+
+    return data
