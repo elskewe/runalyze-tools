@@ -8,3 +8,6 @@ rich
 pandas
 pvlib
 geopy
+scikit-learn
+lightgbm
+matplotlib

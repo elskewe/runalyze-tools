@@ -1,20 +1,48 @@
+from datetime import datetime, timedelta
 import json
+import pickle
+
 import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
+import lightgbm as lgb
+import matplotlib.pyplot as plt
+
 from perfect_clothing import load_data, weather, assumptions
 from runalyze import api
-from datetime import datetime, timedelta
 
 
 def train():
     # basic steps:
-    # 4. compute apparent temperature? Ask ChatGPT
-    # 5. train (steps 3)-6) in https://chatgpt.com/c/689769a2-3eb8-832b-acdc-4423c037fa03, needs more clarification. Maybe ask non-reasoning model a similar prompt?)
+    # 7. train (steps 3)-6) in https://chatgpt.com/c/689769a2-3eb8-832b-acdc-4423c037fa03, needs more clarification. Maybe ask non-reasoning model a similar prompt?)
 
     data = load_data.get_data()
     data_df, encoded_clothing_columns = prepare_data(data)
     save_candidate_outfits(data_df, encoded_clothing_columns)
 
-    data_df
+    x = data_df[["wind_chill", "x_gap", "ghi", "is_race", *encoded_clothing_columns]]
+    y = data_df["comfort_int"]
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+    base = lgb.LGBMClassifier(n_estimators=300, random_state=42)
+    # Calibrate for better probabilities (sigmoid works reliably with moderate data)
+    clf = CalibratedClassifierCV(base, cv=3, method='sigmoid')
+    clf.fit(x_train, y_train)
+    with open(assumptions.MODEL_FILENAME, "wb") as f:
+        pickle.dump(clf, f)
+
+    y_pred = clf.predict(x_test)
+    labels = list(assumptions.TEMPERATURE_LABEL_MAPPING.keys())
+    print(classification_report(y_test, y_pred, target_names=labels))
+    cm = confusion_matrix(y_test, y_pred)
+    print(cm)
+
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
+    disp.plot()
+    plt.show()
+
+    return None
 
 
 def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]:
