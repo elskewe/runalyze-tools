@@ -33,6 +33,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
         e["date_time"] = datetime.fromisoformat(e["date_time"])  # type: ignore
         e["location"], e["latitude"], e["longitude"] = (
             assumptions.get_location(e["date_time"], e.get("recurring_route")))  # type: ignore
+        e["is_race"] = True if e.get("race_result") else False
 
     # try filling missing location data
     for i, e in enumerate(data):
