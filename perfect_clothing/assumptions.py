@@ -7,6 +7,19 @@ from geopy.geocoders import Nominatim
 
 GEOPY_CACHE = "cache/geopy.json"
 
+INVALID_CLOTHING = [
+    "Kompressionsstrümpfe",  # only for injury reasons
+    "Trainingshose",  # only for warm up and not representative
+    "Trainingsjacke",  # only for warm up and not representative
+    # too little data for the following items
+    "Regenjacke"
+]
+
+# clothing that is only used in races
+CLOTHING_ONLY_FOR_RACES = [
+    "Armwärmer",
+    "Unterziehshirt mit kurzen Ärmeln"
+]
 
 def get_cloud_cover(condition: str) -> int:
     """Returns the cloud cover for a given weather condition.
