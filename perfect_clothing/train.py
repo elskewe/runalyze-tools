@@ -15,6 +15,7 @@ def train():
     data_df = clean_data(data_df)
     # recorded cloud cover is not reliable
     data_df["cloud_cover"] = data_df["weather_condition"].apply(assumptions.get_cloud_cover)
+    data_df["wind_chill"] = data_df.apply(lambda row: weather.wind_chill(row["temperature"], row["wind_speed"]), axis=1)
     data_df["ghi"] = data_df.groupby(
         # grouping by timezone is necessary to construct a pd.DatetimeIndex object
         ["latitude", "longitude", "timezone_offset"],

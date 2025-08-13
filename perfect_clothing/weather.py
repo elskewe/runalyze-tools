@@ -9,6 +9,23 @@ import numpy as np
 NumericType = TypeVar("NumericType", float, np.ndarray)
 
 
+def wind_chill(temperature: float, wind_speed: float) -> float:
+    """Returns the windchill temperature.
+
+    Args:
+        temperature (float): The temperature in °C.
+        wind_speed (float): The wind speed in m/s.
+
+    Returns:
+        float: The windchill temperature in °C.
+    """
+    wind_speed_kmh = wind_speed * 3.6
+    if temperature > 10 or wind_speed_kmh < 4.8:
+        # windchill is not defined at this conditions
+        return temperature
+    return 13.12 + 0.6215 * temperature - 11.37 * wind_speed_kmh ** 0.16 + 0.3965 * temperature * wind_speed_kmh ** 0.16
+
+
 def get_radiation(latitude: float, longitude: float, dates: pd.DatetimeIndex | datetime,
                   cloud_cover: np.ndarray) -> np.ndarray:
     """Returns the sun radiation for a given location and dates.
