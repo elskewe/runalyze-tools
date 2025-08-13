@@ -8,6 +8,7 @@ from geopy.geocoders import Nominatim
 GEOPY_CACHE = "cache/geopy.json"
 MODEL_FILENAME = "cache/model.pickle"
 CANDIDATE_OUTFITS_FILENAME = "cache/candidate_outfits.json"
+INPUT_COLUMNS = ["wind_chill", "x_gap", "ghi", "is_race"]  # columns used as the input for the prediction
 
 INVALID_CLOTHING = [
     "Kompressionsstrümpfe",  # only for injury reasons

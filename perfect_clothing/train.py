@@ -21,7 +21,7 @@ def train():
     data_df, encoded_clothing_columns = prepare_data(data)
     save_candidate_outfits(data_df, encoded_clothing_columns)
 
-    x = data_df[["wind_chill", "x_gap", "ghi", "is_race", *encoded_clothing_columns]]
+    x = data_df[[*assumptions.INPUT_COLUMNS, *encoded_clothing_columns]]
     y = data_df["comfort_int"]
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 
