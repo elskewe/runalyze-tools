@@ -10,14 +10,15 @@ def train():
     # 5. train (steps 3)-6) in https://chatgpt.com/c/689769a2-3eb8-832b-acdc-4423c037fa03, needs more clarification. Maybe ask non-reasoning model a similar prompt?)
 
     data = load_data.get_data()
-    data_df = prepare_data(data)
+    data_df, encoded_clothing_columns = prepare_data(data)
+
     data_df
 
 
-def prepare_data(data: list[api.ActivityType]) -> pd.DataFrame:
+def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]:
     """Prepares the data by converting the json data to a pandas dataframe.
 
-    Also adds encoding for clothing layers etc.
+    Also adds encoding for clothing layers etc. and returns the names of these new columns.
     """
     data_df = convert_to_df(data)
     data_df = clean_data(data_df)
@@ -28,9 +29,9 @@ def prepare_data(data: list[api.ActivityType]) -> pd.DataFrame:
         # grouping by timezone is necessary to construct a pd.DatetimeIndex object
         ["latitude", "longitude", "timezone_offset"],
         sort=False, group_keys=False).apply(get_radiation_data)
-    data_df = encode_clothing_layers(data_df)
+    data_df, encoded_clothing_columns = encode_clothing_layers(data_df)
     data_df["comfort_int"] = data_df["comfort"].map(assumptions.TEMPERATURE_LABEL_MAPPING)
-    return data_df
+    return data_df, encoded_clothing_columns
 
 
 def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
@@ -92,11 +93,15 @@ def get_radiation_data(data: pd.DataFrame) -> pd.Series:
         index=data.index)
 
 
-def encode_clothing_layers(data: pd.DataFrame) -> pd.DataFrame:
-    """Encodes the clothing layers into ints for each category."""
+def encode_clothing_layers(data: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
+    """Encodes the clothing layers into ints for each category.
+
+    Also returns the added column names."""
+    new_columns = []
     for category, items in assumptions.SORTED_CLOTHING.items():
         n_layers = int(data[category].str.len().max())  # number of layers needed
         column_names = [f"{category}_layer{i}" for i in range(1, n_layers + 1)]
+        new_columns.extend(column_names)
         # clothing sorted descending from warmer to less warm
         encoded_clothing = data[category].apply(lambda e: sorted(e, key=items.index, reverse=True)).apply(
             # encode clothing as layers, with 0 meaning nothing in this layer and a number mapping
@@ -104,4 +109,4 @@ def encode_clothing_layers(data: pd.DataFrame) -> pd.DataFrame:
             lambda clothes: [items.index(clothes[i])+1 if i < len(clothes) else 0 for i in range(n_layers)])
         data[column_names] = pd.DataFrame(encoded_clothing.to_list(), index=data.index)
 
-    return data
+    return data, new_columns
