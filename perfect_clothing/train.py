@@ -55,7 +55,7 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     """Removes activities with missing data"""
     data = data[~data["weather_condition"].str.contains("unknown")]  # missing weather
     data = data.dropna(subset=["equipment"])  # without equipment data the activity is not usable
-    # remove activities with invalid clothing
+    # remove activities with invalid clothing items
     data = data[~data["equipment"].apply(lambda lst: any(e in assumptions.INVALID_CLOTHING for e in lst))]
     # remove activities with race only clothing which are not races
     data = data[data["is_race"]
