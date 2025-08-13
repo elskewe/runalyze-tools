@@ -21,6 +21,46 @@ CLOTHING_ONLY_FOR_RACES = [
     "Unterziehshirt mit kurzen Ärmeln"
 ]
 
+# clothing categories sorted by warmth (from cold to warm)
+SORTED_CLOTHING = {
+    "lower_body": [
+        "Ganz kurze Hose",
+        "Kurze Hose",
+        "Kurze Tights",
+        "Lange Tights"
+    ],
+    "upper_body": [
+        "Oberkörperfrei",
+        "Singlet",
+        "T-Shirt",
+        "Langarmshirt",
+        "Gefüttertes Langarmshirt",
+        "Laufjacke"
+    ],
+    "hands": [
+        "Handschuhe",
+        "Skihandschuhe"
+    ],
+    "neck": [
+        "Halstuch",
+        "Schal",
+        "Sturmhaube"
+    ],
+    "head": [
+        "Stirnband",
+        "Mütze",
+    ]
+}
+
+ALL_CLOTHING_ITEMS = [e for v in SORTED_CLOTHING.values() for e in v]
+
+
+# the key is replaced by the value
+CLOTHING_REPLACEMENTS = {
+    "2. Langarmshirt": "Langarmshirt"  # only because Runalyze can't handle multiple entries of the same item
+}
+
+
 def get_cloud_cover(condition: str) -> int:
     """Returns the cloud cover for a given weather condition.
 
