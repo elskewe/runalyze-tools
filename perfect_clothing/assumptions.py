@@ -132,7 +132,7 @@ def lookup_location(name: str) -> tuple[float, float]:
 
 def convert_equipment(equipment: list[dict[str, str | int]]) -> list[str]:
     """Converts the equipment to a list of strings.
-    
+
     Also filters the data by removing everything that is not a clothing item and applying the
     specified conversions
     """
