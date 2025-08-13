@@ -58,6 +58,8 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     data = data.dropna(subset=["equipment"])  # without equipment data the activity is not usable
     # remove activities with invalid clothing items
     data = data[~data["equipment"].apply(lambda lst: any(e in assumptions.INVALID_CLOTHING for e in lst))]
+    # remove activities without a value set for either lower body or upper body clothing
+    data = data[(data["lower_body"].str.len() > 0) & (data["upper_body"].str.len() > 0)]
     # remove activities with race only clothing which are not races
     data = data[data["is_race"]
                 | ~data["equipment"].apply(lambda lst: any(e in assumptions.CLOTHING_ONLY_FOR_RACES for e in lst))]
