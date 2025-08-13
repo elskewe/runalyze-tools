@@ -36,8 +36,6 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str]):
     # Calibrate for better probabilities (sigmoid works reliably with moderate data)
     clf = CalibratedClassifierCV(base, cv=3, method='sigmoid')
     clf.fit(x_train, y_train)
-    with open(assumptions.MODEL_FILENAME, "wb") as f:
-        pickle.dump(clf, f)
 
     y_pred = clf.predict(x_test)
     labels = list(assumptions.TEMPERATURE_LABEL_MAPPING.keys())
@@ -49,6 +47,8 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str]):
     disp.plot()
     plt.show()
 
+    with open(assumptions.MODEL_FILENAME, "wb") as f:
+        pickle.dump(clf, f)
     return None
 
 def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]:
