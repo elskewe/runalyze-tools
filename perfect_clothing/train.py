@@ -11,6 +11,15 @@ def train():
     # 5. train (steps 3)-6) in https://chatgpt.com/c/689769a2-3eb8-832b-acdc-4423c037fa03, needs more clarification. Maybe ask non-reasoning model a similar prompt?)
 
     data = load_data.get_data()
+    data_df = prepare_data(data)
+    data_df
+
+
+def prepare_data(data: list[api.ActivityType]) -> pd.DataFrame:
+    """Prepares the data by converting the json data to a pandas dataframe.
+
+    Also adds encoding for clothing layers etc.
+    """
     data_df = convert_to_df(data)
     data_df = clean_data(data_df)
     # recorded cloud cover is not reliable
@@ -21,7 +30,7 @@ def train():
         ["latitude", "longitude", "timezone_offset"],
         sort=False, group_keys=False).apply(get_radiation_data)
     data_df = encode_clothing_layers(data_df)
-    data_df
+    return data_df
 
 
 def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
