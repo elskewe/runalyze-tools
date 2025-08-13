@@ -2,13 +2,11 @@ from typing import cast
 import pandas as pd
 from perfect_clothing import load_data, weather, assumptions
 from runalyze import api
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def train():
     # basic steps:
-    # 3. add radiance data (including cloud cover)
-    #    3. adjust time to reflect activity duration
     # 4. compute apparent temperature? Ask ChatGPT
     # 5. train (steps 3)-6) in https://chatgpt.com/c/689769a2-3eb8-832b-acdc-4423c037fa03, needs more clarification. Maybe ask non-reasoning model a similar prompt?)
 
@@ -30,7 +28,9 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
         e["sport"] = e["sport"]["name"]  # type: ignore
         if isinstance(t := e.get("type"), dict):
             e["type"] = t["name"]
-        e["date_time"] = datetime.fromisoformat(e["date_time"])  # type: ignore
+        e["date_time"] = (datetime.fromisoformat(e["date_time"])  # type: ignore
+                          # move time to approximate middle of activity
+                          + timedelta(seconds=e["elapsed_time"]/2))  # type: ignore
         e["location"], e["latitude"], e["longitude"] = (
             assumptions.get_location(e["date_time"], e.get("recurring_route")))  # type: ignore
         if isinstance(equipment := e.get("equipment"), list):
