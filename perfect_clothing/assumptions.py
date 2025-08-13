@@ -138,4 +138,4 @@ def convert_equipment(equipment: list[dict[str, str | int]]) -> list[str]:
     """
     # apply replacements and remove everything that is not a clothing item
     return [CLOTHING_REPLACEMENTS.get(name, name) for d in equipment
-            if (name := d.get("name")) in ALL_CLOTHING_ITEMS]
+            if (name := d.get("name")) in ALL_CLOTHING_ITEMS or name in INVALID_CLOTHING]
