@@ -20,7 +20,8 @@ def train():
 
     data = load_data.get_data()
     data_df, encoded_clothing_columns = prepare_data(data)
-    save_candidate_outfits(data_df, encoded_clothing_columns)
+    candidate_outfits = save_candidate_outfits(data_df, encoded_clothing_columns)
+    data_df = augment_data(data_df, encoded_clothing_columns, candidate_outfits)
 
     train_core(data_df, encoded_clothing_columns)
 
@@ -154,6 +155,66 @@ def encode_clothing_layers(data: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]
         data[column_names] = pd.DataFrame(encoded_clothing.to_list(), index=data.index)
 
     return data, new_columns
+
+
+def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
+                 candidate_outfits: list[dict[str, int]]) -> pd.DataFrame:
+    """Adds more examples where the label is not ok.
+
+    Basic idea: if an outfit is too warm, every outfit that only contains the same or warmer items
+    will also be too warm. The same principle holds for the other labels.
+    """
+    new_rows = []
+
+    for _, current_row in data.iterrows():
+        new_rows.extend(generate_new_outfit(current_row, encoded_clothing_columns, candidate_outfits))
+
+    # add to base dataframe
+    augmented = pd.concat([data, pd.DataFrame(new_rows)])
+
+    return augmented
+
+
+def generate_new_outfit(base_row: pd.Series, encoded_clothing_columns: list[str],
+                        candidate_outfits: list[dict[str, int]]) -> list[dict]:
+    """Generates new outfits based on the given label (`base_row["comfort_int"]`).
+
+    The new outfits are warmer/colder (depending on the label) in at least one clothing category and
+    at least the same in the rest, which means the direction of the comfort (too cold/too warm) is
+    retained. The new outfit (with the other data from the base_row) is than added to the return
+    value.
+
+    Args:
+        base_row (pd.Series): the row from which the new outfits are generated
+        encoded_clothing_columns (list[str]): the names of the clothing columns candidate_outfits
+        (list[dict[str, int]]): the possible outfits
+
+    Returns:
+        list[dict]: the additional rows with the altered outfits
+    """
+    new_rows = []
+    if (label := base_row["comfort_int"]) == 0:
+        return new_rows  # no new rows are added
+
+    outfit = base_row[encoded_clothing_columns].to_dict()
+    if label > 0:  # zuWarmAngezogen
+        # Generate outfits warmer to this one
+        new_label = "zuWarmAngezogen"
+        for candidate_outfit in candidate_outfits:
+            if all(v >= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit:
+                new_rows.append(candidate_outfit)
+    elif label < 0:  # zuKaltAngezogen
+        # Generate outfits cooler to this one
+        new_label = "zuKaltAngezogen"
+        for candidate_outfit in candidate_outfits:
+            if all(v <= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit:
+                new_rows.append(candidate_outfit)
+    else:
+        raise ValueError("Shouldn't end up here")
+
+    return [base_row.to_dict() | new_row
+            | {"comfort": new_label, "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[new_label]}
+            for new_row in new_rows]
 
 
 def save_candidate_outfits(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> list[dict[str, int]]:
