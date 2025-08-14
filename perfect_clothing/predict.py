@@ -1,6 +1,7 @@
 import json
 import pickle
 import re
+import numpy as np
 import pandas as pd
 from rich.table import Table
 from rich.console import Console
@@ -17,28 +18,31 @@ def predict(input_data: dict):
         model = pickle.load(f)
     with open(assumptions.CANDIDATE_OUTFITS_FILENAME, "r", encoding="utf-8") as f:
         candidate_outfits = json.load(f)
-    best_outfits = recommend_best(pd.DataFrame(input_data, index=[1]), model, candidate_outfits, top_k=5)
-    table = Table("Rank", "Outfit", "P(ok) in %", title="Best Outfits")
+    best_outfits = recommend_best(pd.DataFrame(input_data, index=[1]), model, candidate_outfits, top_k=100)
+    table = Table("Rank", "Outfit", "P(ok) in %", "P(zuHeiss) in %", "Sum in %", title="Best Outfits")
     for i, (p_ok, p_zuHeiss, outfit) in enumerate(best_outfits):
-        table.add_row(f"{i+1}.", outfit_to_string(outfit), str(int(p_ok*100)))
+        table.add_row(f"{i+1}.", outfit_to_string(outfit),
+                      str(int(p_ok*100)), str(int(p_zuHeiss*100)), str(int((p_ok + p_zuHeiss)*100)))
 
     console = Console()
     console.print(table)
 
 
-def score_outfit(input_data: pd.DataFrame, outfit_encoding, model):
+def score_outfit(input_data: pd.DataFrame, outfit_encoding, model) -> tuple[np.float64, np.float64]:
+    """Scores the given outfit for the given input data and returns the P(ok) and P(zuHeiss)."""
     x = pd.concat((input_data[assumptions.INPUT_COLUMNS], pd.DataFrame(outfit_encoding, index=input_data.index)), axis=1)
     probs = model.predict_proba(x)[0]
-    return probs[list(assumptions.TEMPERATURE_LABEL_MAPPING).index("ok")]  # P(ok | weather, outfit)
+    labels = list(assumptions.TEMPERATURE_LABEL_MAPPING)
+    return probs[labels.index("ok")], probs[labels.index("zuHeiss")]
 
 
 def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1):
     scored = []
     for outfit in candidate_outfits:
-        p_ok = score_outfit(input_data, outfit, model)
-        scored.append((p_ok, outfit))
-    scored.sort(reverse=True, key=lambda x: x[0])
-    return scored[:top_k]   # best outfit(s) and their P(ok)
+        p_ok, p_zuHeiss = score_outfit(input_data, outfit, model)
+        scored.append((p_ok, p_zuHeiss, outfit))
+    scored.sort(reverse=True, key=lambda x: x[0] + x[1])
+    return scored[:top_k]   # best outfit(s) and their P(ok) and P(zuHeiss)
 
 
 def outfit_to_string(outfit_encoding: dict[str, int]):
