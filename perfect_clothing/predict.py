@@ -14,10 +14,7 @@ def predict(input_data: dict):
     Args:
         input_data (dict): The input data with the keys specified in assumptions.INPUT_COLUMNS
     """
-    with open(assumptions.MODEL_FILENAME, "rb") as f:
-        model = pickle.load(f)
-    with open(assumptions.CANDIDATE_OUTFITS_FILENAME, "r", encoding="utf-8") as f:
-        candidate_outfits = json.load(f)
+    model, candidate_outfits = load_data()
     best_outfits = recommend_best(pd.DataFrame(input_data, index=[1]), model, candidate_outfits, top_k=100)
     table = Table("Rank", "Outfit", "P(ok) in %", "P(zuHeiss) in %", "Sum in %", title="Best Outfits")
     for i, (p_ok, p_zuHeiss, outfit) in enumerate(best_outfits):
@@ -26,6 +23,15 @@ def predict(input_data: dict):
 
     console = Console()
     console.print(table)
+
+
+def load_data(model_filename=assumptions.MODEL_FILENAME,
+              candidate_outfits_filename=assumptions.CANDIDATE_OUTFITS_FILENAME):
+    with open(model_filename, "rb") as f:
+        model = pickle.load(f)
+    with open(candidate_outfits_filename, "r", encoding="utf-8") as f:
+        candidate_outfits = json.load(f)
+    return model, candidate_outfits
 
 
 def score_outfit(input_data: pd.DataFrame, outfit_encoding, model) -> tuple[np.float64, np.float64]:
