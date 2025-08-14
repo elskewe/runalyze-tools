@@ -11,3 +11,4 @@ geopy
 scikit-learn
 lightgbm
 matplotlib
+gradio
