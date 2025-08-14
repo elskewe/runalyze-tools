@@ -35,6 +35,9 @@ CLOTHING_ONLY_FOR_RACES = [
     "Armwärmer",
     "Unterziehshirt mit kurzen Ärmeln"
 ]
+# one of these items is required for a race
+NECESSARY_RACE_CLOTHING = {"upper_body": ["Singlet"]}
+
 
 # clothing categories sorted by warmth (from cold to warm)
 SORTED_CLOTHING = {

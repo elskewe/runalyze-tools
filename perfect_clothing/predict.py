@@ -44,6 +44,11 @@ def score_outfit(input_data: pd.DataFrame, outfit_encoding, model) -> tuple[np.f
 def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) -> pd.DataFrame:
     scored = []
     for outfit in candidate_outfits:
+        if input_data["is_race"].item() and \
+            not all(any(assumptions.SORTED_CLOTHING[category][v-1] in items
+                        for k, v in outfit.items() if k.startswith(category))
+                        for category, items in assumptions.NECESSARY_RACE_CLOTHING.items()):
+            continue  # outfit without a necessary race clothing item
         p_ok, p_zuHeiss = score_outfit(input_data, outfit, model)
         scored.append((outfit, p_ok, p_zuHeiss))
     scored.sort(reverse=True, key=lambda x: x[1] + x[2])
