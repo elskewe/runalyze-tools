@@ -18,10 +18,17 @@ def train():
     # basic steps:
     # 7. train (steps 3)-6) in https://chatgpt.com/c/689769a2-3eb8-832b-acdc-4423c037fa03, needs more clarification. Maybe ask non-reasoning model a similar prompt?)
 
-    data = load_data.get_data()
-    data_df, encoded_clothing_columns = prepare_data(data)
-    candidate_outfits = save_candidate_outfits(data_df, encoded_clothing_columns)
-    data_df = augment_data(data_df, encoded_clothing_columns, candidate_outfits)
+    try:
+        with open(assumptions.DATA_FILENAME, "rb") as f:
+            (data_df, encoded_clothing_columns) = pickle.load(f)
+    except FileNotFoundError:
+        data = load_data.get_data()
+        data_df, encoded_clothing_columns = prepare_data(data)
+        candidate_outfits = save_candidate_outfits(data_df, encoded_clothing_columns)
+        data_df = augment_data(data_df, encoded_clothing_columns, candidate_outfits)
+
+        with open(assumptions.DATA_FILENAME, "wb") as f:
+            pickle.dump((data_df, encoded_clothing_columns), f)
 
     train_core(data_df, encoded_clothing_columns, n_estimators=300)
 
