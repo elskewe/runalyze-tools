@@ -21,8 +21,9 @@ with gr.Blocks() as demo:
         with gr.Column(scale=2):
             output_df = gr.DataFrame()
 
-    temp.change(fn=predict_outfit, inputs=[temp, duration, race], outputs=output_df)
-    duration.change(fn=predict_outfit, inputs=[temp, duration, race], outputs=output_df)
-    race.change(fn=predict_outfit, inputs=[temp, duration, race], outputs=output_df)
+    inputs = [temp, duration, race]
+    change_args = {"fn": predict_outfit, "inputs": inputs, "outputs": output_df}
+    for i in inputs:
+        i.change(**change_args)
 
 demo.launch()
