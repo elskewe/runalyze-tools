@@ -23,7 +23,7 @@ def train():
     candidate_outfits = save_candidate_outfits(data_df, encoded_clothing_columns)
     data_df = augment_data(data_df, encoded_clothing_columns, candidate_outfits)
 
-    train_core(data_df, encoded_clothing_columns)
+    train_core(data_df, encoded_clothing_columns, n_estimators=300)
 
     return None
 
