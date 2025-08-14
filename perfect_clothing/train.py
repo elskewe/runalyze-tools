@@ -152,9 +152,11 @@ def encode_clothing_layers(data: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]
     return data, new_columns
 
 
-def save_candidate_outfits(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> None:
+def save_candidate_outfits(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> list[dict[str, int]]:
     """Saves the candidate outfits to a json file for later use."""
     d = data[encoded_clothing_columns].drop_duplicates().to_dict(orient='records')
 
     with open(assumptions.CANDIDATE_OUTFITS_FILENAME, "w", encoding="utf-8") as f:
         json.dump(d, f, indent=4)
+
+    return d  # type: ignore
