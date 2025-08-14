@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import json
 import pickle
 
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.calibration import CalibratedClassifierCV
@@ -47,6 +48,9 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str]):
     disp.plot()
     plt.show()
 
+    plot_importances(clf, x.columns.to_list())
+
+    # save model
     with open(assumptions.MODEL_FILENAME, "wb") as f:
         pickle.dump(clf, f)
     return None
@@ -160,3 +164,23 @@ def save_candidate_outfits(data: pd.DataFrame, encoded_clothing_columns: list[st
         json.dump(d, f, indent=4)
 
     return d  # type: ignore
+
+
+def plot_importances(clf: CalibratedClassifierCV, feature_names: list[str]):
+
+    importances = np.mean([
+        est.estimator.feature_importances_
+        for est in clf.calibrated_classifiers_
+        ], axis=0)
+
+    # Sort by importance
+    idx = np.argsort(importances)
+    sorted_importances = importances[idx]
+    sorted_features = np.array(feature_names)[idx]
+
+    plt.barh(sorted_features, sorted_importances)
+    plt.xscale('log')
+    plt.xlabel("Feature Importance (log scale)")
+    plt.title("LightGBM Feature Importances (averaged over folds)")
+    plt.tight_layout()
+    plt.show()
