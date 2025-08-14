@@ -4,7 +4,7 @@ import pickle
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 import lightgbm as lgb
@@ -28,15 +28,29 @@ def train():
     return None
 
 
-def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str]):
-    """Actually train the model."""
+def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estimators=-1):
+    """Actually train the model.
+
+    n_estimator is passed to LGBMClassifier. If it is -1, it will be optimized beforehand by a
+    hyperparameter search.
+    """
     x = data[[*assumptions.INPUT_COLUMNS, *encoded_clothing_columns]]
     y = data["comfort_int"]
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 
-    base = lgb.LGBMClassifier(n_estimators=300, random_state=42)
+    base = lgb.LGBMClassifier(n_estimators=n_estimators, random_state=42, class_weight="balanced", verbose=-1)
+    if n_estimators == -1:
+        param_grid = {
+            "n_estimators": np.logspace(1, 3, 10, dtype=int)
+        }
+        # search for best hyperparameters
+        search = GridSearchCV(base, param_grid, scoring="f1_macro", error_score="raise")
+        search.fit(x_train, y_train)
+        base = search.best_estimator_
+
     # Calibrate for better probabilities (sigmoid works reliably with moderate data)
-    clf = CalibratedClassifierCV(base, cv=3, method='sigmoid')
+    clf = CalibratedClassifierCV(base, method='sigmoid')
+
     clf.fit(x_train, y_train)
 
     y_pred = clf.predict(x_test)
