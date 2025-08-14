@@ -10,6 +10,7 @@ MODEL_FILENAME = "cache/model.pickle"
 CANDIDATE_OUTFITS_FILENAME = "cache/candidate_outfits.json"
 INPUT_COLUMNS = ["wind_chill", "x_gap", "ghi", "is_race"]  # columns used as the input for the prediction
 
+OUTFIT_FREQUENCY_THRESHOLD = 5  # outfits that occur less than this number of times are removed
 INVALID_CLOTHING = [
     "Kompressionsstrümpfe",  # only for injury reasons
     "Trainingshose",  # only for warm up and not representative

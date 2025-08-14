@@ -51,6 +51,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str]):
         pickle.dump(clf, f)
     return None
 
+
 def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]:
     """Prepares the data by converting the json data to a pandas dataframe.
 
@@ -118,6 +119,9 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     # remove activities with race only clothing which are not races
     data = data[data["is_race"]
                 | ~data["equipment"].apply(lambda lst: any(e in assumptions.CLOTHING_ONLY_FOR_RACES for e in lst))]
+    # remove data with outfits that only occur infrequently
+    s = data['equipment'].apply(tuple)  # convert list to tuple
+    data = data[s.map(s.value_counts()) >= assumptions.OUTFIT_FREQUENCY_THRESHOLD]
     return data
 
 
