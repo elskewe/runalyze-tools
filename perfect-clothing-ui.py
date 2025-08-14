@@ -1,3 +1,4 @@
+from functools import lru_cache
 import gradio as gr
 import pandas as pd
 from perfect_clothing import predict
@@ -5,6 +6,7 @@ from perfect_clothing import predict
 MODEL, CANDIDATE_OUTFITS = predict.load_data()
 
 
+@lru_cache
 def predict_outfit(temp, duration_min, is_race: bool):
     # Build your feature row from inputs
     features = pd.DataFrame([{"temperature": temp, "duration": duration_min*60, "is_race": is_race}])
