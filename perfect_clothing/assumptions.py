@@ -8,7 +8,16 @@ from geopy.geocoders import Nominatim
 GEOPY_CACHE = "cache/geopy.json"
 MODEL_FILENAME = "cache/model.pickle"
 CANDIDATE_OUTFITS_FILENAME = "cache/candidate_outfits.json"
-INPUT_COLUMNS = ["wind_chill", "x_gap", "ghi", "is_race"]  # columns used as the input for the prediction
+INPUT_COLUMNS = [  # columns used as the input for the prediction
+    "temperature",
+    "humidity",
+    "wind_speed",
+    "duration",
+    "hr_avg",
+    "fit_trimp",
+    "x_pace",
+    "ghi",
+    "is_race"]
 
 OUTFIT_FREQUENCY_THRESHOLD = 5  # outfits that occur less than this number of times are removed
 INVALID_CLOTHING = [
