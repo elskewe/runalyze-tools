@@ -19,7 +19,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
         "ghi": weather.get_radiation(latitude_, longitude_, date_, cloud_cover_perc)[0],
         "is_race": is_race}])
     best_outfits = predict.recommend_best(features, MODEL, CANDIDATE_OUTFITS, top_k=100)
-    return best_outfits, f"{int(pace_min_km)}:{int(pace_min_km*60%60):02d} min/km"
+    return best_outfits, f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km"
 
 
 with gr.Blocks(fill_width=True) as demo:
