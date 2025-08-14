@@ -15,9 +15,6 @@ from runalyze import api
 
 
 def train():
-    # basic steps:
-    # 7. train (steps 3)-6) in https://chatgpt.com/c/689769a2-3eb8-832b-acdc-4423c037fa03, needs more clarification. Maybe ask non-reasoning model a similar prompt?)
-
     try:
         with open(assumptions.DATA_FILENAME, "rb") as f:
             (data_df, encoded_clothing_columns) = pickle.load(f)
