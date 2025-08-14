@@ -11,11 +11,12 @@ DATA_FILENAME = "cache/data.pickle"  # pandas DataFrame with the training data
 CANDIDATE_OUTFITS_FILENAME = "cache/candidate_outfits.json"
 INPUT_COLUMNS = [  # columns used as the input for the prediction
     "temperature",
-    "humidity",
-    "wind_speed",
+    # "wind_chill", => actually makes results worse
+    # "humidity", => comparatively hard to obtain and does not make that big of a difference
+    "wind_speed",  # => this feels like it should have an influence, but I'm not convinced it's actually the case
     "duration",
-    "hr_avg",
-    "fit_trimp",
+    ##"hr_avg",
+    ##"fit_trimp",
     "x_pace",
     "ghi",
     "is_race"]
