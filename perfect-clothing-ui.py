@@ -12,14 +12,17 @@ def predict_outfit(temp, duration_min, is_race: bool):
     return best_outfits
 
 
-demo = gr.Interface(
-    fn=predict_outfit,
-    inputs=[
-        gr.Slider(-10, 35, step=1, label="Temperature (°C)"),
-        gr.Slider(0, 100, step=2.5, label="Duration (min)"),
-        gr.Checkbox(label="Race")
-    ],
-    outputs="dataframe"
-)
+with gr.Blocks() as demo:
+    with gr.Row():
+        with gr.Column(scale=1):
+            temp = gr.Slider(-10, 35, step=1, value=15, label="Temperature (°C)")
+            duration = gr.Slider(0, 100, step=2.5, value=30, label="Duration (min)")
+            race = gr.Checkbox(label="Race")
+        with gr.Column(scale=2):
+            output_df = gr.DataFrame()
+
+    temp.change(fn=predict_outfit, inputs=[temp, duration, race], outputs=output_df)
+    duration.change(fn=predict_outfit, inputs=[temp, duration, race], outputs=output_df)
+    race.change(fn=predict_outfit, inputs=[temp, duration, race], outputs=output_df)
 
 demo.launch()
