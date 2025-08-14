@@ -22,7 +22,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
     return best_outfits, f"{int(pace_min_km)}:{int(pace_min_km*60%60):02d} min/km"
 
 
-with gr.Blocks() as demo:
+with gr.Blocks(fill_width=True) as demo:
     with gr.Row():
         with gr.Column(scale=1):
             temp = gr.Slider(-10, 35, step=1, value=15, label="Temperature (°C)")
