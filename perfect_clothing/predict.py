@@ -2,6 +2,8 @@ import json
 import pickle
 import re
 import pandas as pd
+from rich.table import Table
+from rich.console import Console
 from perfect_clothing import assumptions
 
 
@@ -16,8 +18,12 @@ def predict(input_data: dict):
     with open(assumptions.CANDIDATE_OUTFITS_FILENAME, "r", encoding="utf-8") as f:
         candidate_outfits = json.load(f)
     best_outfits = recommend_best(pd.DataFrame(input_data, index=[1]), model, candidate_outfits, top_k=5)
-    for i, (p_ok, outfit) in enumerate(best_outfits):
-        print(f"{i + 1}. {outfit_to_string(outfit)}: P(ok) = {int(p_ok*100)}%")
+    table = Table("Rank", "Outfit", "P(ok) in %", title="Best Outfits")
+    for i, (p_ok, p_zuHeiss, outfit) in enumerate(best_outfits):
+        table.add_row(f"{i+1}.", outfit_to_string(outfit), str(int(p_ok*100)))
+
+    console = Console()
+    console.print(table)
 
 
 def score_outfit(input_data, outfit_encoding, model):
