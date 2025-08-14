@@ -42,7 +42,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     y = data["comfort_int"]
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 
-    base = lgb.LGBMClassifier(n_estimators=n_estimators, random_state=42, class_weight="balanced", verbose=-1)
+    base = lgb.LGBMClassifier(n_estimators=n_estimators, random_state=42, verbose=-1)
     if n_estimators == -1:
         param_grid = {
             "n_estimators": np.logspace(1, 3, 10, dtype=int)
