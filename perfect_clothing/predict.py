@@ -26,13 +26,13 @@ def predict(input_data: dict):
     console.print(table)
 
 
-def score_outfit(input_data, outfit_encoding, model):
+def score_outfit(input_data: pd.DataFrame, outfit_encoding, model):
     x = pd.concat((input_data[assumptions.INPUT_COLUMNS], pd.DataFrame(outfit_encoding, index=input_data.index)), axis=1)
     probs = model.predict_proba(x)[0]
     return probs[list(assumptions.TEMPERATURE_LABEL_MAPPING).index("ok")]  # P(ok | weather, outfit)
 
 
-def recommend_best(input_data, model, candidate_outfits, top_k=1):
+def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1):
     scored = []
     for outfit in candidate_outfits:
         p_ok = score_outfit(input_data, outfit, model)
