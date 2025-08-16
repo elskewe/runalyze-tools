@@ -91,7 +91,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
         ["latitude", "longitude", "timezone_offset"],
         sort=False, group_keys=False).apply(get_radiation_data)
     data_df, encoded_clothing_columns = encode_clothing_layers(data_df)
-    data_df = clean_data(data_df)
+    data_df = clean_data(data_df, encoded_clothing_columns)
     data_df["comfort_int"] = data_df["comfort"].map(assumptions.TEMPERATURE_LABEL_MAPPING)
     data_df["weather_condition_int"] = data_df["weather_condition"].map(assumptions.WEATHER_CONDITION_MAPPING.index)
     return data_df, encoded_clothing_columns
@@ -148,7 +148,7 @@ def remove_invalid_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-def clean_data(data: pd.DataFrame) -> pd.DataFrame:
+def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> pd.DataFrame:
     """Cleans the data
 
     - fixes the case that "zuHeiss" is set despite being able to shed another layer
@@ -157,6 +157,16 @@ def clean_data(data: pd.DataFrame) -> pd.DataFrame:
     # "zuWarmAngezogen"
     data.loc[(data["upper_body_layer1"] > assumptions.SORTED_CLOTHING["upper_body"].index("Oberkörperfrei")+1)
              & (data["comfort"] == "zuHeiss") & ~data["is_race"], "comfort"] = "zuWarmAngezogen"
+    # Remove data with outfits that only occur infrequently. An exception is made for races as long
+    # as they have the necessary equipment from `assumptions.NECESSARY_EQUIPMENT_FOR_RACES`
+    s = data['equipment'].apply(tuple)  # convert list to tuple
+    data = data[(s.map(s.value_counts()) >= assumptions.OUTFIT_FREQUENCY_THRESHOLD)
+                | ((data["is_race"])
+                   & (data[[*encoded_clothing_columns, "is_race"]].apply(
+                       lambda r: assumptions.valid_outfits([r.to_dict()], r["is_race"]), axis=1)
+                       # The return is either the (valid) outfit or an empty list. This truthy and
+                       # can thus be converted to bool directly
+                       .apply(bool)))]
     return data
 
 
