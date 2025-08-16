@@ -45,7 +45,8 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     base = lgb.LGBMClassifier(n_estimators=n_estimators, verbose=-1)
     if n_estimators == -1:
         param_grid = {
-            "n_estimators": np.logspace(1, 3, 10, dtype=int)
+            "n_estimators": np.logspace(1, 3, 10, dtype=int),
+            # "num_leaves": np.logspace(2.083, 2.333, 7, dtype=int)
         }
         # search for best hyperparameters
         search = GridSearchCV(base, param_grid, scoring="f1_macro", error_score="raise")
