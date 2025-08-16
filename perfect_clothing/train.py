@@ -145,9 +145,6 @@ def remove_invalid_data(data: pd.DataFrame) -> pd.DataFrame:
     # remove activities with race only clothing which are not races
     data = data[data["is_race"]
                 | ~data["equipment"].apply(lambda lst: any(e in assumptions.CLOTHING_ONLY_FOR_RACES for e in lst))]
-    # remove data with outfits that only occur infrequently
-    s = data['equipment'].apply(tuple)  # convert list to tuple
-    data = data[s.map(s.value_counts()) >= assumptions.OUTFIT_FREQUENCY_THRESHOLD]
     return data
 
 
