@@ -82,7 +82,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
     Also adds encoding for clothing layers etc. and returns the names of these new columns.
     """
     data_df = convert_to_df(data)
-    data_df = clean_data(data_df)
+    data_df = remove_invalid_data(data_df)
     # recorded cloud cover is not reliable
     data_df["cloud_cover"] = data_df["weather_condition"].apply(assumptions.get_cloud_cover)
     data_df["wind_chill"] = data_df.apply(lambda row: weather.wind_chill(row["temperature"], row["wind_speed"]), axis=1)
@@ -133,7 +133,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
     return pd.DataFrame(data)
 
 
-def clean_data(data: pd.DataFrame) -> pd.DataFrame:
+def remove_invalid_data(data: pd.DataFrame) -> pd.DataFrame:
     """Removes activities with missing data"""
     data = data[~data["weather_condition"].str.contains("unknown")]  # missing weather
     data = data.dropna(subset=["equipment"])  # without equipment data the activity is not usable
