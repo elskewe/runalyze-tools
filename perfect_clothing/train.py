@@ -91,6 +91,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
         sort=False, group_keys=False).apply(get_radiation_data)
     data_df, encoded_clothing_columns = encode_clothing_layers(data_df)
     data_df["comfort_int"] = data_df["comfort"].map(assumptions.TEMPERATURE_LABEL_MAPPING)
+    data_df["weather_condition_int"] = data_df["weather_condition"].map(assumptions.WEATHER_CONDITION_MAPPING)
     return data_df, encoded_clothing_columns
 
 

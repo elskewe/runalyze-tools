@@ -14,6 +14,7 @@ INPUT_COLUMNS = [  # columns used as the input for the prediction
     # "wind_chill", => actually makes results worse
     # "humidity", => comparatively hard to obtain and does not make that big of a difference
     "wind_speed",  # => this feels like it should have an influence, but I'm not convinced it's actually the case
+    #"weather_condition_int", => makes the result slightly worse and gets little weight anyway
     "duration",
     ##"hr_avg",
     ##"fit_trimp",
@@ -79,6 +80,19 @@ CLOTHING_REPLACEMENTS = {
 
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
 OK_TEMPERATURE_LABEL = "ok"
+
+WEATHER_CONDITION_MAPPING = {
+    "snowing": 1,
+    "heavyrain": 2,
+    "thunderstorm": 3,
+    "rainy": 4,
+    "windy": 5,
+    "foggy": 6,
+    "cloudy": 7,
+    "changeable": 8,
+    "fair": 9,
+    "sunny": 10,
+}
 
 
 def get_cloud_cover(condition: str) -> int:
