@@ -175,6 +175,11 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     columns_to_remove = [c for c in encoded_clothing_columns if (data[c] == 0).all()]
     data = data.drop(columns=columns_to_remove)
     encoded_clothing_columns = [c for c in encoded_clothing_columns if c not in columns_to_remove]
+    # remove unused columns to reduce pickle size
+    data = data.drop(columns=["recurring_route", "downhill_efficiency", "uphill_efficiency", "device_id",
+                              "required_critical_power", "required_critical_pace", "fit_sweat_loss", "wheel_size",
+                              "required_critical_pace_vo2max", "fit_hrv_analysis", "jumps", "total_strokes", "swolf",
+                              "ozone"])
     return data, encoded_clothing_columns
 
 
