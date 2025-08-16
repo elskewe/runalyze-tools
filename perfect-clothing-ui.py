@@ -19,7 +19,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
         "ghi": weather.get_radiation(latitude_, longitude_, date_, cloud_cover_perc)[0],
         "is_race": is_race}])
     best_outfits = predict.recommend_best(features, MODEL, CANDIDATE_OUTFITS, top_k=100)
-    return best_outfits, f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km"
+    return best_outfits, f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km", features["ghi"].values[0]
 
 
 with gr.Blocks(fill_width=True) as demo:
@@ -33,8 +33,9 @@ with gr.Blocks(fill_width=True) as demo:
                 pace_display = gr.Textbox(label="", min_width=120)
             duration = gr.Slider(0, 100, step=2.5, value=30, label="Duration (min)")
             with gr.Row():
-                date = gr.DateTime(label="Date", value=datetime.now(), type="datetime")
+                date = gr.DateTime(label="Date", value=datetime.now(), type="datetime", scale=2)
                 race = gr.Checkbox(label="Race")
+                ghi = gr.Number(label="GHI (W/m^2)")
             with gr.Row():
                 latitude = gr.Number(label="Latitude", value=47.7664456)
                 longitude = gr.Number(label="Longitude", value=9.1605106)
@@ -42,7 +43,7 @@ with gr.Blocks(fill_width=True) as demo:
             output_df = gr.DataFrame()
 
     inputs = [temp, wind_speed, cloud_cover, duration, pace, date, race, latitude, longitude]
-    change_args = {"fn": predict_outfit, "inputs": inputs, "outputs": [output_df, pace_display]}
+    change_args = {"fn": predict_outfit, "inputs": inputs, "outputs": [output_df, pace_display, ghi]}
     for i in inputs:
         i.change(**change_args)
 
