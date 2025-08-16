@@ -186,3 +186,26 @@ def split_equipment(equipment: list[str]) -> dict[str, list[str]]:
                               the values are the items in the category.
     """
     return {k: [e for e in equipment if e in v] for k, v in SORTED_CLOTHING.items()}
+
+
+def valid_outfits(candidate_outfits: list[dict[str, int]], is_race: bool) -> list[dict[str, int]]:
+    """Takes a list of candidate outfits and filters the list for valid outfits.
+
+    Currently this only means that the necessary race clothing must be present in the outfit if this
+    is a race.
+
+    Args:
+        candidate_outfits (list[dict[str, int]]): The list of candidate outfits with the keys being
+                                                  the layers and the values being the int encoded
+                                                  clothing items
+        is_race (bool): Whether this is a race or not
+
+    Returns:
+        list[dict[str, int]]: The list of valid outfits, same format as the input
+    """
+    valid_outfits_ = [outfit for outfit in candidate_outfits
+                      if not is_race or
+                      all(any(SORTED_CLOTHING[category][v-1] in items
+                              for k, v in outfit.items() if k.startswith(category))
+                          for category, items in NECESSARY_RACE_CLOTHING.items())]
+    return valid_outfits_

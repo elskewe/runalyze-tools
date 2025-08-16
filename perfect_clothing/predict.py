@@ -47,11 +47,7 @@ def score_outfits(input_data: pd.DataFrame, outfit_encoding: list[dict[str, int]
 def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) -> pd.DataFrame:
     labels = list(assumptions.TEMPERATURE_LABEL_MAPPING)
     # only score outfit with a necessary race clothing item if it is a race
-    valid_outfits = [outfit for outfit in candidate_outfits
-                     if not input_data["is_race"].item() or
-                     all(any(assumptions.SORTED_CLOTHING[category][v-1] in items
-                             for k, v in outfit.items() if k.startswith(category))
-                         for category, items in assumptions.NECESSARY_RACE_CLOTHING.items())]
+    valid_outfits = assumptions.valid_outfits(candidate_outfits, input_data["is_race"].item())
     probs = score_outfits(input_data, valid_outfits, model)
     df = pd.DataFrame([{"outfit": outfit_to_string(outfit), "P(ok)": p[labels.index("ok")],
                         "P(zuHeiss)": p[labels.index("zuHeiss")], "P(zuKalt)": p[labels.index("zuKaltAngezogen")],
