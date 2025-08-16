@@ -38,7 +38,7 @@ with gr.Blocks(fill_width=True) as demo:
                                    # the timezone should be set automatically to the local timezone
                                    # when no value is passed, but this doesn't work unfortunately
                                    timezone=get_localzone().key, type="datetime", scale=2)
-                race = gr.Checkbox(label="Race")
+                race = gr.Checkbox(label="Race", min_width=80)
                 ghi = gr.Number(label="GHI (W/m^2)")
             with gr.Row():
                 latitude = gr.Number(label="Latitude", value=47.7664456)
