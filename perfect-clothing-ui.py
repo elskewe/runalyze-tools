@@ -44,7 +44,7 @@ with gr.Blocks(fill_width=True) as demo:
                 latitude = gr.Number(label="Latitude", value=47.7664456)
                 longitude = gr.Number(label="Longitude", value=9.1605106)
         with gr.Column(scale=2):
-            output_df = gr.DataFrame()
+            output_df = gr.DataFrame(show_row_numbers=True)
 
     inputs = [temp, wind_speed, cloud_cover, duration, pace, date, race, latitude, longitude]
     change_args = {"fn": predict_outfit, "inputs": inputs, "outputs": [output_df, pace_display, ghi]}
