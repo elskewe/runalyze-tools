@@ -53,18 +53,17 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
                              for k, v in outfit.items() if k.startswith(category))
                          for category, items in assumptions.NECESSARY_RACE_CLOTHING.items())]
     probs = score_outfits(input_data, valid_outfits, model)
-    scored = [(outfit, p[labels.index("ok")], p[labels.index("zuHeiss")],
-               p[labels.index("zuKaltAngezogen")], p[labels.index("zuWarmAngezogen")])
-              for outfit, p in zip(valid_outfits, probs)]
-    scored.sort(reverse=True, key=lambda x: x[1] + x[2])
+    df = pd.DataFrame([{"outfit": outfit_to_string(outfit), "P(ok)": p[labels.index("ok")],
+                        "P(zuHeiss)": p[labels.index("zuHeiss")], "P(zuKalt)": p[labels.index("zuKaltAngezogen")],
+                        "P(zuWarm)": p[labels.index("zuWarmAngezogen")]}
+                      for outfit, p in zip(valid_outfits, probs)])
 
-    # convert to dataframe
-    df = pd.DataFrame(scored, columns=["outfit", "P(ok)", "P(zuHeiss)", "P(zuKalt)", "P(zuWarm)"])
-    df["outfit"] = df["outfit"].apply(outfit_to_string)
-    # convert to percent
-    for col in ["P(ok)", "P(zuHeiss)", "P(zuKalt)", "P(zuWarm)"]:
-        df[col] = df[col].transform(lambda x: int(x*100))
     df["sum_ok"] = df["P(ok)"] + df["P(zuHeiss)"]
+    df = df.sort_values("sum_ok", ascending=False)
+    # convert to percent
+    for col in df.columns:
+        if col.startswith("P(") or col == "sum_ok":
+            df[col] = df[col].transform(lambda x: int(x*100))
     return df[:top_k]   # best outfit(s) and their P(ok) and P(zuHeiss)
 
 
