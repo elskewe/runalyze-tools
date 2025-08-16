@@ -91,7 +91,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
         ["latitude", "longitude", "timezone_offset"],
         sort=False, group_keys=False).apply(get_radiation_data)
     data_df, encoded_clothing_columns = encode_clothing_layers(data_df)
-    data_df = clean_data(data_df, encoded_clothing_columns)
+    data_df, encoded_clothing_columns = clean_data(data_df, encoded_clothing_columns)
     data_df["comfort_int"] = data_df["comfort"].map(assumptions.TEMPERATURE_LABEL_MAPPING)
     data_df["weather_condition_int"] = data_df["weather_condition"].map(assumptions.WEATHER_CONDITION_MAPPING.index)
     return data_df, encoded_clothing_columns
@@ -148,11 +148,13 @@ def remove_invalid_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> pd.DataFrame:
+def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple[pd.DataFrame, list[str]]:
     """Cleans the data
 
     - fixes the case that "zuHeiss" is set despite being able to shed another layer
     - removes outfits that only occur infrequently (except those used in races)
+        - then removes clothing encoding columns which are now superfluous
+    - removes unused columns
     """
     # When "zuHeiss" is set despite being able to shed another layer change the label to
     # "zuWarmAngezogen"
@@ -168,7 +170,12 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> pd.Da
                     # The return is either the (valid) outfit or an empty list. This truthy and
                     # can thus be converted to bool directly
                     .apply(bool))]
-    return data
+    # remove clothing encoding columns which are now superfluous due to not having any outfits with
+    # that many layers
+    columns_to_remove = [c for c in encoded_clothing_columns if (data[c] == 0).all()]
+    data = data.drop(columns=columns_to_remove)
+    encoded_clothing_columns = [c for c in encoded_clothing_columns if c not in columns_to_remove]
+    return data, encoded_clothing_columns
 
 
 def get_radiation_data(data: pd.DataFrame) -> pd.Series:
