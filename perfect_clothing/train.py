@@ -119,6 +119,8 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
              if assumptions.TEMPERATURE_LABEL_MAPPING.get(tag["tag"]) is not None),
             assumptions.OK_TEMPERATURE_LABEL
         )
+        if isinstance(tags := e.get("tags"), list):
+            e["tags"] = tuple(tag["tag"] for tag in tags) # type: ignore
 
     # try filling missing location data
     for i, e in enumerate(data):
