@@ -152,7 +152,14 @@ def remove_invalid_data(data: pd.DataFrame) -> pd.DataFrame:
 
 
 def clean_data(data: pd.DataFrame) -> pd.DataFrame:
-    """Cleans the data"""
+    """Cleans the data
+
+    - fixes the case that "zuHeiss" is set despite being able to shed another layer
+    """
+    # When "zuHeiss" is set despite being able to shed another layer change the label to
+    # "zuWarmAngezogen"
+    data.loc[(data["upper_body_layer1"] > assumptions.SORTED_CLOTHING["upper_body"].index("Oberkörperfrei")+1)
+             & (data["comfort"] == "zuHeiss") & ~data["is_race"], "comfort"] = "zuWarmAngezogen"
     return data
 
 
