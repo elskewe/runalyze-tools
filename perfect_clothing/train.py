@@ -91,6 +91,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
         ["latitude", "longitude", "timezone_offset"],
         sort=False, group_keys=False).apply(get_radiation_data)
     data_df, encoded_clothing_columns = encode_clothing_layers(data_df)
+    data_df = clean_data(data_df)
     data_df["comfort_int"] = data_df["comfort"].map(assumptions.TEMPERATURE_LABEL_MAPPING)
     data_df["weather_condition_int"] = data_df["weather_condition"].map(assumptions.WEATHER_CONDITION_MAPPING.index)
     return data_df, encoded_clothing_columns
@@ -147,6 +148,11 @@ def remove_invalid_data(data: pd.DataFrame) -> pd.DataFrame:
     # remove data with outfits that only occur infrequently
     s = data['equipment'].apply(tuple)  # convert list to tuple
     data = data[s.map(s.value_counts()) >= assumptions.OUTFIT_FREQUENCY_THRESHOLD]
+    return data
+
+
+def clean_data(data: pd.DataFrame) -> pd.DataFrame:
+    """Cleans the data"""
     return data
 
 
