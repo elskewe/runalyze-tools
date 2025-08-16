@@ -81,18 +81,18 @@ CLOTHING_REPLACEMENTS = {
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
 OK_TEMPERATURE_LABEL = "ok"
 
-WEATHER_CONDITION_MAPPING = {
-    "snowing": 1,
-    "heavyrain": 2,
-    "thunderstorm": 3,
-    "rainy": 4,
-    "windy": 5,
-    "foggy": 6,
-    "cloudy": 7,
-    "changeable": 8,
-    "fair": 9,
-    "sunny": 10,
-}
+WEATHER_CONDITION_MAPPING = [
+    "snowing",
+    "heavyrain",
+    "thunderstorm",
+    "rainy",
+    "windy",
+    "foggy",
+    "cloudy",
+    "changeable",
+    "fair",
+    "sunny",
+]
 
 
 def get_cloud_cover(condition: str) -> int:
