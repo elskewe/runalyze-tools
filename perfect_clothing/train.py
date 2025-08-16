@@ -163,8 +163,8 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     # Remove data with outfits that only occur infrequently. An exception is made for combinations
     # which are valid for races (i.e. the have the necessary equipment from
     # `assumptions.NECESSARY_EQUIPMENT_FOR_RACES`) because otherwise there is too little data for these outfits
-    s = data['equipment'].apply(tuple)  # convert list to tuple
-    data = data[(s.map(s.value_counts()) >= assumptions.OUTFIT_FREQUENCY_THRESHOLD)
+    e = data["equipment"]
+    data = data[(e.map(e.value_counts()) >= assumptions.OUTFIT_FREQUENCY_THRESHOLD)
                 | (data[encoded_clothing_columns].apply(
                     lambda r: assumptions.valid_outfits([r.to_dict()], True), axis=1)
                     # The return is either the (valid) outfit or an empty list. This truthy and
