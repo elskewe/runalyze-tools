@@ -44,14 +44,14 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
     scored = []
     labels = list(assumptions.TEMPERATURE_LABEL_MAPPING)
     for outfit in candidate_outfits:
-        if input_data["is_race"].item() and \
-            not all(any(assumptions.SORTED_CLOTHING[category][v-1] in items
-                        for k, v in outfit.items() if k.startswith(category))
-                        for category, items in assumptions.NECESSARY_RACE_CLOTHING.items()):
-            continue  # outfit without a necessary race clothing item
-        probs = score_outfit(input_data, outfit, model)
-        scored.append((outfit, probs[labels.index("ok")], probs[labels.index("zuHeiss")],
-                       probs[labels.index("zuKaltAngezogen")], probs[labels.index("zuWarmAngezogen")]))
+        if not input_data["is_race"].item() or \
+            all(any(assumptions.SORTED_CLOTHING[category][v-1] in items
+                    for k, v in outfit.items() if k.startswith(category))
+                for category, items in assumptions.NECESSARY_RACE_CLOTHING.items()):
+            # only score outfit with a necessary race clothing item if it is a race
+            probs = score_outfit(input_data, outfit, model)
+            scored.append((outfit, probs[labels.index("ok")], probs[labels.index("zuHeiss")],
+                           probs[labels.index("zuKaltAngezogen")], probs[labels.index("zuWarmAngezogen")]))
     scored.sort(reverse=True, key=lambda x: x[1] + x[2])
 
     # convert to dataframe
