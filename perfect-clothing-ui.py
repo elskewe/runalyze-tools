@@ -1,5 +1,6 @@
 from datetime import datetime
 from functools import lru_cache
+from tzlocal import get_localzone
 import gradio as gr
 import pandas as pd
 from perfect_clothing import predict, weather
@@ -33,7 +34,10 @@ with gr.Blocks(fill_width=True) as demo:
                 pace_display = gr.Textbox(label="", min_width=120)
             duration = gr.Slider(0, 100, step=2.5, value=30, label="Duration (min)")
             with gr.Row():
-                date = gr.DateTime(label="Date", value=datetime.now(), type="datetime", scale=2)
+                date = gr.DateTime(label="Date", value=datetime.now(),
+                                   # the timezone should be set automatically to the local timezone
+                                   # when no value is passed, but this doesn't work unfortunately
+                                   timezone=get_localzone().key, type="datetime", scale=2)
                 race = gr.Checkbox(label="Race")
                 ghi = gr.Number(label="GHI (W/m^2)")
             with gr.Row():

@@ -12,3 +12,4 @@ scikit-learn
 lightgbm
 matplotlib
 gradio
+tzlocal
