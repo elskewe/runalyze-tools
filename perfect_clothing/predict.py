@@ -33,25 +33,29 @@ def load_data(model_filename=assumptions.MODEL_FILENAME,
     return model, candidate_outfits
 
 
-def score_outfit(input_data: pd.DataFrame, outfit_encoding, model) -> np.ndarray:
+def score_outfits(input_data: pd.DataFrame, outfit_encoding: list[dict[str, int]], model) -> np.ndarray:
     """Scores the given outfit for the given input data and returns the P(ok) and P(zuHeiss)."""
-    x = pd.concat((input_data[assumptions.INPUT_COLUMNS], pd.DataFrame(outfit_encoding, index=input_data.index)), axis=1)
-    probs = model.predict_proba(x)[0]
+    # repeats the relevant columns of `input_data` `len(outfit_encoding)` times and then merges the
+    # outfits s.t. the result has the same number of rows as there are entries (i.e. outfits) in
+    # `outfit_encoding`
+    x = pd.concat([input_data[assumptions.INPUT_COLUMNS]]*len(outfit_encoding), ignore_index=True) \
+        .join(pd.DataFrame(outfit_encoding))
+    probs = model.predict_proba(x)
     return probs
 
 
 def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) -> pd.DataFrame:
-    scored = []
     labels = list(assumptions.TEMPERATURE_LABEL_MAPPING)
-    for outfit in candidate_outfits:
-        if not input_data["is_race"].item() or \
-            all(any(assumptions.SORTED_CLOTHING[category][v-1] in items
-                    for k, v in outfit.items() if k.startswith(category))
-                for category, items in assumptions.NECESSARY_RACE_CLOTHING.items()):
-            # only score outfit with a necessary race clothing item if it is a race
-            probs = score_outfit(input_data, outfit, model)
-            scored.append((outfit, probs[labels.index("ok")], probs[labels.index("zuHeiss")],
-                           probs[labels.index("zuKaltAngezogen")], probs[labels.index("zuWarmAngezogen")]))
+    # only score outfit with a necessary race clothing item if it is a race
+    valid_outfits = [outfit for outfit in candidate_outfits
+                     if not input_data["is_race"].item() or
+                     all(any(assumptions.SORTED_CLOTHING[category][v-1] in items
+                             for k, v in outfit.items() if k.startswith(category))
+                         for category, items in assumptions.NECESSARY_RACE_CLOTHING.items())]
+    probs = score_outfits(input_data, valid_outfits, model)
+    scored = [(outfit, p[labels.index("ok")], p[labels.index("zuHeiss")],
+               p[labels.index("zuKaltAngezogen")], p[labels.index("zuWarmAngezogen")])
+              for outfit, p in zip(valid_outfits, probs)]
     scored.sort(reverse=True, key=lambda x: x[1] + x[2])
 
     # convert to dataframe
