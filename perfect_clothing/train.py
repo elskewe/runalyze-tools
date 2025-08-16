@@ -157,16 +157,16 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> pd.Da
     # "zuWarmAngezogen"
     data.loc[(data["upper_body_layer1"] > assumptions.SORTED_CLOTHING["upper_body"].index("Oberkörperfrei")+1)
              & (data["comfort"] == "zuHeiss") & ~data["is_race"], "comfort"] = "zuWarmAngezogen"
-    # Remove data with outfits that only occur infrequently. An exception is made for races as long
-    # as they have the necessary equipment from `assumptions.NECESSARY_EQUIPMENT_FOR_RACES`
+    # Remove data with outfits that only occur infrequently. An exception is made for combinations
+    # which are valid for races (i.e. the have the necessary equipment from
+    # `assumptions.NECESSARY_EQUIPMENT_FOR_RACES`) because otherwise there is too little data for these outfits
     s = data['equipment'].apply(tuple)  # convert list to tuple
     data = data[(s.map(s.value_counts()) >= assumptions.OUTFIT_FREQUENCY_THRESHOLD)
-                | ((data["is_race"])
-                   & (data[[*encoded_clothing_columns, "is_race"]].apply(
-                       lambda r: assumptions.valid_outfits([r.to_dict()], r["is_race"]), axis=1)
-                       # The return is either the (valid) outfit or an empty list. This truthy and
-                       # can thus be converted to bool directly
-                       .apply(bool)))]
+                | (data[encoded_clothing_columns].apply(
+                    lambda r: assumptions.valid_outfits([r.to_dict()], True), axis=1)
+                    # The return is either the (valid) outfit or an empty list. This truthy and
+                    # can thus be converted to bool directly
+                    .apply(bool))]
     return data
 
 
