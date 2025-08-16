@@ -152,6 +152,7 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> pd.Da
     """Cleans the data
 
     - fixes the case that "zuHeiss" is set despite being able to shed another layer
+    - removes outfits that only occur infrequently (except those used in races)
     """
     # When "zuHeiss" is set despite being able to shed another layer change the label to
     # "zuWarmAngezogen"
