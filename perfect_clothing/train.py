@@ -257,6 +257,7 @@ def plot_importances(clf: CalibratedClassifierCV, feature_names: list[str]):
     sorted_importances = importances[idx]
     sorted_features = np.array(feature_names)[idx]
 
+    plt.figure()
     plt.barh(sorted_features, sorted_importances)
     plt.xscale('log')
     plt.xlabel("Feature Importance (log scale)")
