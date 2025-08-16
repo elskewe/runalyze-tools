@@ -27,7 +27,7 @@ def train():
         with open(assumptions.DATA_FILENAME, "wb") as f:
             pickle.dump((data_df, encoded_clothing_columns), f)
 
-    train_core(data_df, encoded_clothing_columns, n_estimators=316)
+    train_core(data_df, encoded_clothing_columns, n_estimators=500)
 
     return None
 
