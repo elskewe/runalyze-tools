@@ -45,6 +45,7 @@ SORTED_CLOTHING = {
         "Ganz kurze Hose",
         "Kurze Hose",
         "Kurze Tights",
+        "Lange Unterhose",
         "Lange Tights"
     ],
     "legs": [
