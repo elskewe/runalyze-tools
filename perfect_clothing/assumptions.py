@@ -24,7 +24,6 @@ INPUT_COLUMNS = [  # columns used as the input for the prediction
 
 OUTFIT_FREQUENCY_THRESHOLD = 5  # outfits that occur less than this number of times are removed
 INVALID_CLOTHING = [
-    "Kompressionsstrümpfe",  # only for injury reasons
     "Trainingshose",  # only for warm up and not representative
     "Trainingsjacke",  # only for warm up and not representative
     # too little data for the following items
@@ -47,6 +46,9 @@ SORTED_CLOTHING = {
         "Kurze Hose",
         "Kurze Tights",
         "Lange Tights"
+    ],
+    "legs": [
+        "Kompressionsstrümpfe"
     ],
     "upper_body": [
         "Oberkörperfrei",
