@@ -14,6 +14,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
     # Build your feature row from inputs
     features = pd.DataFrame([{
         "temperature": temperature,
+        "wind_chill": weather.wind_chill(temperature, wind_speed_),
         "wind_speed": wind_speed_,  # is already in km/h in Runalyze data
         "duration": duration_min*60,
         "x_pace": 60/pace_min_km,
