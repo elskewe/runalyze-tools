@@ -5,10 +5,11 @@ google-api-python-client
 humanize
 click
 rich
-pandas
+numpy>=2.0
+pandas>=2.2.0
 pvlib
 geopy
-scikit-learn
+scikit-learn==1.6.1
 lightgbm
 matplotlib
 gradio
