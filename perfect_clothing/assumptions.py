@@ -11,7 +11,7 @@ DATA_FILENAME = "cache/data.pickle"  # pandas DataFrame with the training data
 CANDIDATE_OUTFITS_FILENAME = "cache/candidate_outfits.json"
 INPUT_COLUMNS = [  # columns used as the input for the prediction
     "temperature",
-    # "wind_chill", => actually makes results worse
+    "wind_chill",
     # "humidity", => comparatively hard to obtain and does not make that big of a difference
     "wind_speed",  # => this feels like it should have an influence, but I'm not convinced it's actually the case
     #"weather_condition_int", => makes the result slightly worse and gets little weight anyway
