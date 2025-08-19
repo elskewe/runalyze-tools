@@ -134,7 +134,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
                 e["latitude"] = data[i - 1]["latitude"]
                 e["longitude"] = data[i - 1]["longitude"]
 
-    return pd.DataFrame(data)
+    return pd.DataFrame.from_records(data, index="id")
 
 
 def remove_invalid_data(data: pd.DataFrame) -> pd.DataFrame:
@@ -222,16 +222,16 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
     """
     new_rows = []
 
-    for _, current_row in data.iterrows():
-        new_rows.extend(generate_new_outfit(current_row, encoded_clothing_columns, candidate_outfits))
+    for id_, current_row in data.iterrows():
+        new_rows.extend(generate_new_outfit(id_, current_row, encoded_clothing_columns, candidate_outfits))
 
     # add to base dataframe
-    augmented = pd.concat([data, pd.DataFrame(new_rows)])
+    augmented = pd.concat([data, pd.DataFrame.from_records(new_rows, index="id")])
 
     return augmented
 
 
-def generate_new_outfit(base_row: pd.Series, encoded_clothing_columns: list[str],
+def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns: list[str],
                         candidate_outfits: list[dict[str, int]]) -> list[dict]:
     """Generates new outfits based on the given label (`base_row["comfort_int"]`).
 
@@ -269,7 +269,8 @@ def generate_new_outfit(base_row: pd.Series, encoded_clothing_columns: list[str]
         raise ValueError("Shouldn't end up here")
 
     return [base_row.to_dict() | new_row
-            | {"comfort": new_label, "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[new_label]}
+            | {"comfort": new_label, "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[new_label],
+               "id": id_}
             for new_row in new_rows]
 
 
