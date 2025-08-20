@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import json
 import pickle
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -87,7 +88,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
     # recorded cloud cover is not reliable
     data_df["cloud_cover"] = data_df["weather_condition"].apply(assumptions.get_cloud_cover)
     data_df["wind_chill"] = data_df.apply(lambda row: weather.wind_chill(row["temperature"], row["wind_speed"]), axis=1)
-    data_df["ghi"] = data_df.groupby(
+    data_df[["ghi_start", "ghi_middle", "ghi_end"]] = data_df.groupby(
         # grouping by timezone is necessary to construct a pd.DatetimeIndex object
         ["latitude", "longitude", "timezone_offset"],
         sort=False, group_keys=False).apply(get_radiation_data)
@@ -104,9 +105,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
         e["sport"] = e["sport"]["name"]  # type: ignore
         if isinstance(t := e.get("type"), dict):
             e["type"] = t["name"]
-        e["date_time"] = (datetime.fromisoformat(e["date_time"])  # type: ignore
-                          # move time to approximate middle of activity
-                          + timedelta(seconds=e.get("elapsed_time", e.get("duration"))/2))  # type: ignore
+        e["date_time"] = datetime.fromisoformat(e["date_time"])  # type: ignore
         e["location"], e["latitude"], e["longitude"] = (
             assumptions.get_location(e["date_time"], e.get("recurring_route")))  # type: ignore
         if isinstance(equipment := e.get("equipment"), list):
@@ -186,12 +185,27 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     return data, encoded_clothing_columns
 
 
-def get_radiation_data(data: pd.DataFrame) -> pd.Series:
+def get_radiation_data(data: pd.DataFrame) -> pd.DataFrame:
     """Returns the radiation data for a given data frame. Assumes that the location is identical for each row."""
-    return pd.Series(weather.get_radiation(
-        data["latitude"].iloc[0], data["longitude"].iloc[0],
-        pd.to_datetime(data["date_time"].to_list()), data["cloud_cover"].to_numpy()),
-        index=data.index)
+    with warnings.catch_warnings():
+        # not worth preventing them as pandas datetime only works in UTC and thus would have to be
+        # converted back to tz-aware immediately afterwards
+        warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
+
+        def get_radiation(time: pd.Series) -> np.ndarray:
+            return weather.get_radiation(data["latitude"].iloc[0], data["longitude"].iloc[0],
+                                         # pylance somehow thinks this is a `Index[int]`
+                                         pd.DatetimeIndex(time),  # type: ignore
+                                         data["cloud_cover"].to_numpy())
+
+        return pd.DataFrame({"ghi_start": get_radiation(data["date_time"]),
+                             "ghi_middle": get_radiation(data["date_time"]
+                                                         + pd.to_timedelta(data.get("elapsed_time",  # type: ignore
+                                                                                    data.get("duration"))/2, unit="s")),
+                             "ghi_end": get_radiation(data["date_time"]
+                                                      + pd.to_timedelta(data.get("elapsed_time",  # type: ignore
+                                                                                 data.get("duration")), unit="s"))},
+                            index=data.index)
 
 
 def encode_clothing_layers(data: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
