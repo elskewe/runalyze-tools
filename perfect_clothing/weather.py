@@ -25,7 +25,7 @@ def wind_chill(temperature: float, wind_speed: float) -> float:
     return 13.12 + 0.6215 * temperature - 11.37 * wind_speed ** 0.16 + 0.3965 * temperature * wind_speed ** 0.16
 
 
-def get_radiation(latitude: float, longitude: float, dates: pd.DatetimeIndex | datetime,
+def get_radiation(latitude: float, longitude: float, dates: pd.DatetimeIndex | datetime | list[datetime],
                   cloud_cover: np.ndarray) -> np.ndarray:
     """Returns the sun radiation for a given location and dates.
 
@@ -41,6 +41,8 @@ def get_radiation(latitude: float, longitude: float, dates: pd.DatetimeIndex | d
     # convert datetime object to pandas ´DatetimeIndex`
     if isinstance(dates, datetime):
         dates = pd.to_datetime([dates])
+    elif isinstance(dates, list):
+        dates = pd.to_datetime(dates)
 
     location = pvlib.location.Location(latitude, longitude)
     # cast is valid assuming a scalar input (instead of a pandas series)
