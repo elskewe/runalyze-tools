@@ -19,7 +19,9 @@ INPUT_COLUMNS = [  # columns used as the input for the prediction
     ##"hr_avg",
     ##"fit_trimp",
     "x_pace",
-    "ghi",
+    "ghi_start",
+    "ghi_middle",
+    "ghi_end",
     "is_race"]
 
 OUTFIT_FREQUENCY_THRESHOLD = 5  # outfits that occur less than this number of times are removed

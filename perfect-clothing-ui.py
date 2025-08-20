@@ -1,8 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import lru_cache
 from tzlocal import get_localzone
 import gradio as gr
 import pandas as pd
+import numpy as np
 from perfect_clothing import predict, weather
 
 MODEL, CANDIDATE_OUTFITS = predict.load_data()
@@ -11,6 +12,10 @@ MODEL, CANDIDATE_OUTFITS = predict.load_data()
 @lru_cache
 def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: float, duration_min: float, pace_min_km,
                    date_: datetime, is_race: bool, latitude_: float, longitude_: float):
+    ghi = weather.get_radiation(latitude_, longitude_,
+                                [date_, date_ + timedelta(minutes=duration_min)/2,
+                                 date_ + timedelta(minutes=duration_min)],
+                                cloud_cover_perc)
     # Build your feature row from inputs
     features = pd.DataFrame([{
         "temperature": temperature,
@@ -18,10 +23,12 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
         "wind_speed": wind_speed_,  # is already in km/h in Runalyze data
         "duration": duration_min*60,
         "x_pace": 60/pace_min_km,
-        "ghi": weather.get_radiation(latitude_, longitude_, date_, cloud_cover_perc)[0],
+        "ghi_start": ghi[0],
+        "ghi_middle": ghi[1],
+        "ghi_end": ghi[2],
         "is_race": is_race}])
     best_outfits = predict.recommend_best(features, MODEL, CANDIDATE_OUTFITS, top_k=100)
-    return best_outfits, f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km", features["ghi"].values[0]
+    return best_outfits, f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km", np.average(ghi)
 
 
 with gr.Blocks(fill_width=True) as demo:
