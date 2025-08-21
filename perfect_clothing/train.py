@@ -331,7 +331,7 @@ def best_low_complexity(cv_results: dict[str, Any]):
                    cv_results["mean_test_score"][i]) for i in candidate_idx]
     # choose the result with the lowest complexity and the highest score
     best_candidate = min(candidates, key=lambda c: (c[1], -c[2]))
-    return best_idx[1]
+    return best_candidate[1]
 
 
 def plot_importances(clf: CalibratedClassifierCV, feature_names: list[str]):
