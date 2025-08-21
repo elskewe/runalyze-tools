@@ -322,13 +322,15 @@ def best_low_complexity(cv_results: dict[str, Any]):
 
     candidate_idx = np.flatnonzero(cv_results["mean_test_score"] >= best_score_lower_bound)
     # choose the candidate with the lowest product of the hyperparameters (should be a good proxy
-    # for the complexity)
+    # for the complexity) with the mean score being the tie breaker
     best_idx = candidate_idx[
         np.array(
             # I don't like that this is hardcoded, but I can't think of a better option to prevent
             # also multiplying with regularization terms (which might be zero without making the
             # model less complex)
-            [cv_results["params"][i]["n_estimators"] * cv_results["params"][i]["num_leaves"] for i in candidate_idx]
+            [cv_results["params"][i]["n_estimators"] * cv_results["params"][i]["num_leaves"]
+             # sort first to get the result with the highest mean score when they have the same complexity
+             for _, i in sorted(zip(cv_results["mean_test_score"], candidate_idx), reverse=True)]
             ).argmin()
     ]
     return best_idx
