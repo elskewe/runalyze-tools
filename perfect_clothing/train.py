@@ -324,7 +324,12 @@ def best_low_complexity(cv_results: dict[str, Any]):
     # choose the candidate with the lowest product of the hyperparameters (should be a good proxy
     # for the complexity)
     best_idx = candidate_idx[
-        np.array([np.prod(list(cv_results["params"][i].values())) for i in candidate_idx]).argmin()
+        np.array(
+            # I don't like that this is hardcoded, but I can't think of a better option to prevent
+            # also multiplying with regularization terms (which might be zero without making the
+            # model less complex)
+            [cv_results["params"][i]["n_estimators"] * cv_results["params"][i]["num_leaves"] for i in candidate_idx]
+            ).argmin()
     ]
     return best_idx
 
