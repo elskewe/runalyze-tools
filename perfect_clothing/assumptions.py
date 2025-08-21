@@ -36,7 +36,6 @@ INVALID_CLOTHING = [
 # clothing that is only used in races
 CLOTHING_ONLY_FOR_RACES = [
     "Armwärmer",
-    "Unterziehshirt mit kurzen Ärmeln"
 ]
 # one of these items is required for a race
 NECESSARY_RACE_CLOTHING = {"upper_body": ["Singlet"]}
@@ -81,7 +80,8 @@ ALL_CLOTHING_ITEMS = [e for v in SORTED_CLOTHING.values() for e in v]
 
 # the key is replaced by the value
 CLOTHING_REPLACEMENTS = {
-    "2. Langarmshirt": "Langarmshirt"  # only because Runalyze can't handle multiple entries of the same item
+    "2. Langarmshirt": "Langarmshirt",  # only because Runalyze can't handle multiple entries of the same item
+    "Unterziehshirt mit kurzen Ärmeln": "T-Shirt",  # should be pretty similar warmth wise
 }
 
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
