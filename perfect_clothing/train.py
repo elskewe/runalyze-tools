@@ -53,7 +53,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
             # "num_leaves": np.logspace(2.083, 2.333, 7, dtype=int)
         }
         # search for best hyperparameters
-        search = GridSearchCV(base, param_grid, scoring="f1_macro", error_score="raise")
+        search = GridSearchCV(base, param_grid, cv=cv, scoring="f1_macro", error_score="raise", verbose=3)
         search.fit(x_train, y_train)
         base = search.best_estimator_
         print(search.best_params_)
