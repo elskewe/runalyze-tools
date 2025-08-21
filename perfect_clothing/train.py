@@ -56,8 +56,8 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
                               verbose=-1, class_weight="balanced", importance_type="gain",)
     if n_estimators == -1:
         param_grid = {
-            "n_estimators": np.logspace(1, 3, 10, dtype=int),
-            # "num_leaves": np.logspace(2.083, 2.333, 7, dtype=int),
+            "n_estimators": np.logspace(1, 2, 3, dtype=int),
+            "num_leaves": np.logspace(1, 2, 3, dtype=int),
             "reg_alpha": np.concatenate(([0], np.logspace(-2, 0, 2))),
             "reg_lambda": np.concatenate(([0], np.logspace(-2, 0, 2))),
         }
