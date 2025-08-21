@@ -6,7 +6,7 @@ import warnings
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.model_selection import GridSearchCV, StratifiedGroupKFold
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay, precision_recall_fscore_support
 import lightgbm as lgb
@@ -44,7 +44,13 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     """
     x = data[[*assumptions.INPUT_COLUMNS, *encoded_clothing_columns]]
     y = data["comfort_int"]
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+    train_idx, test_idx = next(
+        StratifiedGroupKFold(shuffle=True).split(x, y, data.index))
+    x_train, x_test, y_train, y_test = x.iloc[train_idx], x.iloc[test_idx], y.iloc[train_idx], y.iloc[test_idx]
+
+    # this is a list instead of a generator to allow pickle and use in both the hyperparameter
+    # search and actual training
+    cv = list(StratifiedGroupKFold(shuffle=True).split(x_train, y_train, groups=data.index[train_idx]))
 
     base = lgb.LGBMClassifier(n_estimators=n_estimators, num_leaves=195,
                               verbose=-1, class_weight="balanced", importance_type="gain",)
@@ -63,7 +69,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
         print(search.best_params_)
 
     # Calibrate for better probabilities (sigmoid works reliably with moderate data)
-    clf = CalibratedClassifierCV(base, method='sigmoid')
+    clf = CalibratedClassifierCV(base, cv=cv, method='sigmoid')
 
     clf.fit(x_train, y_train)
 
