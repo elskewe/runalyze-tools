@@ -7,6 +7,7 @@ from geopy.geocoders import Nominatim
 
 GEOPY_CACHE = "cache/geopy.json"
 MODEL_FILENAME = "cache/model.pickle"
+ALTERNATIVE_MODEL_FILENAME = "cache/model_small.pickle"  # alternative model
 DATA_FILENAME = "cache/data.pickle"  # pandas DataFrame with the training data
 CANDIDATE_OUTFITS_FILENAME = "cache/candidate_outfits.json"
 INPUT_COLUMNS = [  # columns used as the input for the prediction

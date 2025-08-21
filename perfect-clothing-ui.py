@@ -4,9 +4,10 @@ from tzlocal import get_localzone
 import gradio as gr
 import pandas as pd
 import numpy as np
-from perfect_clothing import predict, weather
+from perfect_clothing import predict, weather, assumptions
 
 MODEL, CANDIDATE_OUTFITS = predict.load_data()
+ALTERNATIVE_MODEL, _ = predict.load_data(assumptions.ALTERNATIVE_MODEL_FILENAME)
 
 
 @lru_cache
@@ -28,7 +29,8 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
         "ghi_end": ghi[2],
         "is_race": is_race}])
     best_outfits = predict.recommend_best(features, MODEL, CANDIDATE_OUTFITS, top_k=100)
-    return best_outfits, f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km", np.average(ghi)
+    best_outfits_alternative = predict.recommend_best(features, ALTERNATIVE_MODEL, CANDIDATE_OUTFITS, top_k=100)
+    return best_outfits, best_outfits_alternative, f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km", np.average(ghi)
 
 
 with gr.Blocks(fill_width=True) as demo:
@@ -53,9 +55,11 @@ with gr.Blocks(fill_width=True) as demo:
                 longitude = gr.Number(label="Longitude", value=9.1605106)
         with gr.Column(scale=2):
             output_df = gr.DataFrame(show_row_numbers=True)
+            output_df_alternative = gr.DataFrame(show_row_numbers=True)
 
     inputs = [temp, wind_speed, cloud_cover, duration, pace, date, race, latitude, longitude]
-    change_args = {"fn": predict_outfit, "inputs": inputs, "outputs": [output_df, pace_display, ghi]}
+    change_args = {"fn": predict_outfit, "inputs": inputs,
+                   "outputs": [output_df, output_df_alternative, pace_display, ghi]}
     for i in inputs:
         i.change(**change_args)
 
