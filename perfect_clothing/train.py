@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
 import pickle
 import warnings
@@ -7,9 +7,11 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.calibration import CalibratedClassifierCV
-from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay, precision_recall_fscore_support
 import lightgbm as lgb
 import matplotlib.pyplot as plt
+from rich.table import Table
+from rich.console import Console
 
 from perfect_clothing import load_data, weather, assumptions
 from runalyze import api
@@ -71,6 +73,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     plt.show()
 
     plot_importances(clf, x.columns.to_list())
+    find_problematic_regions(x_test, y_test, y_pred)
 
     # save model
     with open(assumptions.MODEL_FILENAME, "wb") as f:
@@ -317,3 +320,35 @@ def plot_importances(clf: CalibratedClassifierCV, feature_names: list[str]):
     plt.title("LightGBM Feature Importances (averaged over folds)")
     plt.tight_layout()
     plt.show()
+
+
+def find_problematic_regions(x: pd.DataFrame, y: pd.Series, y_pred: np.ndarray, n_bins=10, top_k=5):
+    """Prints the feature regions with the worst performance.
+
+    Args:
+        x (pd.DataFrame): the features
+        y (pd.Series): the ground truth labels
+        y_pred (np.ndarray): the predicted labels
+        n_bins (int, optional): the number of bins to use. Defaults to 10.
+        top_k (int, optional): the number of worst regions to print. Defaults to 5.
+    """
+    values = []
+    for column in x.columns:
+        if len(x[column].unique()) < n_bins:
+            bounds = x[column].unique()
+            bounds.sort()
+        else:
+            bounds = np.linspace(x[column].min(), x[column].max(), n_bins + 1)
+            bounds[-1] += 1
+        for lower_bound, upper_bound in zip(bounds[:-1], bounds[1:]):
+            idx = (x[column] >= lower_bound) & (x[column] < upper_bound)
+            values.append((column, lower_bound, upper_bound, idx.sum(),
+                           precision_recall_fscore_support(y[idx], y_pred[idx], average="macro", zero_division=0)[2],
+                           precision_recall_fscore_support(y[idx], y_pred[idx], average="weighted", zero_division=0)[2]))
+
+    table = Table("Feature", "Lower Bound", "Upper Bound", "Count", "Macro F1", "Weighted F1", title="Worst regions")
+    for row in sorted(values, key=lambda x: x[4])[:top_k]:
+        table.add_row(*(f"{e:.3g}" if not isinstance(e, str) else e for e in row))
+
+    console = Console()
+    console.print(table)
