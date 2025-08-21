@@ -322,18 +322,14 @@ def best_low_complexity(cv_results: dict[str, Any]):
 
     candidate_idx = np.flatnonzero(cv_results["mean_test_score"] >= best_score_lower_bound)
     # choose the candidate with the lowest product of the hyperparameters (should be a good proxy
-    # for the complexity) with the mean score being the tie breaker
-    best_idx = candidate_idx[
-        np.array(
-            # I don't like that this is hardcoded, but I can't think of a better option to prevent
-            # also multiplying with regularization terms (which might be zero without making the
-            # model less complex)
-            [cv_results["params"][i]["n_estimators"] * cv_results["params"][i]["num_leaves"]
-             # sort first to get the result with the highest mean score when they have the same complexity
-             for _, i in sorted(zip(cv_results["mean_test_score"], candidate_idx), reverse=True)]
-            ).argmin()
-    ]
-    return best_idx
+    # for the complexity) with the mean score being the tie breaker. I don't like that this is
+    # hardcoded, but I can't think of a better option to prevent also multiplying with
+    # regularization terms (which might be zero without making the model less complex)
+    candidates = [(i, cv_results["params"][i]["n_estimators"] * cv_results["params"][i]["num_leaves"],
+                   cv_results["mean_test_score"][i]) for i in candidate_idx]
+    # choose the result with the lowest complexity and the highest score
+    best_candidate = min(candidates, key=lambda c: (c[1], -c[2]))
+    return best_idx[1]
 
 
 def plot_importances(clf: CalibratedClassifierCV, feature_names: list[str]):
