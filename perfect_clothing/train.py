@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import pickle
+from typing import Any
 import warnings
 
 import numpy as np
@@ -53,7 +54,8 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
             # "num_leaves": np.logspace(2.083, 2.333, 7, dtype=int)
         }
         # search for best hyperparameters
-        search = GridSearchCV(base, param_grid, cv=cv, scoring="f1_macro", error_score="raise", verbose=3)
+        search = GridSearchCV(base, param_grid, cv=cv, scoring="f1_macro", error_score="raise",
+                              refit=best_low_complexity, verbose=3)
         search.fit(x_train, y_train)
         base = search.best_estimator_
         print(search.best_params_)
@@ -300,6 +302,31 @@ def save_candidate_outfits(data: pd.DataFrame, encoded_clothing_columns: list[st
         json.dump(d, f, indent=4)
 
     return d  # type: ignore
+
+
+def best_low_complexity(cv_results: dict[str, Any]):
+    """Balance model complexity with cross-validated score.
+
+    The best hyperparameter combination is the one whose mean is within one standard error of the
+    mean of the best one with the lowest complexity.
+
+    Args:
+        cv_results (dict): the result of a GridSearchCV
+
+    Returns:
+        tuple: the hyperparameter combination with the highest test score and the lowest complexity
+    """
+    best_score_idx = np.argmax(cv_results["mean_test_score"])
+    best_score_lower_bound = cv_results["mean_test_score"][best_score_idx]\
+        - cv_results["std_test_score"][best_score_idx]
+
+    candidate_idx = np.flatnonzero(cv_results["mean_test_score"] >= best_score_lower_bound)
+    # choose the candidate with the lowest product of the hyperparameters (should be a good proxy
+    # for the complexity)
+    best_idx = candidate_idx[
+        np.array([np.prod(list(cv_results["params"][i].values())) for i in candidate_idx]).argmin()
+    ]
+    return best_idx
 
 
 def plot_importances(clf: CalibratedClassifierCV, feature_names: list[str]):
