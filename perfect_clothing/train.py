@@ -56,6 +56,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
         search = GridSearchCV(base, param_grid, scoring="f1_macro", error_score="raise")
         search.fit(x_train, y_train)
         base = search.best_estimator_
+        print(search.best_params_)
 
     # Calibrate for better probabilities (sigmoid works reliably with moderate data)
     clf = CalibratedClassifierCV(base, method='sigmoid')
