@@ -174,8 +174,13 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     """
     # When "zuHeiss" is set despite being able to shed another layer change the label to
     # "zuWarmAngezogen"
+    # 1. for non-races
     data.loc[(data["upper_body_layer1"] > assumptions.SORTED_CLOTHING["upper_body"].index("Oberkörperfrei")+1)
              & (data["comfort"] == "zuHeiss") & ~data["is_race"], "comfort"] = "zuWarmAngezogen"
+    # 2. for races
+    data.loc[(data["upper_body_layer1"] > assumptions.SORTED_CLOTHING["upper_body"].index("Singlet")+1)
+             & (data["comfort"] == "zuHeiss") & data["is_race"], "comfort"] = "zuWarmAngezogen"
+
     # Remove data with outfits that only occur infrequently. An exception is made for combinations
     # which are valid for races (i.e. the have the necessary equipment from
     # `assumptions.NECESSARY_EQUIPMENT_FOR_RACES`) because otherwise there is too little data for these outfits
