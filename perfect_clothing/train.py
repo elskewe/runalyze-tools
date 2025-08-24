@@ -386,11 +386,20 @@ def find_problematic_regions(x: pd.DataFrame, y: pd.Series, y_pred: np.ndarray, 
             bounds[-1] += 1
         for lower_bound, upper_bound in zip(bounds[:-1], bounds[1:]):
             idx = (x[column] >= lower_bound) & (x[column] < upper_bound)
+            by_label = precision_recall_fscore_support(y[idx], y_pred[idx],
+                                                       # list the labels explicitly to always get
+                                                       # the same dimension of the outputs
+                                                       labels=list(assumptions.TEMPERATURE_LABEL_MAPPING.values()),
+                                                       zero_division=0)
             values.append((column, lower_bound, upper_bound, idx.sum(),
                            precision_recall_fscore_support(y[idx], y_pred[idx], average="macro", zero_division=0)[2],
-                           precision_recall_fscore_support(y[idx], y_pred[idx], average="weighted", zero_division=0)[2]))
+                           precision_recall_fscore_support(y[idx], y_pred[idx], average="weighted", zero_division=0)[2],
+                           *[e for t in zip(by_label[2], by_label[3]) for e in t]  # f1 and count by label
+                           ))
 
-    table = Table("Feature", "Lower Bound", "Upper Bound", "Count", "Macro F1", "Weighted F1", title="Worst regions")
+    table = Table("Feature", "Lower Bound", "Upper Bound", "Count", "Macro F1", "Weighted F1",
+                  *[e for t in [(l, "#") for l in assumptions.TEMPERATURE_LABEL_MAPPING] for e in t],
+                  title="Worst regions")
     for row in sorted(values, key=lambda x: x[4])[:top_k]:
         table.add_row(*(f"{e:.3g}" if not isinstance(e, str) else e for e in row))
 
