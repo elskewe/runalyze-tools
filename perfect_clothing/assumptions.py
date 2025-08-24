@@ -36,9 +36,10 @@ INVALID_CLOTHING = [
 # clothing that is only used in races
 CLOTHING_ONLY_FOR_RACES = [
     "Armwärmer",
+    "Singlet+Armwärmer"
 ]
 # one of these items is required for a race
-NECESSARY_RACE_CLOTHING = {"upper_body": ["Singlet"]}
+NECESSARY_RACE_CLOTHING = {"upper_body": ["Singlet", "Singlet+Armwärmer"]}
 
 
 # clothing categories sorted by warmth (from cold to warm)
@@ -57,6 +58,7 @@ SORTED_CLOTHING = {
         "Oberkörperfrei",
         "Singlet",
         "T-Shirt",
+        "Singlet+Armwärmer",
         "Langarmshirt",
         "Gefüttertes Langarmshirt",
         "Laufjacke"
@@ -85,7 +87,9 @@ CLOTHING_REPLACEMENTS = {
 }
 
 # every entry in the key is removed and the value added if all entries in the key are present
-CLOTHING_REPLACEMENTS_MULTI = {}
+CLOTHING_REPLACEMENTS_MULTI = {
+    ("Singlet", "Armwärmer"): "Singlet+Armwärmer",
+}
 
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
 OK_TEMPERATURE_LABEL = "ok"
