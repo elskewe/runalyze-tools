@@ -84,6 +84,9 @@ CLOTHING_REPLACEMENTS = {
     "Unterziehshirt mit kurzen Ärmeln": "T-Shirt",  # should be pretty similar warmth wise
 }
 
+# every entry in the key is removed and the value added if all entries in the key are present
+CLOTHING_REPLACEMENTS_MULTI = {}
+
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
 OK_TEMPERATURE_LABEL = "ok"
 
@@ -177,8 +180,26 @@ def convert_equipment(equipment: list[dict[str, str | int]]) -> tuple[str, ...]:
     specified conversions
     """
     # apply replacements and remove everything that is not a clothing item
-    return tuple(CLOTHING_REPLACEMENTS.get(name, name) for d in equipment
-                 if (name := d.get("name")) in ALL_CLOTHING_ITEMS or name in INVALID_CLOTHING)
+    out = [CLOTHING_REPLACEMENTS.get(name, name) for d in equipment
+           if (name := d.get("name")) in ALL_CLOTHING_ITEMS or name in INVALID_CLOTHING
+           # also keep items if they might be reduced to a single item later
+           or name in [e for t in CLOTHING_REPLACEMENTS_MULTI for e in t]]
+    out = replace_tuple(out, CLOTHING_REPLACEMENTS_MULTI)
+    return tuple(out)  # convert to tuple to make it hashable
+
+
+def replace_tuple(data: list[str], mapping: dict[tuple[str, ...], str]) -> list[str]:
+    """If every element of key tuple is in data, replace it with the value.
+
+    The value is inserted once and the list is modified in place
+    """
+    for key, val in mapping.items():
+        if all(k in data for k in key):
+            for k in key:
+                data.remove(k)
+            data.append(val)
+
+    return data
 
 
 def split_equipment(equipment: tuple[str, ...]) -> dict[str, tuple[str, ...]]:
