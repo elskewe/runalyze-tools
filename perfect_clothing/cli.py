@@ -16,6 +16,12 @@ def load_data():
 
 
 @cli.command()
+def update_data():
+    """Updates the existing data from Runalyze with new activities."""
+    ld.update_data()
+
+
+@cli.command()
 def clean_data():
     """Cleans the already loaded data.
 

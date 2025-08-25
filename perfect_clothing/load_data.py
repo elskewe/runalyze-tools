@@ -39,6 +39,15 @@ def load_data(existing_activities: list[api.ActivityType] = []):
     return activities
 
 
+def update_data(cache_file=CACHE_FILE):
+    """Loads the data from Runalyze until the first activity which is in the cache file.
+
+    The new activities will be added to the cache file.
+    """
+    existing_activities = get_data(cache_file)
+    return load_data(existing_activities)
+
+
 def get_data(cache_file=CACHE_FILE) -> list[api.ActivityType]:
     """Returns the data from the cache file."""
     with open(CACHE_FILE, "r", encoding="utf-8") as f:
