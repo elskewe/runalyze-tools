@@ -302,13 +302,13 @@ def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns:
 
     outfit = base_row[encoded_clothing_columns].to_dict()
     if label > 0:  # zuWarmAngezogen
-        # Generate outfits warmer to this one
+        # Generate outfits warmer compared to this one
         new_label = "zuWarmAngezogen"
         for candidate_outfit in candidate_outfits:
             if all(v >= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit:
                 new_rows.append(candidate_outfit)
     elif label < 0:  # zuKaltAngezogen
-        # Generate outfits cooler to this one
+        # Generate outfits cooler compared to this one
         new_label = "zuKaltAngezogen"
         for candidate_outfit in candidate_outfits:
             if all(v <= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit:
