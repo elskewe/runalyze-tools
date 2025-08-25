@@ -18,12 +18,11 @@ def load_data():
         task_id = p.add_task("Loading activities", total=None)
         while True:
             new_activities = api.get_activities(credentials, page)
-            if not new_activities:
-                break
-
             activities.extend(new_activities)
             page += 1
             p.update(task_id, advance=1)
+            if not new_activities:
+                break
 
     activities = clean_data(activities)
 
