@@ -10,20 +10,24 @@ MODEL_FILENAME = "cache/model.pickle"
 ALTERNATIVE_MODEL_FILENAME = "cache/model_small.pickle"  # alternative model
 DATA_FILENAME = "cache/data.pickle"  # pandas DataFrame with the training data
 CANDIDATE_OUTFITS_FILENAME = "cache/candidate_outfits.json"
-INPUT_COLUMNS = [  # columns used as the input for the prediction
-    "temperature",
-    "wind_chill",
+# keys are the columns used as the input for the prediction, the values are the increments to move
+# the outfit towards a warmer feeling (0 meaning no influence)
+INPUT_COLUMNS = {
+    "temperature": 2,
+    "wind_chill": 0,  # is already moved by wind speed
     # "humidity", => comparatively hard to obtain and does not make that big of a difference
-    "wind_speed",  # => this feels like it should have an influence, but I'm not convinced it's actually the case
+    "wind_speed": -2,  # => this feels like it should have an influence, but I'm not convinced it's actually the case
     #"weather_condition_int", => makes the result slightly worse and gets little weight anyway
-    "duration",
+    "duration": 0,
     ##"hr_avg",
     ##"fit_trimp",
-    "x_pace",
-    "ghi_start",
-    "ghi_middle",
-    "ghi_end",
-    "is_race"]
+    "x_pace": 1,
+    # for the ghi these are dummy values only giving the sign as these should be consistent with the time of day
+    "ghi_start": 1,
+    "ghi_middle": 1,
+    "ghi_end": 1,
+    "is_race": 0}
+MAX_AUGMENTATION_FACTOR = 3  # maximum factor that is multiplied on the increments to augment the data
 
 OUTFIT_FREQUENCY_THRESHOLD = 5  # outfits that occur less than this number of times are removed
 INVALID_CLOTHING = [
