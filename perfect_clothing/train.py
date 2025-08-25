@@ -305,13 +305,15 @@ def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns:
         # Generate outfits warmer compared to this one
         new_label = "zuWarmAngezogen"
         for candidate_outfit in candidate_outfits:
-            if all(v >= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit:
+            if all(v >= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit \
+                    and sum(candidate_outfit.values()) - sum(outfit.values()) in assumptions.MAX_CLOTHING_DISTANCE:
                 new_rows.append(candidate_outfit)
     elif label < 0:  # zuKaltAngezogen
         # Generate outfits cooler compared to this one
         new_label = "zuKaltAngezogen"
         for candidate_outfit in candidate_outfits:
-            if all(v <= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit:
+            if all(v <= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit \
+                    and sum(candidate_outfit.values()) - sum(outfit.values()) in assumptions.MAX_CLOTHING_DISTANCE:
                 new_rows.append(candidate_outfit)
     else:
         raise ValueError("Shouldn't end up here")
