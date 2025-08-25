@@ -38,7 +38,7 @@ def score_outfits(input_data: pd.DataFrame, outfit_encoding: list[dict[str, int]
     # repeats the relevant columns of `input_data` `len(outfit_encoding)` times and then merges the
     # outfits s.t. the result has the same number of rows as there are entries (i.e. outfits) in
     # `outfit_encoding`
-    x = pd.concat([input_data[assumptions.INPUT_COLUMNS]]*len(outfit_encoding), ignore_index=True) \
+    x = pd.concat([input_data[assumptions.INPUT_COLUMNS.keys()]]*len(outfit_encoding), ignore_index=True) \
         .join(pd.DataFrame(outfit_encoding))
     probs = model.predict_proba(x)
     return probs
