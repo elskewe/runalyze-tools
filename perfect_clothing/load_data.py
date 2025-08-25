@@ -1,12 +1,13 @@
 import json
 from pathlib import Path
+from typing import Sequence
 from rich.progress import Progress, MofNCompleteColumn, TimeElapsedColumn
 from runalyze import api
 
 CACHE_FILE = "cache/activities.json"
 
 
-def load_data(existing_activities: list[api.ActivityType] = []):
+def load_data(existing_activities: Sequence[api.ActivityType] = ()):
     """Loads the data from Runalyze.
 
     If `existing_activities` is not empty, the download stops as soon as the first activity from it
