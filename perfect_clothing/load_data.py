@@ -6,13 +6,17 @@ from runalyze import api
 CACHE_FILE = "cache/activities.json"
 
 
-def load_data():
-    """Loads the data from Runalyze."""
+def load_data(existing_activities: list[api.ActivityType] = []):
+    """Loads the data from Runalyze.
+
+    If `existing_activities` is not empty, the download stops as soon as the first activity from it
+    is downloaded and the return also includes the already existing activities."""
     with open("runalyze_credentials.json", "r", encoding="utf-8") as f:
         credentials = json.load(f)
 
     page = 1
     activities: list[api.ActivityType] = []
+    existing_ids = {e["id"] for e in existing_activities}  # set for more efficient lookup
 
     with Progress(*Progress.get_default_columns(), MofNCompleteColumn(), TimeElapsedColumn()) as p:
         task_id = p.add_task("Loading activities", total=None)
@@ -21,10 +25,12 @@ def load_data():
             activities.extend(new_activities)
             page += 1
             p.update(task_id, advance=1)
-            if not new_activities:
-                break
+            if not new_activities or any(e["id"] in existing_ids for e in new_activities):
+                break  # stop when there are no new activities or any of the new activities is already in the cache
 
     activities = clean_data(activities)
+    new_ids = {e["id"] for e in activities}
+    activities.extend(d for d in existing_activities if d["id"] not in new_ids)
 
     Path(CACHE_FILE).parent.mkdir(parents=True, exist_ok=True)
     with open(CACHE_FILE, "w", encoding="utf-8") as f:
