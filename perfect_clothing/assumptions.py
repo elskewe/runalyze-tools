@@ -33,7 +33,7 @@ MAX_AUGMENTATION_FACTOR = 3  # maximum factor that is multiplied on the incremen
 # (w.r.t. the sum of the int encoded clothing items) of the original outfit. The first (negative)
 # value is for outfits which are too cold, the second (positive) value is for outfits which are too
 # warm
-MAX_CLOTHING_DISTANCE = range(-10, 5)
+MAX_CLOTHING_DISTANCE = range(-13, 5)
 
 OUTFIT_FREQUENCY_THRESHOLD = 5  # outfits that occur less than this number of times are removed
 INVALID_CLOTHING = [
