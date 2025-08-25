@@ -34,7 +34,7 @@ def load_data():
     return activities
 
 
-def get_data() -> list[api.ActivityType]:
+def get_data(cache_file=CACHE_FILE) -> list[api.ActivityType]:
     """Returns the data from the cache file."""
     with open(CACHE_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
