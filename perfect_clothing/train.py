@@ -252,11 +252,26 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
 
     Basic idea: if an outfit is too warm, every outfit that only contains the same or warmer items
     will also be too warm. The same principle holds for the other labels.
+
+    Furthermore, to balance the categories afterwards, the other features might be modified as well
+    to get more data for less frequent categories.
     """
     new_rows = []
 
     for id_, current_row in data.iterrows():
         new_rows.extend(generate_new_outfit(id_, current_row, encoded_clothing_columns, candidate_outfits))
+
+    for factor in range(1, assumptions.MAX_AUGMENTATION_FACTOR+1):
+        # get comfort labels so far
+        comfort_int = pd.concat([data["comfort_int"], pd.Series([e["comfort_int"] for e in new_rows])])
+        # the return of `value_counts` is sorted by frequency, thus the first value of the index is
+        # always the most frequent label
+        most_frequent_comfort_label = int(comfort_int.value_counts().index[0])  # type: ignore
+        least_frequent_comfort_label = comfort_int.value_counts().index[-1]
+        if least_frequent_comfort_label == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL]:
+            break  # continue this loop until `ok` is the least frequent label (it can't be augmented)
+        for id_, current_row in data.iterrows():
+            new_rows.extend(generate_new_features(id_, current_row, most_frequent_comfort_label, factor))
 
     # add to base dataframe
     augmented = pd.concat([data, pd.DataFrame.from_records(new_rows, index="id")])
@@ -305,6 +320,64 @@ def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns:
             | {"comfort": new_label, "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[new_label],
                "id": id_}
             for new_row in new_rows]
+
+
+def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_label: int,
+                          augmentation_factor: int) -> list[dict]:
+    """Moves each of the features (by `augmentation_factor`) to get additional rows with the same label.
+
+    To combat label imbalance, this is only done for labels which are not the most frequent one."""
+    # Return if the label is `ok` as it's not possible to know which features to move to still
+    # retain the same label. Also don't make the imbalance worse by adding new rows of the already
+    # most frequent label.
+    if base_row["comfort_int"] == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL] \
+            or base_row["comfort_int"] == most_frequent_comfort_label:
+        return []
+
+    new_rows = []
+    # amplitude and direction in which the features are moved
+    factor = augmentation_factor * np.sign(base_row["comfort_int"])
+    for feature, direction in assumptions.INPUT_COLUMNS.items():
+        if direction == 0:
+            continue
+        match feature:
+            case "wind_speed" | "temperature":  # also need to adapt windchill
+                if feature == "wind_speed":
+                    new_wind_speed = base_row["wind_speed"] + direction * factor
+                    new_temperature = base_row["temperature"]
+                else:  # feature == "temperature":
+                    new_wind_speed = base_row["wind_speed"]
+                    new_temperature = base_row["temperature"] + direction * factor
+                if new_wind_speed < 0:
+                    continue  # invalid wind speed
+                new_rows.append({"wind_speed": new_wind_speed,
+                                 "temperature": new_temperature,
+                                 "wind_chill": weather.wind_chill(new_temperature, new_wind_speed)})
+            case "ghi_start":
+                # I don't like the hardcoded value here, but it's the easiest way right now
+                new_cloud_cover_perc = base_row["cloud_cover"] - 50 * factor
+                if new_cloud_cover_perc < 0 or new_cloud_cover_perc > 100:
+                    continue  # cloud cover is already at minimum or maximum
+                tmp_df = pd.DataFrame([base_row])
+                tmp_df["cloud_cover"] = new_cloud_cover_perc
+                # the `group` is only to get the correct type
+                tmp_df[["ghi_start", "ghi_middle", "ghi_end"]] = \
+                    tmp_df.groupby(["latitude"], group_keys=False).apply(get_radiation_data)
+                new_rows.append({"cloud_cover": new_cloud_cover_perc,
+                                 "ghi_start": tmp_df["ghi_start"].iloc[0],
+                                 "ghi_middle": tmp_df["ghi_middle"].iloc[0],
+                                 "ghi_end": tmp_df["ghi_end"].iloc[0]})
+            case "ghi_middle" | "ghi_end":
+                continue  # already handled by `ghi_start`
+            case "x_pace":
+                new_x_pace = base_row["x_pace"] + direction * factor
+                if new_x_pace < 0:
+                    continue  # invalid x_pace
+                new_rows.append({feature: new_x_pace})
+            case _:
+                new_rows.append({feature: base_row[feature] + direction * factor})
+
+    return [base_row.to_dict() | new_row | {"id": id_} for new_row in new_rows]
 
 
 def save_candidate_outfits(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> list[dict[str, int]]:
