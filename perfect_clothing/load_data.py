@@ -32,6 +32,7 @@ def load_data(existing_activities: Sequence[api.ActivityType] = ()):
     activities = clean_data(activities)
     new_ids = {e["id"] for e in activities}
     activities.extend(d for d in existing_activities if d["id"] not in new_ids)
+    print(f"Loaded {len(activities)-len(existing_activities)} new activities")
 
     Path(CACHE_FILE).parent.mkdir(parents=True, exist_ok=True)
     with open(CACHE_FILE, "w", encoding="utf-8") as f:
