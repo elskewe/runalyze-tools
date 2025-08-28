@@ -3,6 +3,7 @@ import json
 import pickle
 from typing import Any
 import warnings
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -20,6 +21,10 @@ from runalyze import api
 
 def train():
     try:
+        # delete the cache file if it is older than the raw data (jumping to the catch if the file
+        # is not found is find as it won't be possible to load it either)
+        if Path(assumptions.DATA_FILENAME).stat().st_mtime < Path(load_data.CACHE_FILE).stat().st_mtime:
+            Path(assumptions.DATA_FILENAME).unlink()
         with open(assumptions.DATA_FILENAME, "rb") as f:
             (data_df, encoded_clothing_columns) = pickle.load(f)
     except FileNotFoundError:
