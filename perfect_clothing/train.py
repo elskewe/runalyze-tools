@@ -171,7 +171,7 @@ def remove_invalid_data(data: pd.DataFrame) -> pd.DataFrame:
     # remove activities with race only clothing which are not races
     data = data[data["is_race"]
                 | ~data["equipment"].apply(lambda lst: any(e in assumptions.CLOTHING_ONLY_FOR_RACES for e in lst))]
-    return data
+    return data  # noqa: RET504
 
 
 def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple[pd.DataFrame, list[str]]:
@@ -284,9 +284,7 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
             new_rows.extend(generate_new_features(id_, current_row, most_frequent_comfort_label, factor))
 
     # add to base dataframe
-    augmented = pd.concat([data, pd.DataFrame.from_records(new_rows, index="id")])
-
-    return augmented
+    return pd.concat([data, pd.DataFrame.from_records(new_rows, index="id")])
 
 
 def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns: list[str],

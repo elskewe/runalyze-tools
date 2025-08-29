@@ -87,11 +87,10 @@ def valid_activity(activity: api.ActivityType) -> bool:
     Returns:
         bool: True if the activity is valid, False otherwise.
     """
-    is_valid = (
+    return (
         isinstance(s := activity.get("sport"), dict) and s.get("name") == "Laufen"
         and "temperature" in activity
     )
-    return is_valid
 
 
 def purge_fields(activity: api.ActivityType) -> None:

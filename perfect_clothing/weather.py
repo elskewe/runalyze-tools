@@ -48,8 +48,7 @@ def get_radiation(latitude: float, longitude: float, dates: pd.DatetimeIndex | d
     location = pvlib.location.Location(latitude, longitude)
     # cast is valid assuming a scalar input (instead of a pandas series)
     clearsky = cast(pd.DataFrame, location.get_clearsky(dates))
-    ghi = cloud_cover_to_ghi_linear(cloud_cover, clearsky["ghi"].to_numpy())
-    return ghi
+    return cloud_cover_to_ghi_linear(cloud_cover, clearsky["ghi"].to_numpy())
 
 
 def cloud_cover_to_ghi_linear(cloud_cover: NumericType, ghi_clear: NumericType, offset=35) -> NumericType:
@@ -74,5 +73,4 @@ def cloud_cover_to_ghi_linear(cloud_cover: NumericType, ghi_clear: NumericType, 
 
     offset = offset / 100.
     cloud_cover = cloud_cover / 100.
-    ghi = (offset + (1 - offset) * (1 - cloud_cover)) * ghi_clear
-    return ghi
+    return (offset + (1 - offset) * (1 - cloud_cover)) * ghi_clear

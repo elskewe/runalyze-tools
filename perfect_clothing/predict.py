@@ -42,8 +42,7 @@ def score_outfits(input_data: pd.DataFrame, outfit_encoding: list[dict[str, int]
     # `outfit_encoding`
     x = pd.concat([input_data[assumptions.INPUT_COLUMNS.keys()]]*len(outfit_encoding), ignore_index=True) \
         .join(pd.DataFrame(outfit_encoding))
-    probs = model.predict_proba(x)
-    return probs
+    return model.predict_proba(x)
 
 
 def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) -> pd.DataFrame:
