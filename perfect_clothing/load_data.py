@@ -52,7 +52,7 @@ def update_data(cache_file=CACHE_FILE):
 
 def get_data(cache_file=CACHE_FILE) -> list[api.ActivityType]:
     """Returns the data from the cache file."""
-    with open(CACHE_FILE, "r", encoding="utf-8") as f:
+    with open(cache_file, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
