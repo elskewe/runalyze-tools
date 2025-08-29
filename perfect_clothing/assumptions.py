@@ -244,7 +244,7 @@ def valid_outfits(candidate_outfits: list[dict[str, int]], is_race: bool) -> lis
     Returns:
         list[dict[str, int]]: The list of valid outfits, same format as the input
     """
-    valid_outfits_ = [outfit for outfit in candidate_outfits
+    return [outfit for outfit in candidate_outfits
                       if (not is_race
                           # if not a race, the outfit must not have race only clothing
                           and not any(any(SORTED_CLOTHING[category][v-1] in CLOTHING_ONLY_FOR_RACES
@@ -254,4 +254,3 @@ def valid_outfits(candidate_outfits: list[dict[str, int]], is_race: bool) -> lis
                       or (is_race and all(any(SORTED_CLOTHING[category][v-1] in items
                                               for k, v in outfit.items() if k.startswith(category))
                                           for category, items in NECESSARY_RACE_CLOTHING.items()))]
-    return valid_outfits_
