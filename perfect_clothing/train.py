@@ -304,25 +304,22 @@ def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns:
     Returns:
         list[dict]: the additional rows with the altered outfits
     """
-    new_rows = []
     if (label := base_row["comfort_int"]) == 0:
-        return new_rows  # no new rows are added
+        return []  # no new rows are added
 
     outfit = base_row[encoded_clothing_columns].to_dict()
     if label > 0:  # zuWarmAngezogen
         # Generate outfits warmer compared to this one
         new_label = "zuWarmAngezogen"
-        for candidate_outfit in candidate_outfits:
-            if all(v >= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit \
-                    and sum(candidate_outfit.values()) - sum(outfit.values()) in assumptions.MAX_CLOTHING_DISTANCE:
-                new_rows.append(candidate_outfit)
+        new_rows = [candidate_outfit for candidate_outfit in candidate_outfits
+                    if all(v >= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit
+                        and sum(candidate_outfit.values()) - sum(outfit.values()) in assumptions.MAX_CLOTHING_DISTANCE]
     elif label < 0:  # zuKaltAngezogen
         # Generate outfits cooler compared to this one
         new_label = "zuKaltAngezogen"
-        for candidate_outfit in candidate_outfits:
-            if all(v <= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit \
-                    and sum(candidate_outfit.values()) - sum(outfit.values()) in assumptions.MAX_CLOTHING_DISTANCE:
-                new_rows.append(candidate_outfit)
+        new_rows = [candidate_outfit for candidate_outfit in candidate_outfits
+                    if all(v <= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit
+                    and sum(candidate_outfit.values()) - sum(outfit.values()) in assumptions.MAX_CLOTHING_DISTANCE]
     else:
         raise ValueError("Shouldn't end up here")
 
