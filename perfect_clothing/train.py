@@ -43,8 +43,6 @@ def train():
 
     train_core(data_df, encoded_clothing_columns, n_estimators=31)
 
-    return None
-
 
 def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estimators=-1):
     """Actually train the model.
