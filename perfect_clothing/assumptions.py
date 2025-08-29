@@ -167,7 +167,7 @@ def lookup_location(name: str) -> tuple[float, float]:
         tuple[float, float]: The latitude and longitude.
     """
     try:
-        with open(GEOPY_CACHE, "r", encoding="utf-8") as f:
+        with open(GEOPY_CACHE, encoding="utf-8") as f:
             locations = json.load(f)
     except FileNotFoundError:
         locations = {}

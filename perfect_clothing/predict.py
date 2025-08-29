@@ -30,7 +30,7 @@ def load_data(model_filename=assumptions.MODEL_FILENAME,
               candidate_outfits_filename=assumptions.CANDIDATE_OUTFITS_FILENAME):
     with open(model_filename, "rb") as f:
         model = pickle.load(f)
-    with open(candidate_outfits_filename, "r", encoding="utf-8") as f:
+    with open(candidate_outfits_filename, encoding="utf-8") as f:
         candidate_outfits = json.load(f)
     return model, candidate_outfits
 

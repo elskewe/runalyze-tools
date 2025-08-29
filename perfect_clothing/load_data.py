@@ -14,7 +14,7 @@ def load_data(existing_activities: Sequence[api.ActivityType] = ()):
 
     If `existing_activities` is not empty, the download stops as soon as the first activity from it
     is downloaded and the return also includes the already existing activities."""
-    with open("runalyze_credentials.json", "r", encoding="utf-8") as f:
+    with open("runalyze_credentials.json", encoding="utf-8") as f:
         credentials = json.load(f)
 
     page = 1
@@ -54,7 +54,7 @@ def update_data(cache_file=CACHE_FILE):
 
 def get_data(cache_file=CACHE_FILE) -> list[api.ActivityType]:
     """Returns the data from the cache file."""
-    with open(cache_file, "r", encoding="utf-8") as f:
+    with open(cache_file, encoding="utf-8") as f:
         return json.load(f)
 
 
