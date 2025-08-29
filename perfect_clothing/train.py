@@ -135,7 +135,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
         if isinstance(equipment := e.get("equipment"), list):
             e["equipment"] = assumptions.convert_equipment(equipment)  # type: ignore
             e |= assumptions.split_equipment(e["equipment"])
-        e["is_race"] = True if e.get("race_result") else False
+        e["is_race"] = bool(e.get("race_result"))
         # if there is a comfort label use it, otherwise use ok
         e["comfort"] = next(
             (tag["tag"]
