@@ -1,10 +1,11 @@
 """Contains functions related to weather (e.g. sun radiation)."""
 
 from datetime import datetime
-from typing import cast, TypeVar
-import pvlib
-import pandas as pd
+from typing import TypeVar, cast
+
 import numpy as np
+import pandas as pd
+import pvlib
 
 NumericType = TypeVar("NumericType", float, np.ndarray)
 

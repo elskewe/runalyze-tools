@@ -1,7 +1,9 @@
 import json
 from pathlib import Path
 from typing import Sequence
-from rich.progress import Progress, MofNCompleteColumn, TimeElapsedColumn
+
+from rich.progress import MofNCompleteColumn, Progress, TimeElapsedColumn
+
 from runalyze import api
 
 CACHE_FILE = "cache/activities.json"

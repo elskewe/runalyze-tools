@@ -1,10 +1,12 @@
 import json
 import pickle
 import re
+
 import numpy as np
 import pandas as pd
-from rich.table import Table
 from rich.console import Console
+from rich.table import Table
+
 from perfect_clothing import assumptions
 
 

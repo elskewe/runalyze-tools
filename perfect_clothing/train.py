@@ -1,21 +1,26 @@
-from datetime import datetime
 import json
 import pickle
-from typing import Any
 import warnings
+from datetime import datetime
 from pathlib import Path
+from typing import Any
 
-import numpy as np
-import pandas as pd
-from sklearn.model_selection import GridSearchCV, StratifiedGroupKFold
-from sklearn.calibration import CalibratedClassifierCV
-from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay, precision_recall_fscore_support
 import lightgbm as lgb
 import matplotlib.pyplot as plt
-from rich.table import Table
+import numpy as np
+import pandas as pd
 from rich.console import Console
+from rich.table import Table
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+    classification_report,
+    confusion_matrix,
+    precision_recall_fscore_support,
+)
+from sklearn.model_selection import GridSearchCV, StratifiedGroupKFold
 
-from perfect_clothing import load_data, weather, assumptions
+from perfect_clothing import assumptions, load_data, weather
 from runalyze import api
 
 

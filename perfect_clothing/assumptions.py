@@ -1,8 +1,9 @@
 """This module contains the assumptions used for the data."""
-from datetime import datetime
-from functools import lru_cache
 import json
 import time
+from datetime import datetime
+from functools import lru_cache
+
 from geopy.geocoders import Nominatim
 
 GEOPY_CACHE = "cache/geopy.json"

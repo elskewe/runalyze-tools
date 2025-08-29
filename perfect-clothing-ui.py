@@ -1,10 +1,12 @@
 from datetime import datetime, timedelta
 from functools import lru_cache
-from tzlocal import get_localzone
+
 import gradio as gr
-import pandas as pd
 import numpy as np
-from perfect_clothing import predict, weather, assumptions
+import pandas as pd
+from tzlocal import get_localzone
+
+from perfect_clothing import assumptions, predict, weather
 
 MODEL, CANDIDATE_OUTFITS = predict.load_data()
 ALTERNATIVE_MODEL, _ = predict.load_data(assumptions.ALTERNATIVE_MODEL_FILENAME)
