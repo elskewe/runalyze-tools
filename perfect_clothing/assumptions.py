@@ -2,7 +2,7 @@
 import json
 import time
 from datetime import datetime
-from functools import lru_cache
+from functools import cache
 
 from geopy.geocoders import Nominatim
 
@@ -156,7 +156,7 @@ def get_location(date: datetime, recurring_route: dict) -> tuple[str, float, flo
     return "", 0, 0
 
 
-@lru_cache(maxsize=None)
+@cache
 def lookup_location(name: str) -> tuple[float, float]:
     """Tries to get the coordinates for a location name.
 
