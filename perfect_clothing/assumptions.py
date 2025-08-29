@@ -153,8 +153,7 @@ def get_location(date: datetime, recurring_route: dict) -> tuple[str, float, flo
     """
     if recurring_route and recurring_route.get("name"):
         return (recurring_route["name"],) + lookup_location(recurring_route["name"])
-    else:
-        return "", 0, 0
+    return "", 0, 0
 
 
 @lru_cache(maxsize=None)
