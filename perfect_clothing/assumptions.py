@@ -105,6 +105,13 @@ CLOTHING_REPLACEMENTS_MULTI = {
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
 OK_TEMPERATURE_LABEL = "ok"
 
+# The following words are matched (with `pandas.Series.str.contains`, i.e. a case-insensitive string
+# which might contain regex) in note to find activities which were at the edge of being ok. If
+# matches from both categories occur, they are not used as the note is ambiguous.
+ALMOST_TOO_COLD_WORDS = ["kühl", "kalt"]
+ALMOST_TOO_WARM_WORDS = ["warm"]
+
+
 WEATHER_CONDITION_MAPPING = [
     "snowing",
     "heavyrain",
