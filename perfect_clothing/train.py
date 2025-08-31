@@ -302,11 +302,8 @@ def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns:
     Returns:
         list[dict]: the additional rows with the altered outfits
     """
-    if (label := base_row["comfort_int"]) == 0:
-        return []  # no new rows are added
-
     outfit = base_row[encoded_clothing_columns].to_dict()
-    if label > 0:  # zuWarmAngezogen
+    if (label := base_row["comfort_int"]) > 0:  # zuWarmAngezogen
         # Generate outfits warmer compared to this one
         new_label = "zuWarmAngezogen"
         new_rows = [candidate_outfit for candidate_outfit in candidate_outfits
@@ -318,8 +315,8 @@ def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns:
         new_rows = [candidate_outfit for candidate_outfit in candidate_outfits
                     if all(v <= outfit[k] for k, v in candidate_outfit.items()) and outfit != candidate_outfit
                     and sum(candidate_outfit.values()) - sum(outfit.values()) in assumptions.MAX_CLOTHING_DISTANCE]
-    else:
-        raise ValueError("Shouldn't end up here")
+    else:  # label == 0
+        return []  # no new rows are added
 
     return [base_row.to_dict() | new_row
             | {"comfort": new_label, "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[new_label],
