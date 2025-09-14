@@ -50,7 +50,4 @@ def translate_activity_type(activity_type: str) -> str:
         "Radfahren": "Biking"
     }
 
-    try:
-        return mapping[activity_type]
-    except KeyError as e:
-        raise ValueError(f"Unknown activity type: {activity_type}") from e
+    return mapping.get(activity_type, "Other")
