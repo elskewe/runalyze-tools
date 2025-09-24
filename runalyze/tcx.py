@@ -47,7 +47,8 @@ def translate_activity_type(activity_type: str) -> str:
     """
     mapping = {
         "Laufen": "Running",
-        "Radfahren": "Biking"
+        "Radfahren": "Biking",
+        "Schwimmen": "Swimming"
     }
 
     return mapping.get(activity_type, "Other")
