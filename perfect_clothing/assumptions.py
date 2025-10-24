@@ -18,7 +18,7 @@ INPUT_COLUMNS = {
     "wind_chill": 0,  # is already moved by wind speed
     # "humidity", => comparatively hard to obtain and does not make that big of a difference
     "wind_speed": -2,  # => this feels like it should have an influence, but I'm not convinced it's actually the case
-    #"weather_condition_int", => makes the result slightly worse and gets little weight anyway
+    # "weather_condition_int": 0,  # => makes the result slightly worse and gets little weight anyway (probably too little data)
     "duration": 0,
     ##"hr_avg",
     ##"fit_trimp",
