@@ -191,6 +191,9 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     # 2. for races
     data.loc[(data["upper_body_layer1"] > assumptions.SORTED_CLOTHING["upper_body"].index("Singlet")+1)
              & (data["comfort"] == "zuHeiss") & data["is_race"], "comfort"] = "zuWarmAngezogen"
+    # 3. for lower body
+    data.loc[(data["lower_body_layer1"] > assumptions.SORTED_CLOTHING["lower_body"].index("Ganz kurze Hose")+1)
+             & (data["comfort"] == "zuHeiss"), "comfort"] = "zuWarmAngezogen"
 
     # Remove data with outfits that only occur infrequently. An exception is made for combinations
     # which are valid for races (i.e. the have the necessary equipment from
