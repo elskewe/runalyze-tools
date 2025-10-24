@@ -4,6 +4,7 @@ import warnings
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+import webbrowser
 
 import lightgbm as lgb
 import matplotlib.pyplot as plt
@@ -11,6 +12,7 @@ import numpy as np
 import pandas as pd
 from rich.console import Console
 from rich.table import Table
+import pyperclip
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import (
     ConfusionMatrixDisplay,
@@ -523,5 +525,12 @@ def find_problematic_entries(clf: CalibratedClassifierCV, x: pd.DataFrame, y: pd
     comfort_int_mapping = {key: i for i, key in enumerate(assumptions.TEMPERATURE_LABEL_MAPPING.values())}
     col_idx = ret["comfort_int"].map(comfort_int_mapping).to_numpy()
     ret["probability_true_label"] = probabilities[np.arange(len(ret)), col_idx]
+
+    worst_entries = ret.loc[ret["probability_true_label"] < 0.1].sort_index()
+    for id in {e for e in worst_entries.index if e not in assumptions.IDS_CHECKED}:
+        webbrowser.open_new_tab(f"https://runalyze.com/activity/{id}/edit")
+        print(worst_entries.loc[id])
+        pyperclip.copy(id)
+        input("Press enter to continue")
 
     return ret

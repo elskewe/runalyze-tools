@@ -14,3 +14,4 @@ lightgbm
 matplotlib
 gradio
 tzlocal
+pyperclip
