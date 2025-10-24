@@ -93,6 +93,9 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
 
     plot_importances(clf, x.columns.to_list())
     find_problematic_regions(x_test, y_test, y_pred)
+    # just calling this to set a debugger breakpoint is not nice, but I don't want to think of a
+    # good output right now
+    problematic_entries = find_problematic_entries(clf, x_test, y_test, y_pred)
 
     # save model
     with open(assumptions.MODEL_FILENAME, "wb") as f:
@@ -496,3 +499,26 @@ def find_problematic_regions(x: pd.DataFrame, y: pd.Series, y_pred: np.ndarray, 
 
     console = Console()
     console.print(table)
+
+
+def find_problematic_entries(clf: CalibratedClassifierCV, x: pd.DataFrame, y: pd.Series, y_pred: np.ndarray) -> pd.DataFrame:
+    """Find points where the predicted probabilities are most wrong
+
+    Returns dataframe which contains the data from y and y_pred as well as the predicted probability
+    of the true class
+
+    Args:
+        x (pd.DataFrame): the features
+        y (pd.Series): the ground truth labels
+        y_pred (np.ndarray): the predicted labels
+    """
+    probabilities = clf.predict_proba(x)
+    ret = pd.concat((x, y), axis=1)
+    ret = pd.concat((ret, pd.Series(y_pred, y.index, name="comfort_int_pred")), axis=1)
+    ret["probabilities"] = probabilities.tolist()
+    # maps the comfort label to position in probabilities
+    comfort_int_mapping = {key: i for i, key in enumerate(assumptions.TEMPERATURE_LABEL_MAPPING.values())}
+    col_idx = ret["comfort_int"].map(comfort_int_mapping).to_numpy()
+    ret["probability_true_label"] = probabilities[np.arange(len(ret)), col_idx]
+
+    return ret
