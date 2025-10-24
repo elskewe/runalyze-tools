@@ -527,7 +527,7 @@ def find_problematic_entries(clf: CalibratedClassifierCV, x: pd.DataFrame, y: pd
     ret["probability_true_label"] = probabilities[np.arange(len(ret)), col_idx]
 
     worst_entries = ret.loc[ret["probability_true_label"] < 0.1].sort_index()
-    for id in {e for e in worst_entries.index if e not in assumptions.IDS_CHECKED}:
+    for id in sorted({e for e in worst_entries.index if e not in assumptions.IDS_CHECKED}):
         webbrowser.open_new_tab(f"https://runalyze.com/activity/{id}/edit")
         print(worst_entries.loc[id])
         pyperclip.copy(id)
