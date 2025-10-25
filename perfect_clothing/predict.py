@@ -56,7 +56,7 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
                       for outfit, p in zip(valid_outfits, probs)])
 
     df["sum_ok"] = df["P(ok)"] + df["P(zuHeiss)"]
-    df = df.sort_values("sum_ok", ascending=False)
+    df = df.sort_values("sum_ok", ascending=False, ignore_index=True)
     # convert to percent
     for col in df.columns:
         if col.startswith("P(") or col == "sum_ok":
