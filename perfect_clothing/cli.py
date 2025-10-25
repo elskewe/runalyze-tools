@@ -40,4 +40,6 @@ def train():
 @cli.command()
 def predict():
     """Returns the perfect clothing"""
-    pr.predict({"wind_chill": -5, "x_gap": 12, "ghi": 300, "is_race": False})
+    pr.predict({"temperature": -4, "wind_chill": 10, "x_gap": 12, 
+                "ghi_start": 300, "ghi_middle": 350, "ghi_end": 350,
+                "wind_speed": 5, "x_pace": 13.1, "is_race": False, "duration": 1800})
