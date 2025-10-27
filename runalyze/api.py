@@ -29,3 +29,16 @@ def get_activities(credentials, page=1) -> list[ActivityType]:
                      headers=credentials,
                      params={"page": page, "order[id]": "desc"})
     return r.json()
+
+def get_body_composition(credentials, page=1) -> list[ActivityType]:
+    """Returns the last 100 body composition data points.
+
+    Note that this always return the oldest data points first.
+
+    Args:
+        credentials (dict): The credentials for the Runalyze API.
+        page (int, optional): The page to get. Defaults to 1.
+    """
+    r = requests.get(RUNALYZE_API_ENDPOINT + "metrics/bodyComposition",
+                     headers=credentials, params={"page": page})
+    return r.json()
