@@ -3,6 +3,7 @@
 import json
 
 import click
+import pandas as pd
 from rich.progress import MofNCompleteColumn, Progress, TimeElapsedColumn
 
 from runalyze import api
@@ -13,6 +14,7 @@ from runalyze import api
 def main(csvfile):
     """Reads a CSV file from Libra and uploads new weight values to Runalyze."""
     data_runalyze = load_weight_from_runalyze()
+    data_libra = load_libra_csv(csvfile)
 
 
 def load_weight_from_runalyze():
@@ -39,6 +41,10 @@ def load_weight_from_runalyze():
 
     print(f"Loaded {len(data)} data points")
     return data
+
+def load_libra_csv(file) -> pd.DataFrame:
+    """Reads a CSV file from Libra."""
+    return pd.read_csv(file, sep=";", skiprows=3)
 
 
 if __name__ == "__main__":
