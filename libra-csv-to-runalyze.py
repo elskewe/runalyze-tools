@@ -15,19 +15,19 @@ from runalyze import api
 @click.argument("csvfile", type=click.File())
 def main(csvfile):
     """Reads a CSV file from Libra and uploads new weight values to Runalyze."""
-    data_runalyze = load_weight_from_runalyze()
+    with open("runalyze_credentials.json", encoding="utf-8") as f:
+        credentials = json.load(f)
+
+    data_runalyze = load_weight_from_runalyze(credentials)
     data_libra = load_libra_csv(csvfile)
     missing_data = find_missing_data(data_runalyze, data_libra)
 
 
-def load_weight_from_runalyze():
+def load_weight_from_runalyze(credentials):
     """Loads the data from Runalyze.
 
     Caching is unfortunately not really possible as the data is always returned starting from the
     least recent data points."""
-
-    with open("runalyze_credentials.json", encoding="utf-8") as f:
-        credentials = json.load(f)
 
     page = 1
     data = []
