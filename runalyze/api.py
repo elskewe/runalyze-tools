@@ -14,7 +14,7 @@ def upload_activity(tcx_string: str, credentials, title: str = "", note: str = "
                       files={"file": ("activity.tcx", tcx_string)},
                       data={"title": title, "note": note})
     print(r.text)
-    if r.status_code != 201:
+    if r.status_code != requests.codes.CREATED:
         raise requests.exceptions.RequestException("Error uploading activity to Runalyze")
 
 
