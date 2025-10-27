@@ -18,6 +18,16 @@ def upload_activity(tcx_string: str, credentials, title: str = "", note: str = "
         raise requests.exceptions.RequestException("Error uploading activity to Runalyze")
 
 
+def upload_body_composition(data: dict, credentials):
+    """Uploads body composition data to Runalyze."""
+    r = requests.post(RUNALYZE_API_ENDPOINT + "metrics/bodyComposition",
+                      headers=credentials,
+                      json=data)
+    print(r.text)
+    if r.status_code != requests.codes.CREATED:
+        raise requests.exceptions.RequestException("Error uploading body composition data to Runalyze")
+
+
 def get_activities(credentials, page=1) -> list[ActivityType]:
     """Returns the last 100 activities.
 
