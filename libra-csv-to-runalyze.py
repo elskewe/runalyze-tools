@@ -44,7 +44,7 @@ def load_weight_from_runalyze():
 
 def load_libra_csv(file) -> pd.DataFrame:
     """Reads a CSV file from Libra."""
-    return pd.read_csv(file, sep=";", skiprows=3)
+    return pd.read_csv(file, sep=";", skiprows=3, parse_dates=[0])
 
 
 if __name__ == "__main__":
