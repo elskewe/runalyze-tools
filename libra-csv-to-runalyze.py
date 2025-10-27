@@ -1,6 +1,8 @@
 """Reads a CSV file from Libra and uploads new weight values to Runalyze."""
 
+import datetime
 import json
+import math
 
 import click
 import pandas as pd
@@ -15,6 +17,7 @@ def main(csvfile):
     """Reads a CSV file from Libra and uploads new weight values to Runalyze."""
     data_runalyze = load_weight_from_runalyze()
     data_libra = load_libra_csv(csvfile)
+    missing_data = find_missing_data(data_runalyze, data_libra)
 
 
 def load_weight_from_runalyze():
@@ -45,6 +48,22 @@ def load_weight_from_runalyze():
 def load_libra_csv(file) -> pd.DataFrame:
     """Reads a CSV file from Libra."""
     return pd.read_csv(file, sep=";", skiprows=3, parse_dates=[0])
+
+def find_missing_data(data_runalyze: list, data_libra: pd.DataFrame, abs_tol=0.15):
+    """Returns a dataframe which contains the libra data which is not found on Runalyze."""
+
+    # construct dict for more efficient lookup
+    data_runalyze_dict: dict[datetime.date, float] = {pd.to_datetime(d["date_time"]).date(): d["weight"] for d in data_runalyze}
+
+    return data_libra[data_libra[["#date", "weight"]].apply(
+        lambda r: not (data_runalyze_dict.get(libra_date :=r["#date"].date())
+                       # sometimes the date in Runalyze is one day later or earlier. Only match
+                       # these if the weight is (mostly) the same
+                       or any((weight := data_runalyze_dict.get(libra_date + delta))
+                              and math.isclose(r["weight"], weight, abs_tol=abs_tol)
+                              for delta in [-datetime.timedelta(days=1), datetime.timedelta(days=1)])),
+                      axis=1
+    )]
 
 
 if __name__ == "__main__":
