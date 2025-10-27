@@ -21,6 +21,8 @@ def main(csvfile):
     data_runalyze = load_weight_from_runalyze(credentials)
     data_libra = load_libra_csv(csvfile)
     missing_data = find_missing_data(data_runalyze, data_libra)
+    for _, row in missing_data.iterrows():
+        api.upload_body_composition({"date_time": str(row["#date"]), "weight": row["weight"]}, credentials)
 
 
 def load_weight_from_runalyze(credentials):
