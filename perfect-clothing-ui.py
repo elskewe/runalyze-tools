@@ -30,6 +30,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
         "ghi_middle": ghi[1],
         "ghi_end": ghi[2],
         "is_race": is_race}])
+    print(features)
     best_outfits = predict.recommend_best(features, MODEL, CANDIDATE_OUTFITS, top_k=100)
     best_outfits_alternative = predict.recommend_best(features, ALTERNATIVE_MODEL, CANDIDATE_OUTFITS, top_k=100)
     return best_outfits, best_outfits_alternative, f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km", np.average(ghi)
