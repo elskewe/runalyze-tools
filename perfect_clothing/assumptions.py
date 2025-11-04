@@ -100,6 +100,8 @@ CLOTHING_REPLACEMENTS = {
 # every entry in the key is removed and every entry in the value added if all entries in the key are present
 CLOTHING_REPLACEMENTS_MULTI = {
     ("Singlet", "Armwärmer"): ("Singlet+Armwärmer", ),
+    # probably mislabelled as this combination would be quite cold on the hands
+    ("Handschuhe", "Lange Tights"): ("Skihandschuhe", "Lange Tights"),
 }
 
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
