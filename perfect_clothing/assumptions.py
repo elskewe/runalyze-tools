@@ -97,9 +97,9 @@ CLOTHING_REPLACEMENTS = {
     "Unterziehshirt mit kurzen Ärmeln": "T-Shirt",  # should be pretty similar warmth wise
 }
 
-# every entry in the key is removed and the value added if all entries in the key are present
+# every entry in the key is removed and every entry in the value added if all entries in the key are present
 CLOTHING_REPLACEMENTS_MULTI = {
-    ("Singlet", "Armwärmer"): "Singlet+Armwärmer",
+    ("Singlet", "Armwärmer"): ("Singlet+Armwärmer", ),
 }
 
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
@@ -427,7 +427,7 @@ def convert_equipment(equipment: list[dict[str, str | int]]) -> tuple[str, ...]:
     return tuple(out)  # convert to tuple to make it hashable
 
 
-def replace_tuple(data: list[str], mapping: dict[tuple[str, ...], str]) -> list[str]:
+def replace_tuple(data: list[str], mapping: dict[tuple[str, ...], tuple[str, ...]]) -> list[str]:
     """If every element of key tuple is in data, replace it with the value.
 
     The value is inserted once and the list is modified in place
@@ -436,7 +436,7 @@ def replace_tuple(data: list[str], mapping: dict[tuple[str, ...], str]) -> list[
         if all(k in data for k in key):
             for k in key:
                 data.remove(k)
-            data.append(val)
+            data.extend(val)
 
     return data
 
