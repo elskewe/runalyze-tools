@@ -102,6 +102,7 @@ CLOTHING_REPLACEMENTS_MULTI = {
     ("Singlet", "Armwärmer"): ("Singlet+Armwärmer", ),
     # probably mislabelled as this combination would be quite cold on the hands
     ("Handschuhe", "Lange Tights"): ("Skihandschuhe", "Lange Tights"),
+    ("Handschuhe", "Laufjacke"): ("Skihandschuhe", "Laufjacke"),
 }
 
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
