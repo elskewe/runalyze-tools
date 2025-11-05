@@ -289,6 +289,9 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
         for id_, current_row in data.iterrows():
             new_rows.extend(generate_new_features(id_, current_row, most_frequent_comfort_label, factor))
 
+    for id_, current_row in data.iterrows():
+        new_rows.extend(generate_new_features_ok(id_, current_row, assumptions.MAX_AUGMENTATION_FACTOR))
+
     # add to base dataframe
     return pd.concat([data, pd.DataFrame.from_records(new_rows, index="id")])
 
@@ -402,6 +405,33 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                 new_rows.append({feature: new_x_pace})
             case _:
                 new_rows.append({feature: base_row[feature] + direction * factor})
+
+    return [base_row.to_dict() | new_row | {"id": id_} for new_row in new_rows]
+
+def generate_new_features_ok(id_: int, base_row: pd.Series, augmentation_factor: int) -> list[dict]:
+    """Moves the temperature (by `augmentation_factor`) to get additional rows with the label changed correspondingly.
+
+    Only looks at rows where the temperature label is ok. To get reasonable results, the augmentation factor should be
+    high enough that the new features definitely change the label."""
+
+    if base_row["comfort_int"] != assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL]:
+        return []
+
+    new_rows = []
+    # amplitude and direction in which the features are moved
+    for new_comfort_int in [-1, 1]:
+        factor = augmentation_factor * new_comfort_int
+        for feature, direction in assumptions.INPUT_COLUMNS.items():
+            if direction == 0:
+                continue
+            match feature:
+                case "temperature":  # also need to adapt windchill
+                    new_temperature = base_row["temperature"] + direction * factor
+                    new_rows.append({"temperature": new_temperature,
+                                    "wind_chill": weather.wind_chill(new_temperature, base_row["wind_speed"]),
+                                    "comfort_int": new_comfort_int})
+                case _:  # it's not certain enough that the new features change the label
+                    continue
 
     return [base_row.to_dict() | new_row | {"id": id_} for new_row in new_rows]
 
