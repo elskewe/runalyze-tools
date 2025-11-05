@@ -36,7 +36,7 @@ MAX_AUGMENTATION_FACTOR = 3  # maximum factor that is multiplied on the incremen
 # warm
 MAX_CLOTHING_DISTANCE = range(-15, 5)
 
-OUTFIT_FREQUENCY_THRESHOLD = 5  # outfits that occur less than this number of times are removed
+OUTFIT_FREQUENCY_THRESHOLD = 3  # outfits that occur less than this number of times are removed
 INVALID_CLOTHING = [
     "Trainingshose",  # only for warm up and not representative
     "Trainingsjacke",  # only for warm up and not representative
