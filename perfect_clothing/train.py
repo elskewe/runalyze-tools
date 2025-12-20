@@ -30,7 +30,7 @@ from runalyze import api
 def train():
     try:
         # delete the cache file if it is older than the raw data (jumping to the catch if the file
-        # is not found is find as it won't be possible to load it either)
+        # is not found is fine as it won't be possible to load it either)
         if Path(assumptions.DATA_FILENAME).stat().st_mtime < Path(load_data.CACHE_FILE).stat().st_mtime:
             Path(assumptions.DATA_FILENAME).unlink()
         with open(assumptions.DATA_FILENAME, "rb") as f:
