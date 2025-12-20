@@ -29,7 +29,7 @@ INPUT_COLUMNS = {
     "ghi_middle": 1,
     "ghi_end": 1,
     "is_race": 0}
-MAX_AUGMENTATION_FACTOR = 3  # maximum factor that is multiplied on the increments to augment the data
+MAX_AUGMENTATION_FACTOR = 4  # maximum factor that is multiplied on the increments to augment the data
 
 # different outfits are used for augmenting the data as long as they are within this distance
 # (w.r.t. the sum of the int encoded clothing items) of the original outfit. The first (negative)
