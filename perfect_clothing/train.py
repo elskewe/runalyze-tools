@@ -570,7 +570,7 @@ def find_problematic_entries(clf: CalibratedClassifierCV, x: pd.DataFrame, y: pd
 
     return ret
 
-def weight_dates(x: pd.Series, minimum_weight=0.3, maximum_weight=1) -> pd.Series:
+def weight_dates(x: pd.Series, minimum_weight=0.1, maximum_weight=1) -> pd.Series:
     """Assigns a weight to each date, scaled linearly between minimum_weight and maximum_weight.
 
     Args:
