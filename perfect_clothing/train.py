@@ -58,7 +58,8 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     train_idx, test_idx = next(
         StratifiedGroupKFold(shuffle=True).split(x, y, data.index))
     x_train, x_test, y_train, y_test = x.iloc[train_idx], x.iloc[test_idx], y.iloc[train_idx], y.iloc[test_idx]
-    x_weights = weight_dates(data["date_time"]).iloc[train_idx]
+    weights = weight_dates(data["date_time"])
+    weights_train, weights_test = weights.iloc[train_idx], weights.iloc[test_idx]
 
     # this is a list instead of a generator to allow pickle and use in both the hyperparameter
     # search and actual training
@@ -76,20 +77,20 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
         # search for best hyperparameters
         search = GridSearchCV(base, param_grid, cv=cv, scoring="f1_macro", error_score="raise",
                               refit=best_low_complexity, verbose=3)
-        search.fit(x_train, y_train, sample_weight=x_weights)
+        search.fit(x_train, y_train, sample_weight=weights_train)
         base = search.best_estimator_
         print(search.best_params_)
 
     # Calibrate for better probabilities (sigmoid works reliably with moderate data)
     clf = CalibratedClassifierCV(base, cv=cv, method='sigmoid')
 
-    clf.fit(x_train, y_train, sample_weight=x_weights)
+    clf.fit(x_train, y_train, sample_weight=weights_train)
 
     y_pred = clf.predict(x_test)
     labels = list(assumptions.TEMPERATURE_LABEL_MAPPING.keys())
-    print(classification_report(y_test, y_pred, target_names=labels))
-    cm = confusion_matrix(y_test, y_pred)
-    print(cm)
+    print(classification_report(y_test, y_pred, target_names=labels, sample_weight=weights_test))
+    cm = confusion_matrix(y_test, y_pred, sample_weight=weights_test)
+    print(cm.astype("int"))
 
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
     disp.plot()
