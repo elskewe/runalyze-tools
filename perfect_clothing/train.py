@@ -112,6 +112,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
     """
     data_df = convert_to_df(data)
     data_df = remove_invalid_data(data_df)
+    data_df["x_pace_squared"] = data_df["x_pace"] ** 2
     # recorded cloud cover is not reliable
     data_df["cloud_cover"] = data_df["weather_condition"].apply(assumptions.get_cloud_cover)
     data_df["wind_chill"] = data_df.apply(lambda row: weather.wind_chill(row["temperature"], row["wind_speed"]), axis=1)
