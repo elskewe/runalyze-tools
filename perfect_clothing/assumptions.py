@@ -56,15 +56,15 @@ NECESSARY_RACE_CLOTHING = {"upper_body": ["Singlet", "Singlet+Armwärmer"]}
 
 # clothing categories sorted by warmth (from cold to warm)
 SORTED_CLOTHING = {
+    "legs": [
+        "Kompressionsstrümpfe"
+    ],
     "lower_body": [
         "Ganz kurze Hose",
         "Kurze Hose",
         "Kurze Tights",
         "Lange Unterhose",
         "Lange Tights"
-    ],
-    "legs": [
-        "Kompressionsstrümpfe"
     ],
     "upper_body": [
         "Oberkörperfrei",
