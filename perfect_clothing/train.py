@@ -57,6 +57,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     train_idx, test_idx = next(
         StratifiedGroupKFold(shuffle=True).split(x, y, data.index))
     x_train, x_test, y_train, y_test = x.iloc[train_idx], x.iloc[test_idx], y.iloc[train_idx], y.iloc[test_idx]
+    x_weights = weight_dates(data["date_time"]).iloc[train_idx]
 
     # this is a list instead of a generator to allow pickle and use in both the hyperparameter
     # search and actual training
@@ -74,14 +75,14 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
         # search for best hyperparameters
         search = GridSearchCV(base, param_grid, cv=cv, scoring="f1_macro", error_score="raise",
                               refit=best_low_complexity, verbose=3)
-        search.fit(x_train, y_train)
+        search.fit(x_train, y_train, sample_weight=x_weights)
         base = search.best_estimator_
         print(search.best_params_)
 
     # Calibrate for better probabilities (sigmoid works reliably with moderate data)
     clf = CalibratedClassifierCV(base, cv=cv, method='sigmoid')
 
-    clf.fit(x_train, y_train)
+    clf.fit(x_train, y_train, sample_weight=x_weights)
 
     y_pred = clf.predict(x_test)
     labels = list(assumptions.TEMPERATURE_LABEL_MAPPING.keys())
@@ -565,3 +566,19 @@ def find_problematic_entries(clf: CalibratedClassifierCV, x: pd.DataFrame, y: pd
         input("Press enter to continue")
 
     return ret
+
+def weight_dates(x: pd.Series, minimum_weight=0.3, maximum_weight=1) -> pd.Series:
+    """Assigns a weight to each date, scaled linearly between minimum_weight and maximum_weight.
+
+    Args:
+        x (pd.Series): the dates
+        minimum_weight (float, optional): the minimum weight, i.e. the weight of the first date. Defaults to 0.5.
+        maximum_weight (float, optional): the maximum weight, i.e. the weight of the last date. Defaults to 1.
+
+    Returns:
+        np.ndarray: the weights
+    """
+    dates = pd.to_datetime(x, utc=True)
+    minimum_date = x.min()
+    total_span = x.max() - minimum_date
+    return minimum_weight + (maximum_weight - minimum_weight) * (dates - minimum_date) / total_span
