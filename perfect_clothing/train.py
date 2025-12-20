@@ -44,7 +44,7 @@ def train():
         with open(assumptions.DATA_FILENAME, "wb") as f:
             pickle.dump((data_df, encoded_clothing_columns), f)
 
-    train_core(data_df, encoded_clothing_columns, n_estimators=31)
+    train_core(data_df, encoded_clothing_columns, n_estimators=100)
 
 
 def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estimators=-1):
@@ -65,7 +65,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     # search and actual training
     cv = list(StratifiedGroupKFold(shuffle=True).split(x_train, y_train, groups=data.index[train_idx]))
 
-    base = lgb.LGBMClassifier(n_estimators=n_estimators, num_leaves=10,
+    base = lgb.LGBMClassifier(n_estimators=n_estimators, num_leaves=31,
                               verbose=-1, class_weight="balanced", importance_type="gain",)
     if n_estimators == -1:
         param_grid = {
