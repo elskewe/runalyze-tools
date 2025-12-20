@@ -1,4 +1,5 @@
 import json
+from operator import itemgetter
 import pickle
 import warnings
 from datetime import datetime
@@ -424,7 +425,7 @@ def generate_new_features_ok(id_: int, base_row: pd.Series, augmentation_factor:
 
     new_rows = []
     # amplitude and direction in which the features are moved
-    for new_comfort_int in [-1, 1]:
+    for new_comfort_int in itemgetter("zuKaltAngezogen", "zuWarmAngezogen")(assumptions.TEMPERATURE_LABEL_MAPPING):
         factor = augmentation_factor * new_comfort_int
         for feature, direction in assumptions.INPUT_COLUMNS.items():
             if direction == 0:
