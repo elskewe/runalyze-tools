@@ -487,3 +487,25 @@ def valid_outfits(candidate_outfits: list[dict[str, int]], is_race: bool) -> lis
                       or (is_race and all(any(SORTED_CLOTHING[category][v-1] in items
                                               for k, v in outfit.items() if k.startswith(category))
                                           for category, items in NECESSARY_RACE_CLOTHING.items()))]
+
+def can_outfit_be_toHeiss(outfit: dict[str, int], is_race: bool) -> bool:
+    """Checks if the outfit can be toHeiss.
+
+    Args:
+        outfit (dict[str, int]): The outfit with the keys being the layers and the values being the
+                                 int encoded clothing items
+        is_race (bool): Whether this is a race or not
+
+    Returns:
+        bool: True if the outfit can be toHeiss, False otherwise
+    """
+
+    return (
+        # 1. upper body
+            # 1a. for non-races
+            ((outfit["upper_body_layer1"] <= SORTED_CLOTHING["upper_body"].index("Oberkörperfrei")+1 and not is_race)
+            # 1b. for races
+            or (outfit["upper_body_layer1"] <= SORTED_CLOTHING["upper_body"].index("Singlet")+1 and is_race))
+        # 2. lower body
+        and outfit["lower_body_layer1"] <= SORTED_CLOTHING["lower_body"].index("Ganz kurze Hose")+1
+    )
