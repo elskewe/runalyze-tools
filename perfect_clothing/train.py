@@ -123,6 +123,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
         # grouping by timezone is necessary to construct a pd.DatetimeIndex object
         ["latitude", "longitude", "timezone_offset"],
         sort=False, group_keys=False).apply(get_radiation_data)
+    data_df = data_df.dropna(subset=assumptions.INPUT_COLUMNS.keys()) # type: ignore
     data_df, encoded_clothing_columns = encode_clothing_layers(data_df)
     data_df, encoded_clothing_columns = clean_data(data_df, encoded_clothing_columns)
     data_df["comfort_int"] = data_df["comfort"].map(assumptions.TEMPERATURE_LABEL_MAPPING)
