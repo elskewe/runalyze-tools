@@ -41,7 +41,7 @@ def score_outfits(input_data: pd.DataFrame, outfit_encoding: list[dict[str, int]
     # outfits s.t. the result has the same number of rows as there are entries (i.e. outfits) in
     # `outfit_encoding`
     x = pd.concat([input_data[assumptions.INPUT_COLUMNS.keys()]]*len(outfit_encoding), ignore_index=True) \
-        .join(pd.DataFrame(outfit_encoding))
+        .join(pd.DataFrame(outfit_encoding).drop("n_worn", axis=1))
     return model.predict_proba(x)
 
 
@@ -67,7 +67,7 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
 def outfit_to_string(outfit_encoding: dict[str, int]):
     clothing = []
     for category, item in outfit_encoding.items():
-        if item > 0:
+        if item > 0 and category.startswith(tuple(assumptions.SORTED_CLOTHING.keys())):
             category = re.sub(r"_layer\d", "", category)
             clothing.append(assumptions.SORTED_CLOTHING[category][item-1])
 
