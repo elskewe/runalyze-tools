@@ -50,7 +50,7 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
     # only score outfit with a necessary race clothing item if it is a race
     valid_outfits = assumptions.valid_outfits(candidate_outfits, input_data["is_race"].item())
     probs = score_outfits(input_data, valid_outfits, model)
-    df = pd.DataFrame([{"outfit": outfit_to_string(outfit), "P(ok)": p[labels.index("ok")],
+    df = pd.DataFrame([{"outfit": outfit_to_string(outfit), "n": outfit["n_worn"], "P(ok)": p[labels.index("ok")],
                         "P(zuHeiss)": p[labels.index("zuHeiss")], "P(zuKalt)": p[labels.index("zuKaltAngezogen")],
                         "P(zuWarm)": p[labels.index("zuWarmAngezogen")]}
                       for outfit, p in zip(valid_outfits, probs)])
@@ -71,4 +71,4 @@ def outfit_to_string(outfit_encoding: dict[str, int]):
             category = re.sub(r"_layer\d", "", category)
             clothing.append(assumptions.SORTED_CLOTHING[category][item-1])
 
-    return ", ".join(clothing) + f" (n={outfit_encoding['n_worn']})"
+    return ", ".join(clothing)
