@@ -289,7 +289,7 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
             new_rows.extend(generate_new_features(id_, current_row, most_frequent_comfort_label, factor))
 
     for id_, current_row in data.iterrows():
-        new_rows.extend(generate_new_features_ok(id_, current_row, assumptions.MAX_AUGMENTATION_FACTOR))
+        new_rows.extend(generate_new_features_ok(id_, current_row, encoded_clothing_columns, assumptions.MAX_AUGMENTATION_FACTOR))
 
     # add to base dataframe
     return pd.concat([data, pd.DataFrame.from_records(new_rows, index="id")])
@@ -407,7 +407,7 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
 
     return [base_row.to_dict() | new_row | {"id": id_} for new_row in new_rows]
 
-def generate_new_features_ok(id_: int, base_row: pd.Series, augmentation_factor: int) -> list[dict]:
+def generate_new_features_ok(id_: int, base_row: pd.Series, encoded_clothing_columns: list[str], augmentation_factor: int) -> list[dict]:
     """Moves the temperature (by `augmentation_factor`) to get additional rows with the label changed correspondingly.
 
     Only looks at rows where the temperature label is ok. To get reasonable results, the augmentation factor should be
@@ -426,9 +426,13 @@ def generate_new_features_ok(id_: int, base_row: pd.Series, augmentation_factor:
             match feature:
                 case "temperature":  # also need to adapt windchill
                     new_temperature = base_row["temperature"] + direction * factor
+                    new_comfort_int_ = assumptions.TEMPERATURE_LABEL_MAPPING["zuHeiss"] \
+                        if (new_comfort_int > assumptions.TEMPERATURE_LABEL_MAPPING["ok"]
+                            and assumptions.can_outfit_be_toHeiss(base_row[encoded_clothing_columns].to_dict(), base_row["is_race"])) \
+                        else new_comfort_int
                     new_rows.append({"temperature": new_temperature,
                                     "wind_chill": weather.wind_chill(new_temperature, base_row["wind_speed"]),
-                                    "comfort_int": new_comfort_int})
+                                    "comfort_int": new_comfort_int_})
                 case _:  # it's not certain enough that the new features change the label
                     continue
 
