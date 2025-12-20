@@ -41,7 +41,7 @@ with gr.Blocks(fill_width=True) as demo:
         with gr.Column(scale=2):
             temp = gr.Slider(-10, 35, step=1, value=15, label="Temperature (°C)")
             wind_speed = gr.Slider(0, 30, step=1, value=0, label="Wind speed (km/h)")
-            cloud_cover = gr.Slider(0, 100, step=10, value=0, label="Cloud cover (%)")
+            cloud_cover = gr.Slider(0, 100, step=10, value=50, label="Cloud cover (%)")
             with gr.Row():
                 pace = gr.Slider(2.5, 10, step=1/60, value=4.5, label="Pace (min/km)", scale=6)
                 pace_display = gr.Textbox(label="", min_width=120)
