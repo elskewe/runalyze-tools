@@ -1,19 +1,19 @@
 import json
-from operator import itemgetter
 import pickle
 import warnings
+import webbrowser
 from datetime import datetime
+from operator import itemgetter
 from pathlib import Path
 from typing import Any
-import webbrowser
 
 import lightgbm as lgb
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pyperclip
 from rich.console import Console
 from rich.table import Table
-import pyperclip
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import (
     ConfusionMatrixDisplay,
