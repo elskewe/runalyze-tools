@@ -71,4 +71,4 @@ def outfit_to_string(outfit_encoding: dict[str, int]):
             category = re.sub(r"_layer\d", "", category)
             clothing.append(assumptions.SORTED_CLOTHING[category][item-1])
 
-    return ", ".join(clothing)
+    return ", ".join(clothing) + f" (n={outfit_encoding['n_worn']})"
