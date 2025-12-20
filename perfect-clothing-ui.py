@@ -38,7 +38,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
 
 with gr.Blocks(fill_width=True) as demo:
     with gr.Row():
-        with gr.Column(scale=1):
+        with gr.Column(scale=2):
             temp = gr.Slider(-10, 35, step=1, value=15, label="Temperature (°C)")
             wind_speed = gr.Slider(0, 30, step=1, value=0, label="Wind speed (km/h)")
             cloud_cover = gr.Slider(0, 100, step=10, value=0, label="Cloud cover (%)")
@@ -56,7 +56,7 @@ with gr.Blocks(fill_width=True) as demo:
             with gr.Row():
                 latitude = gr.Number(label="Latitude", value=47.7664456)
                 longitude = gr.Number(label="Longitude", value=9.1605106)
-        with gr.Column(scale=2):
+        with gr.Column(scale=5):
             output_df = gr.DataFrame(show_row_numbers=True)
             output_df_alternative = gr.DataFrame(show_row_numbers=True)
 
