@@ -136,9 +136,9 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                     continue  # cloud cover is already at minimum or maximum
                 tmp_df = pd.DataFrame([base_row])
                 tmp_df["cloud_cover"] = new_cloud_cover_perc
-                # the `group` is only to get the correct type
+                # the `group` is only to get the correct type (dataframe instead of series)
                 tmp_df[["ghi_start", "ghi_middle", "ghi_end"]] = \
-                    tmp_df.groupby(["latitude"], group_keys=False).apply(get_radiation_data)
+                    tmp_df.groupby(["latitude", "longitude"], group_keys=False).apply(get_radiation_data, include_groups=False)
                 new_rows.append({"cloud_cover": new_cloud_cover_perc,
                                  "ghi_start": tmp_df["ghi_start"].iloc[0],
                                  "ghi_middle": tmp_df["ghi_middle"].iloc[0],

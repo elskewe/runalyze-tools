@@ -28,7 +28,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
     data_df[["ghi_start", "ghi_middle", "ghi_end"]] = data_df.groupby(
         # grouping by timezone is necessary to construct a pd.DatetimeIndex object
         ["latitude", "longitude", "timezone_offset"],
-        sort=False, group_keys=False).apply(get_radiation_data)
+        sort=False, group_keys=False).apply(get_radiation_data, include_groups=False)
     data_df = data_df.dropna(subset=assumptions.INPUT_COLUMNS.keys()) # type: ignore
     data_df, encoded_clothing_columns = encode_clothing_layers(data_df)
     data_df, encoded_clothing_columns = clean_data(data_df, encoded_clothing_columns)
@@ -128,14 +128,20 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
 
 
 def get_radiation_data(data: pd.DataFrame) -> pd.DataFrame:
-    """Returns the radiation data for a given data frame. Assumes that the location is identical for each row."""
+    """Returns the radiation data for a given data frame.
+
+    The data frame must be grouped by the latitude and longitude (in this order!) as these values
+    are read from `data.name`."""
     with warnings.catch_warnings():
         # not worth preventing them as pandas datetime only works in UTC and thus would have to be
         # converted back to tz-aware immediately afterwards
         warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 
+        latitude = data.name[0]
+        longitude = data.name[1]
+
         def get_radiation(time: pd.Series) -> np.ndarray:
-            return weather.get_radiation(data["latitude"].iloc[0], data["longitude"].iloc[0],
+            return weather.get_radiation(latitude, longitude,
                                          # pylance somehow thinks this is a `Index[int]`
                                          pd.DatetimeIndex(time),  # type: ignore
                                          data["cloud_cover"].to_numpy())
