@@ -58,7 +58,11 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
     df["sum_ok"] = df["P(ok)"] + df["P(heiß)"]
     # delta between too warm and too cold, positive means outfit is on the warmer side
     df["Δ"] = df["P(warm)"] - df["P(kalt)"]
-    df = df.sort_values("sum_ok", ascending=False, ignore_index=True)
+    # This sorts the results descending by `sum_ok - abs(Δ)`, which is the same as sorting ascending
+    # by `abs(Δ) - sum_ok` which is easier to implement (as `sum_ok` can stay unchanged). This means
+    # that the best result is the one where `sum_ok` is the highest while the outfit is overall
+    # balanced
+    df = df.sort_values("sum_ok", ignore_index=True, key=df["Δ"].abs().sub)
     # convert to percent
     for col in df.columns:
         if col.startswith("P(") or col in ["sum_ok", "Δ"]:
