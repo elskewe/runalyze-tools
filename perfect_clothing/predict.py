@@ -52,10 +52,10 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
     probs = score_outfits(input_data, valid_outfits, model)
     df = pd.DataFrame([{"outfit": outfit_to_string(outfit), "n": outfit["n_worn"], "P(ok)": p[labels.index("ok")],
                         "P(kalt)": p[labels.index("zuKaltAngezogen")], "P(warm)": p[labels.index("zuWarmAngezogen")],
-                        "P(heiss)": p[labels.index("zuHeiss")]}
+                        "P(heiß)": p[labels.index("zuHeiss")]}
                       for outfit, p in zip(valid_outfits, probs)])
 
-    df["sum_ok"] = df["P(ok)"] + df["P(heiss)"]
+    df["sum_ok"] = df["P(ok)"] + df["P(heiß)"]
     df = df.sort_values("sum_ok", ascending=False, ignore_index=True)
     # convert to percent
     for col in df.columns:
