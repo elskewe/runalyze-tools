@@ -1,5 +1,6 @@
 """Augments the data by adding synthetic samples based on domain knowledge."""
 
+from datetime import timedelta
 from operator import itemgetter
 
 import numpy as np
@@ -143,8 +144,38 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                                  "ghi_start": tmp_df["ghi_start"].iloc[0],
                                  "ghi_middle": tmp_df["ghi_middle"].iloc[0],
                                  "ghi_end": tmp_df["ghi_end"].iloc[0]})
-            case "ghi_middle" | "ghi_end":
+            case "ghi_middle":
                 continue  # already handled by `ghi_start`
+            case "ghi_end":
+                # This is not quite the right place for changing the time (it might as well be for
+                # `ghi_start`), but the implementation is relatively straightforward this way.
+                if base_row["ghi_start"] > base_row["ghi_middle"] and base_row["ghi_middle"] >= base_row["ghi_end"]:
+                    # after noon (the latter comparison can be equal when the sun sets during the activity)
+                    direction = -1
+                elif base_row["ghi_start"] <= base_row["ghi_middle"] and base_row["ghi_middle"] < base_row["ghi_end"]:
+                    # before noon (the first comparison can be equal when the sun rises during the activity)
+                    direction = 1
+                else:
+                    # around noon, no clear direction to move the time
+                    continue
+                new_date_time = base_row["date_time"] + timedelta(hours=direction * factor)
+                tmp_df = pd.DataFrame([base_row])
+                tmp_df["date_time"] = new_date_time
+                ghi_columns = ["ghi_start", "ghi_middle", "ghi_end"]
+                # the `group` is only to get the correct type (dataframe instead of series)
+                tmp_df[ghi_columns] = \
+                    tmp_df.groupby(["latitude", "longitude"], group_keys=False).apply(get_radiation_data, include_groups=False)
+
+                diff_sign = np.sign((tmp_df[ghi_columns] - base_row[ghi_columns]).iloc[0].to_numpy())
+                if (np.sign(diff_sign + factor) != np.sign(factor)).any():
+                    # The new radiation values don't all change in the right direction (or none
+                    # change at all), thus this augmentation is dropped (this can e.g. occur when
+                    # the time is put on the other side of the noon)
+                    continue
+                new_rows.append({"date_time": new_date_time,
+                                 "ghi_start": tmp_df["ghi_start"].iloc[0],
+                                 "ghi_middle": tmp_df["ghi_middle"].iloc[0],
+                                 "ghi_end": tmp_df["ghi_end"].iloc[0]})
             case "x_pace":
                 new_x_pace = base_row["x_pace"] + direction * factor
                 if new_x_pace < 0:
