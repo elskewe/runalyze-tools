@@ -56,10 +56,12 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
                       for outfit, p in zip(valid_outfits, probs)])
 
     df["sum_ok"] = df["P(ok)"] + df["P(heiß)"]
+    # delta between too warm and too cold, positive means outfit is on the warmer side
+    df["Δ"] = df["P(warm)"] - df["P(kalt)"]
     df = df.sort_values("sum_ok", ascending=False, ignore_index=True)
     # convert to percent
     for col in df.columns:
-        if col.startswith("P(") or col == "sum_ok":
+        if col.startswith("P(") or col in ["sum_ok", "Δ"]:
             df[col] = df[col].transform(lambda x: int(x*100))
     return df[:top_k]   # best outfit(s) and their P(ok) and P(zuHeiss)
 
