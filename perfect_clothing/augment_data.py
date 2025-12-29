@@ -112,7 +112,7 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
 
     new_rows = []
     # amplitude and direction in which the features are moved
-    factor = augmentation_factor * np.sign(base_row["comfort_int"])
+    factor = augmentation_factor * np.sign(base_row["comfort_int"]).item()
     for feature, direction in assumptions.INPUT_COLUMNS.items():
         if direction == 0:
             continue
