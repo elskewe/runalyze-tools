@@ -12,9 +12,15 @@ MODEL, CANDIDATE_OUTFITS = predict.load_data()
 ALTERNATIVE_MODEL, _ = predict.load_data(assumptions.ALTERNATIVE_MODEL_FILENAME)
 
 
+def filter_compression_socks(data: pd.DataFrame, include_compression_socks: bool) -> pd.DataFrame:
+    """Removes outfits with compression socks from the data if `include_compression_socks` is False."""
+    if not include_compression_socks:
+        return data[~data["outfit"].str.contains("Kompressionsstrümpfe")]
+    return data
+
 @lru_cache
 def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: float, duration_min: float, pace_min_km,
-                   date_: datetime, is_race: bool, latitude_: float, longitude_: float):
+                   date_: datetime, is_race: bool, include_compression_socks: bool, latitude_: float, longitude_: float):
     ghi = weather.get_radiation(latitude_, longitude_,
                                 [date_, date_ + timedelta(minutes=duration_min)/2,
                                  date_ + timedelta(minutes=duration_min)],
@@ -33,7 +39,9 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
     print(features)
     best_outfits = predict.recommend_best(features, MODEL, CANDIDATE_OUTFITS, top_k=100)
     best_outfits_alternative = predict.recommend_best(features, ALTERNATIVE_MODEL, CANDIDATE_OUTFITS, top_k=100)
-    return best_outfits, best_outfits_alternative, f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km", np.average(ghi)
+    return filter_compression_socks(best_outfits, include_compression_socks), \
+           filter_compression_socks(best_outfits_alternative, include_compression_socks), \
+           f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km", np.average(ghi)
 
 
 with gr.Blocks(fill_width=True) as demo:
@@ -53,6 +61,7 @@ with gr.Blocks(fill_width=True) as demo:
                                    timezone=get_localzone().key, type="datetime", scale=2)
                 with gr.Column(min_width=80):
                     race = gr.Checkbox(label="Race")
+                    compression_socks = gr.Checkbox(label="Compression socks")
                 ghi = gr.Number(label="GHI (W/m^2)", min_width=50)
             with gr.Row():
                 latitude = gr.Number(label="Latitude", value=47.7664456)
@@ -61,7 +70,7 @@ with gr.Blocks(fill_width=True) as demo:
             output_df = gr.DataFrame(show_row_numbers=True)
             output_df_alternative = gr.DataFrame(show_row_numbers=True)
 
-    inputs = [temp, wind_speed, cloud_cover, duration, pace, date, race, latitude, longitude]
+    inputs = [temp, wind_speed, cloud_cover, duration, pace, date, race, compression_socks, latitude, longitude]
     change_args = {"fn": predict_outfit, "inputs": inputs,
                    "outputs": [output_df, output_df_alternative, pace_display, ghi]}
     for i in inputs:
