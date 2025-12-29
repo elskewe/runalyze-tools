@@ -436,7 +436,11 @@ def convert_equipment(equipment: list[dict[str, str | int]]) -> tuple[str, ...]:
            # also keep items if they might be reduced to a single item later
            or name in [e for t in CLOTHING_REPLACEMENTS_MULTI for e in t]]
     out = replace_tuple(out, CLOTHING_REPLACEMENTS_MULTI)
-    return tuple(out)  # convert to tuple to make it hashable
+    # convert to tuple to make it hashable. The order has to be enforced as the replacement might
+    # lead to the same outfit in different order (as the id of the new item might be different to
+    # the id of the original item and the sorting is done by the original id without enforcing it
+    # here)
+    return tuple(sorted(out))
 
 
 def replace_tuple(data: list[str], mapping: dict[tuple[str, ...], tuple[str, ...]]) -> list[str]:
