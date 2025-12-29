@@ -51,8 +51,8 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
     valid_outfits = assumptions.valid_outfits(candidate_outfits, input_data["is_race"].item())
     probs = score_outfits(input_data, valid_outfits, model)
     df = pd.DataFrame([{"outfit": outfit_to_string(outfit), "n": outfit["n_worn"], "P(ok)": p[labels.index("ok")],
-                        "P(heiss)": p[labels.index("zuHeiss")], "P(kalt)": p[labels.index("zuKaltAngezogen")],
-                        "P(warm)": p[labels.index("zuWarmAngezogen")]}
+                        "P(kalt)": p[labels.index("zuKaltAngezogen")], "P(warm)": p[labels.index("zuWarmAngezogen")],
+                        "P(heiss)": p[labels.index("zuHeiss")]}
                       for outfit, p in zip(valid_outfits, probs)])
 
     df["sum_ok"] = df["P(ok)"] + df["P(heiss)"]
