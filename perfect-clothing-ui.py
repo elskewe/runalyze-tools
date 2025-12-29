@@ -56,7 +56,7 @@ with gr.Blocks(fill_width=True) as demo:
             with gr.Row():
                 latitude = gr.Number(label="Latitude", value=47.7664456)
                 longitude = gr.Number(label="Longitude", value=9.1605106)
-        with gr.Column(scale=5):
+        with gr.Column(scale=7):
             output_df = gr.DataFrame(show_row_numbers=True)
             output_df_alternative = gr.DataFrame(show_row_numbers=True)
 
