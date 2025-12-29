@@ -44,7 +44,7 @@ def train():
     train_core(data_df, encoded_clothing_columns, n_estimators=100)
 
 
-def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estimators=-1,
+def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estimators=-1, num_leaves=31,
                model_filename=assumptions.MODEL_FILENAME):
     """Actually train the model.
 
@@ -63,7 +63,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     # search and actual training
     cv = list(StratifiedGroupKFold(shuffle=True).split(x_train, y_train, groups=data.index[train_idx]))
 
-    base = lgb.LGBMClassifier(n_estimators=n_estimators, num_leaves=31, reg_alpha=0.01, reg_lambda=0.01,
+    base = lgb.LGBMClassifier(n_estimators=n_estimators, num_leaves=num_leaves, reg_alpha=0.01, reg_lambda=0.01,
                               verbose=-1, class_weight="balanced", importance_type="gain",)
     if n_estimators == -1:
         param_grid = {
