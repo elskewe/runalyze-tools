@@ -44,24 +44,26 @@ def train():
     train_core(data_df, encoded_clothing_columns, n_estimators=100)
 
 
-def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estimators=-1, num_leaves=31,
+def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estimators=-1, num_leaves=31, group_activities=True,
                model_filename=assumptions.MODEL_FILENAME):
     """Actually train the model.
 
     n_estimator is passed to LGBMClassifier. If it is -1, it will be optimized beforehand by a
-    hyperparameter search.
+    hyperparameter search. `group_activities` determines whether all augmented activities based on
+    the same base activity should be kept in the same fold for CV and train/test split.
     """
     x = data[[*assumptions.INPUT_COLUMNS, *encoded_clothing_columns]]
     y = data["comfort_int"]
     train_idx, test_idx = next(
-        StratifiedGroupKFold(shuffle=True).split(x, y, data.index))
+        StratifiedGroupKFold(shuffle=True).split(x, y, data.index if group_activities else range(0, len(x))))
     x_train, x_test, y_train, y_test = x.iloc[train_idx], x.iloc[test_idx], y.iloc[train_idx], y.iloc[test_idx]
     weights = weight_dates(data["date_time"])
     weights_train, weights_test = weights.iloc[train_idx], weights.iloc[test_idx]
 
     # this is a list instead of a generator to allow pickle and use in both the hyperparameter
     # search and actual training
-    cv = list(StratifiedGroupKFold(shuffle=True).split(x_train, y_train, groups=data.index[train_idx]))
+    cv = list(StratifiedGroupKFold(shuffle=True)
+              .split(x_train, y_train, data.index[train_idx] if group_activities else range(0, len(train_idx))))
 
     base = lgb.LGBMClassifier(n_estimators=n_estimators, num_leaves=num_leaves, reg_alpha=0.01, reg_lambda=0.01,
                               verbose=-1, class_weight="balanced", importance_type="gain",)
