@@ -44,7 +44,8 @@ def train():
     train_core(data_df, encoded_clothing_columns, n_estimators=100)
 
 
-def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estimators=-1):
+def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estimators=-1,
+               model_filename=assumptions.MODEL_FILENAME):
     """Actually train the model.
 
     n_estimator is passed to LGBMClassifier. If it is -1, it will be optimized beforehand by a
@@ -100,7 +101,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     problematic_entries = find_problematic_entries(clf, x_test, y_test, y_pred)
 
     # save model
-    with open(assumptions.MODEL_FILENAME, "wb") as f:
+    with open(model_filename, "wb") as f:
         pickle.dump(clf, f)
     return None
 
