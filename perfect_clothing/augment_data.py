@@ -24,6 +24,7 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
 
     for id_, current_row in data.iterrows():
         new_rows.extend(generate_new_outfit(id_, current_row, encoded_clothing_columns, candidate_outfits))
+        new_rows.extend(generate_new_duration(id_, current_row))
 
     for factor in range(1, assumptions.MAX_AUGMENTATION_FACTOR+1):
         # get comfort labels so far
@@ -89,6 +90,15 @@ def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns:
             for new_row in new_rows]
 
 
+def generate_new_duration(id_: int, base_row: pd.Series) -> list[dict]:
+    """Adds new rows by adjusting the duration slightly
+
+    The assumptions being that this wont change the label
+    """
+    return [base_row.to_dict() | {"id": id_, "duration": base_row["duration"]*factor}
+            for factor in [1 + assumptions.INVARIANT_DURATION_CHANGE, 1 - assumptions.INVARIANT_DURATION_CHANGE]]
+
+
 def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_label: int,
                           augmentation_factor: int) -> list[dict]:
     """Moves each of the features (by `augmentation_factor`) to get additional rows with the same label.
@@ -99,18 +109,12 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     same principle holds for too warm. The direction and magnitude each feature has to be moved is
     encoded in the value of `assumptions.INPUT_COLUMNS`.
     """
-    # Don't make the imbalance worse by adding new rows of the already most frequent label.
-    if base_row["comfort_int"] == most_frequent_comfort_label:
-        return []
-
-    # Return if the label and the note sentiment are `ok` as it's not possible to know which
-    # features to move to still retain the same label.
+    # Return if the label is `ok` as it's not possible to know which features to move to still
+    # retain the same label. Also don't make the imbalance worse by adding new rows of the already
+    # most frequent label.
     if base_row["comfort_int"] == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL] \
-        and base_row["note_sentiment"] == base_row["comfort_int"]:
-        # but it is still possible to alter the duration slightly if this is the first iteration
-        return [base_row.to_dict() | {"id": id_, "duration": base_row["duration"]*factor}
-                for factor in [1 + assumptions.INVARIANT_DURATION_CHANGE, 1 - assumptions.INVARIANT_DURATION_CHANGE]] \
-                if augmentation_factor == 1 else []
+            or base_row["comfort_int"] == most_frequent_comfort_label:
+        return []
 
     new_rows = []
     # amplitude and direction in which the features are moved
