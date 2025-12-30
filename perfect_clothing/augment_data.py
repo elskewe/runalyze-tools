@@ -93,21 +93,27 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                           augmentation_factor: int) -> list[dict]:
     """Moves each of the features (by `augmentation_factor`) to get additional rows with the same label.
 
-    To combat label imbalance, this is only done for labels which are not the most frequent one."""
+    To combat label imbalance, this is only done for labels which are not the most frequent one. The
+    idea is the same as `generate_new_outfit`, i.e. if an outfit is either already too cold or
+    almost too cold, reducing e.g. the temperature will definitely mean that outfit is too cold. The
+    same principle holds for too warm. The direction and magnitude each feature has to be moved is
+    encoded in the value of `assumptions.INPUT_COLUMNS`.
+    """
     # Don't make the imbalance worse by adding new rows of the already most frequent label.
     if base_row["comfort_int"] == most_frequent_comfort_label:
         return []
 
-    # Return if the label is `ok` as it's not possible to know which
+    # Return if the label and the note sentiment are `ok` as it's not possible to know which
     # features to move to still retain the same label.
-    if base_row["comfort_int"] == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL]:
+    if base_row["comfort_int"] == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL] \
+        and base_row["note_sentiment"] == base_row["comfort_int"]:
         # but it is still possible to alter the duration slightly
         return [base_row.to_dict() | {"id": id_, "duration": base_row["duration"]*factor}
                 for factor in [1 + assumptions.INVARIANT_DURATION_CHANGE, 1 - assumptions.INVARIANT_DURATION_CHANGE]]
 
     new_rows = []
     # amplitude and direction in which the features are moved
-    factor = augmentation_factor * np.sign(base_row["comfort_int"]).item()
+    factor = augmentation_factor * np.sign(base_row["comfort_int"] + base_row["note_sentiment"]).item()
     for feature, direction in assumptions.INPUT_COLUMNS.items():
         if direction == 0:
             continue
