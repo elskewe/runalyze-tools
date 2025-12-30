@@ -107,9 +107,10 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     # features to move to still retain the same label.
     if base_row["comfort_int"] == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL] \
         and base_row["note_sentiment"] == base_row["comfort_int"]:
-        # but it is still possible to alter the duration slightly
+        # but it is still possible to alter the duration slightly if this is the first iteration
         return [base_row.to_dict() | {"id": id_, "duration": base_row["duration"]*factor}
-                for factor in [1 + assumptions.INVARIANT_DURATION_CHANGE, 1 - assumptions.INVARIANT_DURATION_CHANGE]]
+                for factor in [1 + assumptions.INVARIANT_DURATION_CHANGE, 1 - assumptions.INVARIANT_DURATION_CHANGE]] \
+                if augmentation_factor == 1 else []
 
     new_rows = []
     # amplitude and direction in which the features are moved
