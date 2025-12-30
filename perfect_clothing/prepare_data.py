@@ -34,6 +34,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
     data_df, encoded_clothing_columns = clean_data(data_df, encoded_clothing_columns)
     data_df["comfort_int"] = data_df["comfort"].map(assumptions.TEMPERATURE_LABEL_MAPPING)
     data_df["weather_condition_int"] = data_df["weather_condition"].map(assumptions.WEATHER_CONDITION_MAPPING.index)
+    data_df["is_augmented"] = False
     return data_df, encoded_clothing_columns
 
 

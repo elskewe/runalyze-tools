@@ -41,6 +41,7 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
         new_rows.extend(generate_new_features_ok(id_, current_row, encoded_clothing_columns, assumptions.MAX_AUGMENTATION_FACTOR))
 
     # add to base dataframe
+    new_rows = [r | {"is_augmented": True} for r in new_rows]
     return pd.concat([data, pd.DataFrame.from_records(new_rows, index="id")])
 
 
