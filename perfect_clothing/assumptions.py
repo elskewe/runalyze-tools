@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from functools import cache
 
+import pandas as pd
 from geopy.geocoders import Nominatim
 
 GEOPY_CACHE = "cache/geopy.json"
@@ -517,3 +518,21 @@ def can_outfit_be_toHeiss(outfit: dict[str, int], is_race: bool) -> bool:
         # 2. lower body
         and outfit["lower_body_layer1"] <= SORTED_CLOTHING["lower_body"].index("Ganz kurze Hose")+1
     )
+
+def get_note_sentiment(row: pd.Series) -> int:
+    """Determine the sentiment of the note.
+
+    The sentiment of the note is "zuWarmAngezogen" (`1`) if it contains any word from
+    `ALMOST_TOO_WARM_WORDS` and "zuKaltAngezogen" (`-1`) if it contains any word from
+    `ALMOST_TOO_COLD_WORDS`. If words from both lists or none are present or the sentiment
+    contradicts the actual label, then the sentiment is "ok" (`0`).
+    """
+    note_sentiment = (  any(w in row["note"] for w in ALMOST_TOO_WARM_WORDS)
+                      - any(w in row["note"] for w in ALMOST_TOO_COLD_WORDS)) \
+                        if isinstance(row["note"], str) else 0
+    # If the inferred label from the note and the actual label contradict each other disregard the
+    # note.
+    if row["comfort_int"] * note_sentiment < 0:
+        note_sentiment = 0
+
+    return note_sentiment

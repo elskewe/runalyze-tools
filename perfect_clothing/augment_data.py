@@ -52,10 +52,9 @@ def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns:
     The new outfits are warmer/colder (depending on the label) in at least one clothing category and
     at least the same in the rest, which means the direction of the comfort (too cold/too warm) is
     retained. The new outfit (with the other data from the base_row) is than added to the return
-    value. Besides the actual label, an attempt is made to determine the sentiment of the note. This
-    sentiment is used like the actual label if they do not contradict each other. The idea here is
-    the same, if an outfit is almost too warm, then adding items will finally push that outfit into
-    being too warm (the same principle applies for too cold).
+    value. Besides the actual label, the sentiment of the note is used. The idea here is the same,
+    if an outfit is almost too warm, then adding any item will finally push that outfit into being
+    too warm (the same principle applies for too cold).
 
     Args:
         base_row (pd.Series): the row from which the new outfits are generated
@@ -66,18 +65,8 @@ def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns:
         list[dict]: the additional rows with the altered outfits
     """
     outfit = base_row[encoded_clothing_columns].to_dict()
-    # The sentiment of the note is "zuWarmAngezogen" (`1`) if it contains any word from
-    # `ALMOST_TOO_WARM_WORDS` and "zuKaltAngezogen" (`-1`) if it contains any word from
-    # `ALMOST_TOO_COLD_WORDS`. If words from both list or none are present, the note is not used as
-    # it is ambiguous.
-    note_sentiment = (any(w in base_row["note"] for w in assumptions.ALMOST_TOO_WARM_WORDS)
-        - any(w in base_row["note"] for w in assumptions.ALMOST_TOO_COLD_WORDS)) \
-            if isinstance(base_row["note"], str) else 0
     label = base_row["comfort_int"]
-    # If the inferred label from the note and the actual label contradict each other disregard the
-    # note.
-    if label * note_sentiment < 0:
-        note_sentiment = 0
+    note_sentiment = base_row["note_sentiment"]
 
     if label > 0 or note_sentiment > 0:  # zuWarmAngezogen
         # Generate outfits warmer compared to this one
