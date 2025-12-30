@@ -156,9 +156,9 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                 tmp_df = pd.DataFrame([base_row])
                 tmp_df["date_time"] = new_date_time
                 ghi_columns = ["ghi_start", "ghi_middle", "ghi_end"]
-                # the `group` is only to get the correct type (dataframe instead of series)
-                tmp_df[ghi_columns] = \
-                    tmp_df.groupby(["latitude", "longitude"], group_keys=False).apply(get_radiation_data, include_groups=False)
+                # The `group` is only to get the correct type (dataframe instead of series). This is
+                # rather slow, but I don't see an easy way to improve performance.
+                tmp_df.groupby(["latitude", "longitude"], group_keys=False).apply(get_radiation_data, include_groups=False)
 
                 diff_sign = np.sign((tmp_df[ghi_columns] - base_row[ghi_columns]).iloc[0].to_numpy())
                 if (np.sign(diff_sign + factor) != np.sign(factor)).any():
