@@ -55,6 +55,8 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     hyperparameter search. `group_activities` determines whether all augmented activities based on
     the same base activity should be kept in the same fold for CV and train/test split.
     """
+    # drop duplicated rows
+    data = data[~data[[*assumptions.INPUT_COLUMNS, *encoded_clothing_columns]].duplicated()]
     x = data[[*assumptions.INPUT_COLUMNS, *encoded_clothing_columns]]
     y = data["comfort_int"]
     train_idx, test_idx = next(
