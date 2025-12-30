@@ -94,12 +94,16 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     """Moves each of the features (by `augmentation_factor`) to get additional rows with the same label.
 
     To combat label imbalance, this is only done for labels which are not the most frequent one."""
-    # Return if the label is `ok` as it's not possible to know which features to move to still
-    # retain the same label. Also don't make the imbalance worse by adding new rows of the already
-    # most frequent label.
-    if base_row["comfort_int"] == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL] \
-            or base_row["comfort_int"] == most_frequent_comfort_label:
+    # Don't make the imbalance worse by adding new rows of the already most frequent label.
+    if base_row["comfort_int"] == most_frequent_comfort_label:
         return []
+
+    # Return if the label is `ok` as it's not possible to know which
+    # features to move to still retain the same label.
+    if base_row["comfort_int"] == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL]:
+        # but it is still possible to alter the duration slightly
+        return [base_row.to_dict() | {"id": id_, "duration": base_row["duration"]*factor}
+                for factor in [1 + assumptions.INVARIANT_DURATION_CHANGE, 1 - assumptions.INVARIANT_DURATION_CHANGE]]
 
     new_rows = []
     # amplitude and direction in which the features are moved
