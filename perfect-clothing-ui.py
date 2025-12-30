@@ -62,7 +62,7 @@ with gr.Blocks(fill_width=True) as demo:
                 with gr.Column(min_width=80):
                     race = gr.Checkbox(label="Race")
                     compression_socks = gr.Checkbox(label="Compression socks")
-                ghi = gr.Number(label="GHI (W/m^2)", min_width=50)
+                ghi = gr.Number(label="GHI (W/m^2)", min_width=100)
             with gr.Row():
                 latitude = gr.Number(label="Latitude", value=47.7664456)
                 longitude = gr.Number(label="Longitude", value=9.1605106)
