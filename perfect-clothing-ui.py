@@ -58,7 +58,7 @@ with gr.Blocks(fill_width=True) as demo:
                 date = gr.DateTime(label="Date", value=datetime.now(),
                                    # the timezone should be set automatically to the local timezone
                                    # when no value is passed, but this doesn't work unfortunately
-                                   timezone=get_localzone().key, type="datetime", scale=2)
+                                   timezone=get_localzone().key, type="datetime", scale=2, min_width=200)
                 with gr.Column(min_width=80):
                     race = gr.Checkbox(label="Race")
                     compression_socks = gr.Checkbox(label="Compression socks")
