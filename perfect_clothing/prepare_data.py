@@ -36,6 +36,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
     data_df["weather_condition_int"] = data_df["weather_condition"].map(assumptions.WEATHER_CONDITION_MAPPING.index)
     data_df["is_augmented"] = False
     data_df["note_sentiment"] = data_df.apply(assumptions.get_note_sentiment, axis=1)
+    print("Created pandas df")
     return data_df, encoded_clothing_columns
 
 

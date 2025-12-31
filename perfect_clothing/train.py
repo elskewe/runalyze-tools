@@ -37,6 +37,7 @@ def train():
         data_df, encoded_clothing_columns = prepare_data(data)
         candidate_outfits = save_candidate_outfits(data_df, encoded_clothing_columns)
         data_df = augment_data(data_df, encoded_clothing_columns, candidate_outfits)
+        print("Created augmented df")
 
         with open(assumptions.DATA_FILENAME, "wb") as f:
             pickle.dump((data_df, encoded_clothing_columns), f)

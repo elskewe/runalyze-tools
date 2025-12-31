@@ -25,6 +25,7 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
     for id_, current_row in data.iterrows():
         new_rows.extend(generate_new_outfit(id_, current_row, encoded_clothing_columns, candidate_outfits))
         new_rows.extend(generate_new_duration(id_, current_row))
+    print("Augmented data with new outfits and durations")
 
     for factor in range(1, assumptions.MAX_AUGMENTATION_FACTOR+1):
         # get comfort labels so far
@@ -37,6 +38,7 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
             break  # continue this loop until `ok` is the least frequent label (it can't be augmented)
         for id_, current_row in data.iterrows():
             new_rows.extend(generate_new_features(id_, current_row, most_frequent_comfort_label, factor))
+    print("Augmented data with new features")
 
     for id_, current_row in data.iterrows():
         new_rows.extend(generate_new_features_ok(id_, current_row, encoded_clothing_columns, assumptions.MAX_AUGMENTATION_FACTOR))
