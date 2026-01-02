@@ -95,8 +95,8 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     y_pred = clf.predict(x_test)
     labels = list(assumptions.TEMPERATURE_LABEL_MAPPING.keys())
     print(classification_report(y_test, y_pred, target_names=labels, sample_weight=weights_test))
-    cm = confusion_matrix(y_test, y_pred, sample_weight=weights_test)
-    print(cm.astype("int"))
+    cm = confusion_matrix(y_test, y_pred, sample_weight=weights_test).astype("int")
+    print(cm)
 
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
     disp.plot()
