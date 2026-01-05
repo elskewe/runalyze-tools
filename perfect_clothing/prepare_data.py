@@ -146,20 +146,18 @@ def get_radiation_data(data: pd.DataFrame) -> pd.DataFrame:
         latitude = data.name[0]
         longitude = data.name[1]
 
-        def get_radiation(time: pd.Series) -> np.ndarray:
-            return weather.get_radiation(latitude, longitude,
-                                         # pylance somehow thinks this is a `Index[int]`
-                                         pd.DatetimeIndex(time),  # type: ignore
-                                         data["cloud_cover"].to_numpy())
+        # contains all `ghi_start`, then all `ghi_middle` and finally all `ghi_end`
+        radiation_data = weather.get_radiation(
+            latitude, longitude,
+            pd.DatetimeIndex(pd.concat((data["date_time"],
+                                        data["date_time"] + pd.to_timedelta(data["elapsed_time"]/2, unit="s"),
+                                        data["date_time"] + pd.to_timedelta(data["elapsed_time"],   unit="s")))),
+            np.tile(data["cloud_cover"].to_numpy(), 3)
+        )
 
-        return pd.DataFrame({"ghi_start": get_radiation(data["date_time"]),
-                             "ghi_middle": get_radiation(data["date_time"]
-                                                         + pd.to_timedelta(data.get("elapsed_time",  # type: ignore
-                                                                                    data.get("duration"))/2, unit="s")),
-                             "ghi_end": get_radiation(data["date_time"]
-                                                      + pd.to_timedelta(data.get("elapsed_time",  # type: ignore
-                                                                                 data.get("duration")), unit="s"))},
-                            index=data.index)
+        ghi_start, ghi_middle, ghi_end = np.split(radiation_data, 3)
+
+        return pd.DataFrame({"ghi_start": ghi_start, "ghi_middle": ghi_middle, "ghi_end": ghi_end}, index=data.index)
 
 
 def encode_clothing_layers(data: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
