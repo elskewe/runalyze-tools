@@ -7,6 +7,8 @@ import numpy as np
 import pandas as pd
 import pvlib
 
+from perfect_clothing.assumptions import get_shade_from_solar_elevation
+
 NumericType = TypeVar("NumericType", float, np.ndarray)
 
 
@@ -51,7 +53,9 @@ def get_radiation(latitude: float, longitude: float, dates: pd.DatetimeIndex | d
     location = pvlib.location.Location(latitude, longitude)
     # cast is valid assuming a scalar input (instead of a pandas series)
     clearsky = cast(pd.DataFrame, location.get_clearsky(dates))
-    return cloud_cover_to_ghi_linear(cloud_cover, clearsky["ghi"].to_numpy())
+    solar_position = cast(pd.DataFrame, location.get_solarposition(dates))
+    adjusted_cloud_cover = get_shade_from_solar_elevation(solar_position, cloud_cover)
+    return cloud_cover_to_ghi_linear(adjusted_cloud_cover, clearsky["ghi"].to_numpy())
 
 
 def cloud_cover_to_ghi_linear(cloud_cover: NumericType, ghi_clear: NumericType, offset=35) -> NumericType:

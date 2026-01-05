@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from functools import cache
 
+import numpy as np
 import pandas as pd
 from geopy.geocoders import Nominatim
 
@@ -376,6 +377,27 @@ def get_cloud_cover(condition: str) -> int:
             return 100
         case _:
             raise ValueError(f"Unknown weather condition: {condition}")
+
+
+def get_shade_from_solar_elevation(solar_position: pd.DataFrame, cloud_cover: np.ndarray,
+                                   elevation_threshold=35) -> np.ndarray:
+    """Adjusts the cloud cover with a term based on the solar position and returns it
+
+    The returned cloud cover is the max of the actual cloud cover and a term based on the solar
+    position. Currently, the latter term is linear between 0 (100% cloud cover) and
+    `elevation_threshold` (0% cloud cover).
+
+    Args:
+        solar_position (pd.DataFrame): The solar position dataframe (from `location.get_solarposition`).
+        cloud_cover (np.ndarray): The cloud cover in percent.
+        elevation_threshold (int, optional): The elevation threshold. Defaults to 35.
+
+    Returns:
+        np.ndarray: The adjusted cloud cover in percent.
+    """
+    return np.minimum(100,
+                      np.maximum(cloud_cover,
+                                 100 - (solar_position["elevation"].to_numpy() / elevation_threshold) * 100))
 
 
 def get_location(date: datetime, recurring_route: dict) -> tuple[str, float, float]:
