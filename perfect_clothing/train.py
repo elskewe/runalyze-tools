@@ -233,18 +233,21 @@ def find_problematic_entries(clf: CalibratedClassifierCV, x: pd.DataFrame, y: pd
 
     return ret
 
-def weight_dates(x: pd.Series, minimum_weight=0.0, maximum_weight=1) -> pd.Series:
+def weight_dates(x: pd.Series, minimum_weight=0.0, maximum_weight=1,
+                 max_date=pd.Timestamp(2025, 7, 31, tz="UTC")) -> pd.Series:  # noqa: B008
     """Assigns a weight to each date, scaled linearly between minimum_weight and maximum_weight.
 
     Args:
         x (pd.Series): the dates
         minimum_weight (float, optional): the minimum weight, i.e. the weight of the first date. Defaults to 0.5.
         maximum_weight (float, optional): the maximum weight, i.e. the weight of the last date. Defaults to 1.
+        max_date (pd.Timestamp, optional): the date from which on the `maximum_weight` is assigned. Defaults to `pd.Timestamp(2025, 7, 31).`
 
     Returns:
         np.ndarray: the weights
     """
     dates = pd.to_datetime(x, utc=True)
     minimum_date = x.min()
-    total_span = x.max() - minimum_date
-    return minimum_weight + (maximum_weight - minimum_weight) * (dates - minimum_date) / total_span
+    total_span = max_date - minimum_date
+    return np.minimum(maximum_weight,
+                  minimum_weight + (maximum_weight - minimum_weight) * (dates - minimum_date) / total_span)
