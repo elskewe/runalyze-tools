@@ -30,6 +30,9 @@ def get_radiation(latitude: float, longitude: float, dates: pd.DatetimeIndex | d
                   cloud_cover: np.ndarray) -> np.ndarray:
     """Returns the sun radiation for a given location and dates.
 
+    Note that the time complexity is roughly O(1) for `len(dates)` less than 100 as there are high
+    constant costs for initializing `clearsky`.
+
     Args:
         latitude (float): The latitude of the location.
         longitude (float): The longitude of the location.
