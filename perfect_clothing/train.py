@@ -64,6 +64,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
         StratifiedGroupKFold(shuffle=True).split(x, y, data.index if group_activities else range(0, len(x))))
     x_train, x_test, y_train, y_test = x.iloc[train_idx], x.iloc[test_idx], y.iloc[train_idx], y.iloc[test_idx]
     weights = weight_dates(data["date_time"])
+    weights[data["is_augmented"]] = 0.5 * weights  # decrease weight of augmented data
     weights_train, weights_test = weights.iloc[train_idx], weights.iloc[test_idx]
 
     # this is a list instead of a generator to allow pickle and use in both the hyperparameter
