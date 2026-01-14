@@ -1,5 +1,6 @@
 """This module contains the assumptions used for the data."""
 import json
+import re
 import time
 from datetime import datetime
 from functools import cache
@@ -519,6 +520,15 @@ def valid_outfits(candidate_outfits: list[dict[str, int]], is_race: bool) -> lis
                       or (is_race and all(any(SORTED_CLOTHING[category][v-1] in items
                                               for k, v in outfit.items() if k.startswith(category))
                                           for category, items in NECESSARY_RACE_CLOTHING.items()))]
+
+def outfit_to_string(outfit_encoding: dict[str, int]):
+    clothing = []
+    for category, item in outfit_encoding.items():
+        if item > 0 and category.startswith(tuple(SORTED_CLOTHING.keys())):
+            category = re.sub(r"_layer\d", "", category)
+            clothing.append(SORTED_CLOTHING[category][item-1])
+
+    return ", ".join(clothing)
 
 def can_outfit_be_toHeiss(outfit: dict[str, int], is_race: bool) -> bool:
     """Checks if the outfit can be toHeiss.

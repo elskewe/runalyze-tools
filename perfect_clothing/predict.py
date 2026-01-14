@@ -1,6 +1,5 @@
 import json
 import pickle
-import re
 
 import numpy as np
 import pandas as pd
@@ -68,13 +67,3 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
         if col.startswith("P(") or col in ["sum_ok", "Δ"]:
             df[col] = df[col].transform(lambda x: int(x*100))
     return df[:top_k]   # best outfit(s) and their P(ok) and P(zuHeiss)
-
-
-def outfit_to_string(outfit_encoding: dict[str, int]):
-    clothing = []
-    for category, item in outfit_encoding.items():
-        if item > 0 and category.startswith(tuple(assumptions.SORTED_CLOTHING.keys())):
-            category = re.sub(r"_layer\d", "", category)
-            clothing.append(assumptions.SORTED_CLOTHING[category][item-1])
-
-    return ", ".join(clothing)
