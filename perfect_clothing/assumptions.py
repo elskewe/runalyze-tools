@@ -99,6 +99,17 @@ SORTED_CLOTHING = {
 
 ALL_CLOTHING_ITEMS = [e for v in SORTED_CLOTHING.values() for e in v]
 
+CLOTHING_ABBREVIATIONS = {
+    "Kompressionsstrümpfe": "Kompress.-Strümpfe",
+    "Ganz kurze Hose": "Ganz ku. Hose",
+    "Kurze Hose": "Ku. Hose",
+    "Kurze Tights": "Ku. Tights",
+    "Lange Unterhose": "La. Unterhose",
+    "Lange Tights": "La. Tights",
+    "Langarmshirt": "Langarm",
+    "Gefüttertes Langarmshirt": "Gefütt. Langarm",
+}
+
 # the key is replaced by the value
 CLOTHING_REPLACEMENTS = {
     "2. Langarmshirt": "Langarmshirt",  # only because Runalyze can't handle multiple entries of the same item
@@ -521,13 +532,15 @@ def valid_outfits(candidate_outfits: list[dict[str, int]], is_race: bool) -> lis
                                               for k, v in outfit.items() if k.startswith(category))
                                           for category, items in NECESSARY_RACE_CLOTHING.items()))]
 
-def outfit_to_string(outfit_encoding: dict[str, int]):
+def outfit_to_string(outfit_encoding: dict[str, int], abbreviate = False):
     clothing = []
     for category, item in outfit_encoding.items():
         if item > 0 and category.startswith(tuple(SORTED_CLOTHING.keys())):
             category = re.sub(r"_layer\d", "", category)
             clothing.append(SORTED_CLOTHING[category][item-1])
 
+    if abbreviate:
+        clothing = [CLOTHING_ABBREVIATIONS.get(c, c) for c in clothing]
     return ", ".join(clothing)
 
 def can_outfit_be_toHeiss(outfit: dict[str, int], is_race: bool) -> bool:
