@@ -15,7 +15,7 @@ ALTERNATIVE_MODEL, _ = predict.load_data(assumptions.ALTERNATIVE_MODEL_FILENAME)
 def filter_compression_socks(data: pd.DataFrame, include_compression_socks: bool) -> pd.DataFrame:
     """Removes outfits with compression socks from the data if `include_compression_socks` is False."""
     if not include_compression_socks:
-        return data[~data["outfit"].str.contains("Kompressionsstrümpfe")]
+        return data[~data["outfit"].str.contains(assumptions.CLOTHING_ABBREVIATIONS["Kompressionsstrümpfe"])]
     return data
 
 @lru_cache
