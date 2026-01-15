@@ -180,9 +180,16 @@ def encode_clothing_layers(data: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]
 
 def save_candidate_outfits(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> list[dict[str, int]]:
     """Saves the candidate outfits to a json file for later use."""
-    outfits = data[encoded_clothing_columns].value_counts().reset_index(name="n_worn").to_dict(orient='records')
+    outfits_df = data[encoded_clothing_columns].value_counts().reset_index(name="n_worn")
+    # I don't like that these conditions are very similar to those in `clean_data`, but they are not
+    # quite the same s.t. moving them to a function is hard and the available data is just not the
+    # same here
+    outfits_df["race_only"] = ((outfits_df["n_worn"] < assumptions.OUTFIT_FREQUENCY_THRESHOLD)
+                               & ~(outfits_df.apply(assumptions.outfit_to_string, axis=1)
+                                   .str.contains("|".join(assumptions.OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS))))
+    outfits = outfits_df.to_dict(orient='records')
 
     with open(assumptions.CANDIDATE_OUTFITS_FILENAME, "w", encoding="utf-8") as f:
         json.dump(outfits, f, indent=4)
 
-    return [{k: v for k, v in d.items() if k != "n_worn"} for d in outfits]  # type: ignore
+    return [{k: v for k, v in d.items() if k not in ("n_worn", "race_only")} for d in outfits]  # type: ignore

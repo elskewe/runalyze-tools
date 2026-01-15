@@ -40,7 +40,7 @@ def score_outfits(input_data: pd.DataFrame, outfit_encoding: list[dict[str, int]
     # outfits s.t. the result has the same number of rows as there are entries (i.e. outfits) in
     # `outfit_encoding`
     x = pd.concat([input_data[assumptions.INPUT_COLUMNS.keys()]]*len(outfit_encoding), ignore_index=True) \
-        .join(pd.DataFrame(outfit_encoding).drop("n_worn", axis=1))
+        .join(pd.DataFrame(outfit_encoding).drop(["n_worn", "race_only"], axis=1))
     return model.predict_proba(x)
 
 
