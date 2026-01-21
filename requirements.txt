@@ -4,7 +4,7 @@ google-auth-httplib2
 google-api-python-client
 humanize
 click
-rich
+rich>=13.8.0
 numpy>=2.0
 pandas>=2.2.0
 pvlib

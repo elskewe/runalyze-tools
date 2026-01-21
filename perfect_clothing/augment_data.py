@@ -5,6 +5,7 @@ from operator import itemgetter
 
 import numpy as np
 import pandas as pd
+from rich.progress import track, Progress
 
 from perfect_clothing import assumptions, weather
 from perfect_clothing.prepare_data import get_radiation_data
@@ -22,25 +23,29 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
     """
     new_rows = []
 
-    for id_, current_row in data.iterrows():
+    for id_, current_row in track(data.iterrows(), total=len(data),
+                                  description="Augmenting data with new outfits and durations"):
         new_rows.extend(generate_new_outfit(id_, current_row, encoded_clothing_columns, candidate_outfits))
         new_rows.extend(generate_new_duration(id_, current_row))
-    print("Augmented data with new outfits and durations")
 
-    for factor in range(1, assumptions.MAX_AUGMENTATION_FACTOR+1):
-        # get comfort labels so far
-        comfort_int = pd.concat([data["comfort_int"], pd.Series([e["comfort_int"] for e in new_rows])])
-        # the return of `value_counts` is sorted by frequency, thus the first value of the index is
-        # always the most frequent label
-        most_frequent_comfort_label = int(comfort_int.value_counts().index[0])  # type: ignore
-        least_frequent_comfort_label = comfort_int.value_counts().index[-1]
-        if least_frequent_comfort_label == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL]:
-            break  # continue this loop until `ok` is the least frequent label (it can't be augmented)
-        for id_, current_row in data.iterrows():
-            new_rows.extend(generate_new_features(id_, current_row, most_frequent_comfort_label, factor))
-    print("Augmented data with new features")
+    with Progress() as progress:
+        augmentation_range = range(1, assumptions.MAX_AUGMENTATION_FACTOR+1)
+        task = progress.add_task(description="Augmenting data with new features")
+        for i, factor in enumerate(augmentation_range):
+            # get comfort labels so far
+            comfort_int = pd.concat([data["comfort_int"], pd.Series([e["comfort_int"] for e in new_rows])])
+            # the return of `value_counts` is sorted by frequency, thus the first value of the index is
+            # always the most frequent label
+            most_frequent_comfort_label = int(comfort_int.value_counts().index[0])  # type: ignore
+            least_frequent_comfort_label = comfort_int.value_counts().index[-1]
+            if least_frequent_comfort_label == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL]:
+                break  # continue this loop until `ok` is the least frequent label (it can't be augmented)
+            for id_, current_row in progress.track(data.iterrows(), task_id=task,
+                                                   total=len(data)*len(augmentation_range), completed=i*len(data)):
+                new_rows.extend(generate_new_features(id_, current_row, most_frequent_comfort_label, factor))
 
-    for id_, current_row in data.iterrows():
+    for id_, current_row in track(data.iterrows(), total=len(data),
+                                  description="Augmenting data with new features which change the label"):
         new_rows.extend(generate_new_features_ok(id_, current_row, encoded_clothing_columns, assumptions.MAX_AUGMENTATION_FACTOR))
 
     # add to base dataframe
