@@ -18,6 +18,9 @@ def filter_compression_socks(data: pd.DataFrame, include_compression_socks: bool
         return data[~data["outfit"].str.contains(assumptions.CLOTHING_ABBREVIATIONS["Kompressionsstrümpfe"])]
     return data
 
+def format_pace(pace_min_km: float):
+    return f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km"
+
 @lru_cache
 def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: float, duration_min: float, pace_min_km,
                    date_: datetime, is_race: bool, include_compression_socks: bool, latitude_: float, longitude_: float):
@@ -41,7 +44,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
     best_outfits_alternative = predict.recommend_best(features, ALTERNATIVE_MODEL, CANDIDATE_OUTFITS, top_k=100)
     return filter_compression_socks(best_outfits, include_compression_socks), \
            filter_compression_socks(best_outfits_alternative, include_compression_socks), \
-           f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km", np.average(ghi)
+           format_pace(pace_min_km), np.average(ghi)
 
 
 with gr.Blocks(fill_width=True) as demo:
