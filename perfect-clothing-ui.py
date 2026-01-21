@@ -22,7 +22,7 @@ def format_pace(pace_min_km: float):
     return f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km"
 
 @lru_cache
-def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: float, duration_min: float, pace_min_km,
+def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: float, duration_min: float, pace_min_km: float,
                    date_: datetime, is_race: bool, include_compression_socks: bool, latitude_: float, longitude_: float):
     ghi = weather.get_radiation(latitude_, longitude_,
                                 [date_, date_ + timedelta(minutes=duration_min)/2,
