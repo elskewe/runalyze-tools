@@ -26,6 +26,8 @@ INPUT_COLUMNS = {
     ##"hr_avg",
     ##"fit_trimp",
     "x_pace": 1,
+    "pace": 0,  # is moved with the x_pace
+    "variability_index_pace": 0,
     ##"x_pace_squared": 1, # => x_pace seems to be a better predictor
     # for the ghi these are dummy values only giving the sign as these should be consistent with the time of day
     "ghi_start": 1,
