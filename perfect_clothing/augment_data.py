@@ -186,9 +186,10 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                                  "ghi_end": tmp_df["ghi_end"].iloc[0]})
             case "x_pace":
                 new_x_pace = base_row["x_pace"] + direction * factor
+                new_pace = new_x_pace / base_row["variability_index_pace"]
                 if new_x_pace < 0:
                     continue  # invalid x_pace
-                new_rows.append({feature: new_x_pace})
+                new_rows.append({feature: new_x_pace, "pace": new_pace})
             case _:
                 new_rows.append({feature: base_row[feature] + direction * factor})
 
