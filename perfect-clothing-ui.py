@@ -23,11 +23,13 @@ def format_pace(pace_min_km: float):
 
 @lru_cache
 def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: float, duration_min: float, pace_min_km: float,
-                   date_: datetime, is_race: bool, include_compression_socks: bool, latitude_: float, longitude_: float):
+                   variability_index_pace_: float, date_: datetime, is_race: bool, include_compression_socks: bool,
+                   latitude_: float, longitude_: float):
     ghi = weather.get_radiation(latitude_, longitude_,
                                 [date_, date_ + timedelta(minutes=duration_min)/2,
                                  date_ + timedelta(minutes=duration_min)],
                                 cloud_cover_perc)
+    x_pace_min_km = pace_min_km/variability_index_pace_
     # Build your feature row from inputs
     features = pd.DataFrame([{
         "temperature": temperature,
@@ -35,6 +37,8 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
         "wind_speed": wind_speed_,  # is already in km/h in Runalyze data
         "duration": duration_min*60,
         "x_pace": 60/pace_min_km,
+        "pace": 60/pace_min_km,
+        "variability_index_pace": variability_index_pace_,
         "ghi_start": ghi[0],
         "ghi_middle": ghi[1],
         "ghi_end": ghi[2],
@@ -44,7 +48,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
     best_outfits_alternative = predict.recommend_best(features, ALTERNATIVE_MODEL, CANDIDATE_OUTFITS, top_k=100)
     return filter_compression_socks(best_outfits, include_compression_socks), \
            filter_compression_socks(best_outfits_alternative, include_compression_socks), \
-           format_pace(pace_min_km), np.average(ghi)
+           format_pace(pace_min_km), format_pace(x_pace_min_km), np.average(ghi)
 
 
 with gr.Blocks(fill_width=True) as demo:
@@ -55,7 +59,9 @@ with gr.Blocks(fill_width=True) as demo:
             cloud_cover = gr.Slider(0, 100, step=10, value=50, label="Cloud cover (%)")
             with gr.Row():
                 pace = gr.Slider(2.5, 10, step=1/60, value=4.5, label="Pace (min/km)", scale=6)
-                pace_display = gr.Textbox(label="", min_width=120)
+                variability_index_pace = gr.Slider(1, 2, step=0.005, label="Variability index")
+                pace_display = gr.Textbox(label="pace", min_width=120)
+                x_pace_display = gr.Textbox(label="x_pace", min_width=120)
             duration = gr.Slider(0, 100, step=2.5, value=30, label="Duration (min)")
             with gr.Row():
                 date = gr.DateTime(label="Date", value=datetime.now(),
@@ -73,9 +79,10 @@ with gr.Blocks(fill_width=True) as demo:
             output_df = gr.DataFrame(show_row_numbers=True)
             output_df_alternative = gr.DataFrame(show_row_numbers=True)
 
-    inputs = [temp, wind_speed, cloud_cover, duration, pace, date, race, compression_socks, latitude, longitude]
+    inputs = [temp, wind_speed, cloud_cover, duration, pace, variability_index_pace, date, race,
+              compression_socks, latitude, longitude]
     change_args = {"fn": predict_outfit, "inputs": inputs,
-                   "outputs": [output_df, output_df_alternative, pace_display, ghi]}
+                   "outputs": [output_df, output_df_alternative, pace_display, x_pace_display, ghi]}
     for i in inputs:
         i.change(**change_args)
 
