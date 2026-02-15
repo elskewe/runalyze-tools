@@ -22,9 +22,9 @@ def format_pace(pace_min_km: float):
     return f"{int(pace_min_km)}:{round(pace_min_km*60%60):02d} min/km"
 
 @lru_cache
-def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: float, duration_min: float, pace_min_km: float,
-                   variability_index_pace_: float, date_: datetime, is_race: bool, include_compression_socks: bool,
-                   latitude_: float, longitude_: float):
+def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: float, duration_min: float,
+                   stopped_time_min: float, pace_min_km: float, variability_index_pace_: float, date_: datetime,
+                   is_race: bool, include_compression_socks: bool, latitude_: float, longitude_: float):
     ghi = weather.get_radiation(latitude_, longitude_,
                                 [date_, date_ + timedelta(minutes=duration_min)/2,
                                  date_ + timedelta(minutes=duration_min)],
@@ -36,6 +36,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
         "wind_chill": weather.wind_chill(temperature, wind_speed_),
         "wind_speed": wind_speed_,  # is already in km/h in Runalyze data
         "duration": duration_min*60,
+        "stopped_time": stopped_time_min*60,
         "x_pace": 60/pace_min_km,
         "pace": 60/pace_min_km,
         "variability_index_pace": variability_index_pace_,
@@ -63,6 +64,7 @@ with gr.Blocks(fill_width=True) as demo:
                 pace_display = gr.Textbox(label="pace", min_width=120)
                 x_pace_display = gr.Textbox(label="x_pace", min_width=120)
             duration = gr.Slider(0, 100, step=2.5, value=30, label="Duration (min)")
+            stopped_time = gr.Slider(0, 15, step=1, value=0, label="Stopped time (min)")
             with gr.Row():
                 date = gr.DateTime(label="Date", value=datetime.now(),
                                    # the timezone should be set automatically to the local timezone
@@ -79,7 +81,7 @@ with gr.Blocks(fill_width=True) as demo:
             output_df = gr.DataFrame(show_row_numbers=True)
             output_df_alternative = gr.DataFrame(show_row_numbers=True)
 
-    inputs = [temp, wind_speed, cloud_cover, duration, pace, variability_index_pace, date, race,
+    inputs = [temp, wind_speed, cloud_cover, duration, stopped_time, pace, variability_index_pace, date, race,
               compression_socks, latitude, longitude]
     change_args = {"fn": predict_outfit, "inputs": inputs,
                    "outputs": [output_df, output_df_alternative, pace_display, x_pace_display, ghi]}
