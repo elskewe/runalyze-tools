@@ -57,12 +57,16 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
             e |= assumptions.split_equipment(e["equipment"])
         e["is_race"] = bool(e.get("race_result"))
         # if there is a comfort label use it, otherwise use ok
-        e["comfort"] = next(
-            (tag["tag"]
-             for tag in e.get("tags", [])  # type: ignore
-             if assumptions.TEMPERATURE_LABEL_MAPPING.get(tag["tag"]) is not None),
-            assumptions.OK_TEMPERATURE_LABEL
-        )
+        comfort_tags = [
+            tag["tag"]
+            for tag in e.get("tags", [])  # type: ignore
+            if assumptions.TEMPERATURE_LABEL_MAPPING.get(tag["tag"]) is not None
+        ]
+        if len(comfort_tags) > 1:
+            print(f"Activity {e['id']} has multiple comfort tags: {comfort_tags}.")
+            # make this activity invalid as it is not clear which tag is correct
+            e["equipment"] = None  # type: ignore
+        e["comfort"] = comfort_tags[0] if comfort_tags else assumptions.OK_TEMPERATURE_LABEL
         if isinstance(tags := e.get("tags"), list):
             e["tags"] = tuple(tag["tag"] for tag in tags)  # type: ignore
 
