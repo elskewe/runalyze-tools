@@ -195,6 +195,11 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                 if new_x_pace < 0:
                     continue  # invalid x_pace
                 new_rows.append({feature: new_x_pace, "pace": new_pace})
+            case "stopped_time":
+                new_stopped_time = base_row["stopped_time"] + direction * factor
+                if new_stopped_time < 0:
+                    continue  # invalid stopped_time
+                new_rows.append({feature: new_stopped_time})
             case _:
                 new_rows.append({feature: base_row[feature] + direction * factor})
 

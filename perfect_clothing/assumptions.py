@@ -23,7 +23,7 @@ INPUT_COLUMNS = {
     "wind_speed": -5,  # => this feels like it should have an influence, but I'm not convinced it's actually the case
     # "weather_condition_int": 0,  # => makes the result slightly worse and gets little weight anyway (probably too little data)
     "duration": 0,
-    "stopped_time": 0,
+    "stopped_time": -300,
     ##"hr_avg",
     ##"fit_trimp",
     "x_pace": 1,
