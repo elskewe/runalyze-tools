@@ -118,6 +118,7 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     """
     label = base_row["comfort_int"]
     note_sentiment = base_row["note_sentiment"]
+    new_label = np.sign(label + note_sentiment).item()
     # Return if the label is `ok` (and there is further information in the note) as it's not
     # possible to know which features to move to still retain the same label. Also don't make the
     # imbalance worse by adding new rows of the already most frequent label.
@@ -127,7 +128,7 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
 
     new_rows = []
     # amplitude and direction in which the features are moved
-    factor = augmentation_factor * np.sign(label + note_sentiment).item()
+    factor = augmentation_factor * new_label
 
     # helper for the GHI threshold check. Returns True iff the augmentation should be kept.
     def _ghi_threshold_ok(base_row: pd.Series, tmp_df: pd.DataFrame) -> bool:
@@ -218,7 +219,7 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
             case _:
                 new_rows.append({feature: base_row[feature] + direction * factor})
 
-    return [base_row.to_dict() | new_row | {"id": id_} for new_row in new_rows]
+    return [base_row.to_dict() | new_row | {"id": id_, "comfort_int": new_label} for new_row in new_rows]
 
 
 def generate_new_features_ok(id_: int, base_row: pd.Series, encoded_clothing_columns: list[str], augmentation_factor: int) -> list[dict]:
