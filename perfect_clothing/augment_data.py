@@ -42,7 +42,8 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
                 break  # continue this loop until `ok` is the least frequent label (it can't be augmented)
             for id_, current_row in progress.track(data.iterrows(), task_id=task,
                                                    total=len(data)*len(augmentation_range), completed=i*len(data)):
-                new_rows.extend(generate_new_features(id_, current_row, most_frequent_comfort_label, factor))
+                new_rows.extend(generate_new_features(id_, current_row, most_frequent_comfort_label,
+                                                      encoded_clothing_columns, factor))
 
     for id_, current_row in track(data.iterrows(), total=len(data),
                                   description="Augmenting data with new features which change the label"):
@@ -107,7 +108,7 @@ def generate_new_duration(id_: int, base_row: pd.Series) -> list[dict]:
 
 
 def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_label: int,
-                          augmentation_factor: int) -> list[dict]:
+                          encoded_clothing_columns: list[str], augmentation_factor: int) -> list[dict]:
     """Moves each of the features (by `augmentation_factor`) to get additional rows with the same label.
 
     To combat label imbalance, this is only done for labels which are not the most frequent one. The
@@ -118,7 +119,6 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     """
     label = base_row["comfort_int"]
     note_sentiment = base_row["note_sentiment"]
-    new_label = np.sign(label + note_sentiment).item()
     # Return if the label is `ok` (and there is further information in the note) as it's not
     # possible to know which features to move to still retain the same label. Also don't make the
     # imbalance worse by adding new rows of the already most frequent label.
@@ -126,9 +126,11 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
             or label == most_frequent_comfort_label:
         return []
 
+    new_label_direction = np.sign(label + note_sentiment).item()
+    new_label = _new_label(base_row, encoded_clothing_columns, new_label_direction)
     new_rows = []
     # amplitude and direction in which the features are moved
-    factor = augmentation_factor * new_label
+    factor = augmentation_factor * new_label_direction
 
     # helper for the GHI threshold check. Returns True iff the augmentation should be kept.
     def _ghi_threshold_ok(base_row: pd.Series, tmp_df: pd.DataFrame) -> bool:
