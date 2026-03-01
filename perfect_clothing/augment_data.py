@@ -120,9 +120,12 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     label = base_row["comfort_int"]
     note_sentiment = base_row["note_sentiment"]
     # Return if the label is `ok` (and there is no further information in the note) as it's not
-    # possible to know which features to move to still retain the same label. Also don't make the
-    # imbalance worse by adding new rows of the already most frequent label.
-    if (label == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL] and note_sentiment == label )\
+    # possible to know which features to move to still retain the same label. If only the
+    # information in the note is present (but the label is `ok`) return if the augementation factor
+    # is 1 or less as with that factor it is not certain enough that the label actually changes.
+    # Also don't make the imbalance worse by adding new rows of the already most frequent label.
+    if (label == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL]
+        and (note_sentiment == label or augmentation_factor <= 1))\
             or label == most_frequent_comfort_label:
         return []
 
