@@ -116,16 +116,18 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     same principle holds for too warm. The direction and magnitude each feature has to be moved is
     encoded in the value of `assumptions.INPUT_COLUMNS`.
     """
+    label = base_row["comfort_int"]
+    note_sentiment = base_row["note_sentiment"]
     # Return if the label is `ok` as it's not possible to know which features to move to still
     # retain the same label. Also don't make the imbalance worse by adding new rows of the already
     # most frequent label.
-    if base_row["comfort_int"] == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL] \
-            or base_row["comfort_int"] == most_frequent_comfort_label:
+    if label == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL] \
+            or label == most_frequent_comfort_label:
         return []
 
     new_rows = []
     # amplitude and direction in which the features are moved
-    factor = augmentation_factor * np.sign(base_row["comfort_int"] + base_row["note_sentiment"]).item()
+    factor = augmentation_factor * np.sign(label + note_sentiment).item()
     for feature, direction in assumptions.INPUT_COLUMNS.items():
         if direction == 0:
             continue
