@@ -134,7 +134,7 @@ OK_TEMPERATURE_LABEL = "ok"
 # which might contain regex) in note to find activities which were at the edge of being ok. If
 # matches from both categories occur, they are not used as the note is ambiguous.
 ALMOST_TOO_COLD_WORDS = ["kühl", "kalt"]
-ALMOST_TOO_WARM_WORDS = ["warm", "heiß"]
+ALMOST_TOO_WARM_WORDS = ["warm", "heiß(?!t)"]
 
 
 WEATHER_CONDITION_MAPPING = [
