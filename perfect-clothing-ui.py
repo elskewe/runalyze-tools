@@ -60,9 +60,9 @@ with gr.Blocks(fill_width=True) as demo:
             cloud_cover = gr.Slider(0, 100, step=10, value=50, label="Cloud cover (%)")
             with gr.Row():
                 pace = gr.Slider(2.5, 10, step=1/60, value=4.5, label="Pace (min/km)", scale=6)
-                variability_index_pace = gr.Slider(1, 2, step=0.005, label="Variability index")
-                pace_display = gr.Textbox(label="pace", min_width=120)
-                x_pace_display = gr.Textbox(label="x_pace", min_width=120)
+                variability_index_pace = gr.Slider(1, 2, step=0.005, label="Variability index", visible=False)
+                pace_display = gr.Textbox(label="pace", min_width=120, visible=False)
+                x_pace_display = gr.Textbox(label="x_pace", min_width=120, visible=False)
             duration = gr.Slider(0, 100, step=2.5, value=30, label="Duration (min)")
             stopped_time = gr.Slider(0, 15, step=1, value=0, label="Stopped time (min)")
             with gr.Row():
