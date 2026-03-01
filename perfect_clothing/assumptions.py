@@ -130,9 +130,9 @@ CLOTHING_REPLACEMENTS_MULTI = {
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
 OK_TEMPERATURE_LABEL = "ok"
 
-# The following words are matched (with `pandas.Series.str.contains`, i.e. a case-insensitive string
-# which might contain regex) in note to find activities which were at the edge of being ok. If
-# matches from both categories occur, they are not used as the note is ambiguous.
+# The following words are matched (with `re.search` and case insensitive) in note to find activities
+# which were at the edge of being ok. If matches from both categories occur, they are not used as
+# the note is ambiguous.
 ALMOST_TOO_COLD_WORDS = ["kühl", "kalt"]
 ALMOST_TOO_WARM_WORDS = ["warm", "heiß(?!t)"]
 
@@ -584,8 +584,8 @@ def get_note_sentiment(row: pd.Series) -> int:
     `ALMOST_TOO_COLD_WORDS`. If words from both lists or none are present or the sentiment
     contradicts the actual label, then the sentiment is "ok" (`0`).
     """
-    note_sentiment = (  any(w in row["note"] for w in ALMOST_TOO_WARM_WORDS)
-                      - any(w in row["note"] for w in ALMOST_TOO_COLD_WORDS)) \
+    note_sentiment = (  any(re.search(w, row["note"], re.IGNORECASE) for w in ALMOST_TOO_WARM_WORDS)
+                      - any(re.search(w, row["note"], re.IGNORECASE) for w in ALMOST_TOO_COLD_WORDS)) \
                         if isinstance(row["note"], str) else 0
     # If the inferred label from the note and the actual label contradict each other disregard the
     # note.
