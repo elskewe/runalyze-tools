@@ -241,14 +241,18 @@ def generate_new_features_ok(id_: int, base_row: pd.Series, encoded_clothing_col
             match feature:
                 case "temperature":  # also need to adapt windchill
                     new_temperature = base_row["temperature"] + direction * factor
-                    new_comfort_int_ = assumptions.TEMPERATURE_LABEL_MAPPING["zuHeiss"] \
-                        if (new_comfort_int > assumptions.TEMPERATURE_LABEL_MAPPING["ok"]
-                            and assumptions.can_outfit_be_toHeiss(base_row[encoded_clothing_columns].to_dict(), base_row["is_race"])) \
-                        else new_comfort_int
                     new_rows.append({"temperature": new_temperature,
                                     "wind_chill": weather.wind_chill(new_temperature, base_row["wind_speed"]),
-                                    "comfort_int": new_comfort_int_})
+                                    "comfort_int": _new_label(base_row, encoded_clothing_columns, new_comfort_int)})
                 case _:  # it's not certain enough that the new features change the label
                     continue
 
     return [base_row.to_dict() | new_row | {"id": id_} for new_row in new_rows]
+
+def _new_label(row: pd.Series, encoded_clothing_columns: list[str], new_label: int) -> int:
+    """Helper to determine whether the new should be changed to `zuHeiss`
+    """
+    return assumptions.TEMPERATURE_LABEL_MAPPING["zuHeiss"] \
+        if (new_label > assumptions.TEMPERATURE_LABEL_MAPPING["ok"]
+            and assumptions.can_outfit_be_toHeiss(row[encoded_clothing_columns].to_dict(), row["is_race"])) \
+        else new_label
