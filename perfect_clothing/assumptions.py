@@ -42,7 +42,7 @@ MAX_AUGMENTATION_FACTOR = 4  # maximum factor that is multiplied on the incremen
 # modifying the radiation values is the sentiment extracted from the note. If the computed
 # average change is less than or equal to this value the augmentation is skipped. The units are
 # watts per square meter.
-GHI_AUGMENTATION_THRESHOLD = 50
+GHI_AUGMENTATION_THRESHOLD = 100
 
 # different outfits are used for augmenting the data as long as they are within this distance
 # (w.r.t. the sum of the int encoded clothing items) of the original outfit. The first (negative)
