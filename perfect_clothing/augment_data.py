@@ -128,6 +128,15 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     new_rows = []
     # amplitude and direction in which the features are moved
     factor = augmentation_factor * np.sign(label + note_sentiment).item()
+
+    # helper for the GHI threshold check. Returns True iff the augmentation should be kept.
+    def _ghi_threshold_ok(base_row: pd.Series, tmp_df: pd.DataFrame) -> bool:
+        if label == 0 and note_sentiment != 0:
+            base_avg = base_row[["ghi_start", "ghi_middle", "ghi_end"]].mean()
+            new_avg = tmp_df[["ghi_start", "ghi_middle", "ghi_end"]].iloc[0].mean()
+            return abs(new_avg - base_avg) > assumptions.GHI_AUGMENTATION_THRESHOLD
+        return True
+
     for feature, direction in assumptions.INPUT_COLUMNS.items():
         if direction == 0:
             continue
@@ -154,6 +163,8 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                 # the `group` is only to get the correct type (dataframe instead of series)
                 tmp_df[["ghi_start", "ghi_middle", "ghi_end"]] = \
                     tmp_df.groupby(["latitude", "longitude"], group_keys=False).apply(get_radiation_data, include_groups=False)
+                if not _ghi_threshold_ok(base_row, tmp_df):
+                    continue
                 new_rows.append({"cloud_cover": new_cloud_cover_perc,
                                  "ghi_start": tmp_df["ghi_start"].iloc[0],
                                  "ghi_middle": tmp_df["ghi_middle"].iloc[0],
@@ -186,6 +197,8 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                     # The new radiation values don't all change in the right direction (or none
                     # change at all), thus this augmentation is dropped (this can e.g. occur when
                     # the time is put on the other side of the noon)
+                    continue
+                if not _ghi_threshold_ok(base_row, tmp_df):
                     continue
                 new_rows.append({"date_time": new_date_time,
                                  "ghi_start": tmp_df["ghi_start"].iloc[0],
