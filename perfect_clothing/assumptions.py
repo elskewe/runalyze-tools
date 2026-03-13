@@ -131,6 +131,9 @@ CLOTHING_REPLACEMENTS_MULTI = {
     # probably mislabelled as this combination would be quite cold on the hands
     ("Handschuhe", "Lange Tights"): ("Skihandschuhe", "Lange Tights"),
     ("Handschuhe", "Laufjacke"): ("Skihandschuhe", "Laufjacke"),
+    # I guess these activities were just labelled wrong? This is not an outfit I would actively
+    # choose, but might occur when removing the upper body clothing after the warm up etc.
+    ("Kurze Hose", "Oberkörperfrei"): ("Ganz kurze Hose", "Oberkörperfrei"),
 }
 
 TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
