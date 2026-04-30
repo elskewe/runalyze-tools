@@ -1,6 +1,6 @@
 """Syncs the Garmin TRIMP from the Runalyze activities to the secondary Runalyze account."""
-import json
 import datetime
+import json
 
 from runalyze.api import get_activities, upload_activity
 from runalyze.tcx import create, translate_activity_type
