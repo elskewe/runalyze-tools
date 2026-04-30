@@ -1,6 +1,7 @@
 """Syncs the Garmin TRIMP from the Runalyze activities to the secondary Runalyze account."""
 import datetime
 import json
+import warnings
 
 from runalyze.api import get_activities, upload_activity
 from runalyze.tcx import create, translate_activity_type
@@ -23,6 +24,9 @@ def main():
     for activity in activities:
         if (activity_date := datetime.datetime.fromisoformat(activity["date_time"])) < start_time:
             continue  # ignore old activities to prevent duplicates
+        if "fit_trimp" not in activity:
+            warnings.warn(f"Activity at {datetime.datetime.fromisoformat(activity['date_time']) } has no fit file TRIMP, skipping.")
+            continue
         tcx_string = create(activity_date, activity["fit_trimp"]*60, translate_activity_type(activity["sport"]["name"]))
         upload_activity(tcx_string, secondary_credentials, title=activity["title"])
 
