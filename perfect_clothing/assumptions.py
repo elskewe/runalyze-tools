@@ -740,6 +740,7 @@ def find_similar_activities(data: pd.DataFrame, row: pd.Series, encoded_clothing
     Needs the additional columns `date_time_utc` and `end_time_utc`."""
     return data[
         (data["sport"] == row["sport"])
+        & (data.index != row.name)  # exclude the activity itself
         & (data["comfort_int"] == row["comfort_int"])
         & (data["note_sentiment"] * row["note_sentiment"] >= 0)  # must not be contradictory
         & (data[encoded_clothing_columns] == row[encoded_clothing_columns]).all(axis=1)
