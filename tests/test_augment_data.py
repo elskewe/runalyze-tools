@@ -17,7 +17,7 @@ def make_base_row():
         "ghi_start": 100,
         "ghi_middle": 100,
         "ghi_end": 100,
-        "cloud_cover": 50,
+        "cloud_cover": 100,
         "latitude": 0,
         "longitude": 0,
         "date_time": pd.Timestamp("2020-01-01 12:00"),
@@ -31,6 +31,8 @@ def make_base_row():
         "stopped_time": 0,
         "pace": 0,
         "is_race": False,
+        "upper_body_layer1": 1,
+        "lower_body_layer1": 1,
     })
 
 
@@ -54,8 +56,9 @@ def _run_with_delta(monkeypatch, delta, threshold):
     rows = augment_data.generate_new_features(
         id_=0,
         base_row=make_base_row(),
+        encoded_clothing_columns=["upper_body_layer1", "lower_body_layer1"],
         most_frequent_comfort_label=1,
-        augmentation_factor=1,
+        augmentation_factor=2,
     )
 
     assumptions.INPUT_COLUMNS = orig_inputs
