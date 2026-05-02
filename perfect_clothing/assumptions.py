@@ -684,7 +684,8 @@ def find_similar_activities(data: pd.DataFrame, row: pd.Series, encoded_clothing
 
     Needs the additional columns `date_time_utc` and `end_time_utc`."""
     return data[
-        (data["comfort_int"] == row["comfort_int"])
+        (data["sport"] == row["sport"])
+        & (data["comfort_int"] == row["comfort_int"])
         & (data[encoded_clothing_columns] == row[encoded_clothing_columns]).all(axis=1)
         & (
             (abs(data["date_time_utc"] - row["end_time_utc"]) <= MAX_MERGE_TIME_DIFFERENCE)
