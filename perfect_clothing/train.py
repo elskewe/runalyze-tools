@@ -21,7 +21,7 @@ from sklearn.model_selection import GridSearchCV, StratifiedGroupKFold
 
 from perfect_clothing import assumptions, load_data
 from perfect_clothing.augment_data import augment_data
-from perfect_clothing.prepare_data import prepare_data, save_candidate_outfits
+from perfect_clothing.prepare_data import prepare_data, save_candidate_outfits, filter_close_activities
 
 
 def train():
@@ -38,6 +38,7 @@ def train():
         candidate_outfits = save_candidate_outfits(data_df, encoded_clothing_columns)
         data_df = augment_data(data_df, encoded_clothing_columns, candidate_outfits)
         print("Created augmented df")
+        data_df = filter_close_activities(data_df)
 
         with open(assumptions.DATA_FILENAME, "wb") as f:
             pickle.dump((data_df, encoded_clothing_columns), f)

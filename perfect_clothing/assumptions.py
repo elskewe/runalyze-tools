@@ -41,6 +41,8 @@ INVARIANT_DURATION_CHANGE = 0.1  # changing the duration by this relative amount
 MAX_AUGMENTATION_FACTOR = 4  # maximum factor that is multiplied on the increments to augment the data
 # activities with less than this time difference can be merged if the clothing etc. is the same
 MAX_MERGE_TIME_DIFFERENCE = timedelta(minutes=15)
+# Minimum time gap between the end of activities, activities closer than this will be removed
+MIN_ACTIVITY_TIME_GAP = timedelta(minutes=10)
 
 # columns that are present in the raw Runalyze activity data but are not needed for the
 # clothing prediction pipeline and should be removed early to keep the dataframe small.

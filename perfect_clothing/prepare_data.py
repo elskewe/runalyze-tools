@@ -5,7 +5,7 @@ Furthermore, the clothing is encoded for use with ML.
 
 import json
 import warnings
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
@@ -196,3 +196,19 @@ def save_candidate_outfits(data: pd.DataFrame, encoded_clothing_columns: list[st
         json.dump(outfits, f, indent=4)
 
     return [{k: v for k, v in d.items() if k not in ("n_worn", "race_only")} for d in outfits]  # type: ignore
+
+
+def filter_close_activities(data_df: pd.DataFrame) -> pd.DataFrame:
+    """Remove activities where the end time is less than MIN_ACTIVITY_TIME_GAP from the end of the previous activity.
+
+    Filtering is based on non-augmented activities. Activities identified for removal are removed by ID,
+    which also removes all augmented versions.
+    """
+    non_augmented = data_df[~data_df['is_augmented']].sort_values('end_time_utc')
+    ids_to_remove = set()
+    prev_end = non_augmented['end_time_utc'].iloc[0] - 2*assumptions.MIN_ACTIVITY_TIME_GAP
+    for idx, row in non_augmented.iterrows():
+        if (row['end_time_utc'] - prev_end) < assumptions.MIN_ACTIVITY_TIME_GAP and not row["is_race"]:
+            ids_to_remove.add(idx)
+        prev_end = row['end_time_utc']
+    return data_df[~data_df.index.isin(ids_to_remove)]
