@@ -693,5 +693,6 @@ def find_similar_activities(data: pd.DataFrame, row: pd.Series, encoded_clothing
         )
         & (~data["is_race"])
         & (data["timezone_offset"] == row["timezone_offset"])
+        & (data["weather_condition"] == row["weather_condition"])
         & (~data.index.isin(excluded_ids))
     ]
