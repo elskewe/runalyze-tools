@@ -692,5 +692,6 @@ def find_similar_activities(data: pd.DataFrame, row: pd.Series, encoded_clothing
             | (abs(row["date_time_utc"] - data["end_time_utc"]) <= MAX_MERGE_TIME_DIFFERENCE)
         )
         & (~data["is_race"])
+        & (data["timezone_offset"] == row["timezone_offset"])
         & (~data.index.isin(excluded_ids))
     ]
