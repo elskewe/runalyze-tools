@@ -273,23 +273,27 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
                                   description="Augmenting data with merged activities"):
         if id_ in id_processed:
             continue
+
+        group_ids = {id_}
         similar_activities = assumptions.find_similar_activities(data, current_row, encoded_clothing_columns,
                                                                  id_processed)
-        processed_in_chain = set(similar_activities.index)
-        if len(similar_activities) > 1:  # always contains itself
-            merged_row = assumptions.merge_activities(similar_activities, encoded_clothing_columns)
-            # Iteratively merge the merged activity with additional similar activities
-            while True:
-                similar_to_merged = assumptions.find_similar_activities(data, merged_row, encoded_clothing_columns,
-                                                                        id_processed | processed_in_chain)
-                if len(similar_to_merged) > 0:
-                    merged_row = assumptions.merge_activities(pd.concat(
-                        [pd.DataFrame([merged_row.to_dict()]), similar_to_merged]), encoded_clothing_columns)
-                    processed_in_chain.update(similar_to_merged.index)
-                else:
-                    break
-            new_rows.append(merged_row.to_dict() | {"id": merged_row.name})
-        id_processed.update(processed_in_chain)
+        group_ids.update(similar_activities.index)
+        queue = [row for _, row in similar_activities.iterrows()]
+
+        while queue:
+            row = queue.pop()
+            similar_to_row = assumptions.find_similar_activities(data, row, encoded_clothing_columns,
+                                                                 id_processed | group_ids)
+            new_ids = set(similar_to_row.index) - group_ids
+            if new_ids:
+                group_ids.update(new_ids)
+                queue.extend([row for _, row in data.loc[list(new_ids)].iterrows()])
+
+        if len(group_ids) > 1:
+            merged_row = assumptions.merge_activities(data.loc[sorted(group_ids)], encoded_clothing_columns)
+            new_rows.append(merged_row.to_dict() | {"id": merged_row.name, "is_merged": True})
+
+        id_processed.update(group_ids)
 
     return new_rows
 
