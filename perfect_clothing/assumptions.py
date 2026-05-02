@@ -735,7 +735,7 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
 
 def find_similar_activities(data: pd.DataFrame, row: pd.Series, encoded_clothing_columns: list[str],
                             excluded_ids: set[int]) -> pd.DataFrame:
-    """Finds activities similar to the given row, excluding the given ids.
+    """Finds activities similar (i.e. close in time and with similar data) to the given row, excluding the given ids.
 
     Needs the additional columns `date_time_utc` and `end_time_utc`."""
     return data[
