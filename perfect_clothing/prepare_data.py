@@ -69,7 +69,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
             e["equipment"] = None  # type: ignore
         e["comfort"] = comfort_tags[0] if comfort_tags else assumptions.OK_TEMPERATURE_LABEL
 
-        if "laufbahn" in tags:
+        if assumptions.TRACK_TAG in tags:
             e["is_track"] = True
 
     # try filling missing location data
