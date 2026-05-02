@@ -277,14 +277,14 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
                                                                  id_processed)
         processed_in_chain = set(similar_activities.index)
         if len(similar_activities) > 1:  # always contains itself
-            merged_row = assumptions.merge_activities(similar_activities)
+            merged_row = assumptions.merge_activities(similar_activities, encoded_clothing_columns)
             # Iteratively merge the merged activity with additional similar activities
             while True:
                 similar_to_merged = assumptions.find_similar_activities(data, merged_row, encoded_clothing_columns,
                                                                         id_processed | processed_in_chain)
                 if len(similar_to_merged) > 0:
                     merged_row = assumptions.merge_activities(pd.concat(
-                        [pd.DataFrame([merged_row.to_dict()]), similar_to_merged]))
+                        [pd.DataFrame([merged_row.to_dict()]), similar_to_merged]), encoded_clothing_columns)
                     processed_in_chain.update(similar_to_merged.index)
                 else:
                     break
