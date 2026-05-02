@@ -34,6 +34,7 @@ INPUT_COLUMNS = {
     "ghi_start": 1,
     "ghi_middle": 1,
     "ghi_end": 1,
+    #"is_track": 0, # => has little effect and probably makes the data more sparse again
     "is_race": 0}
 INVARIANT_DURATION_CHANGE = 0.1  # changing the duration by this relative amount does not change the label
 MAX_AUGMENTATION_FACTOR = 4  # maximum factor that is multiplied on the increments to augment the data
