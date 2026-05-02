@@ -2,6 +2,7 @@
 
 from datetime import timedelta
 from operator import itemgetter
+from typing import cast
 
 import numpy as np
 import pandas as pd
@@ -48,6 +49,8 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
     for id_, current_row in track(data.iterrows(), total=len(data),
                                   description="Augmenting data with new features which change the label"):
         new_rows.extend(generate_new_features_ok(id_, current_row, encoded_clothing_columns, assumptions.MAX_AUGMENTATION_FACTOR))
+
+    new_rows.extend(merge_activities(data, encoded_clothing_columns))
 
     # add to base dataframe
     new_rows = [r | {"is_augmented": True} for r in new_rows]
@@ -253,6 +256,40 @@ def generate_new_features_ok(id_: int, base_row: pd.Series, encoded_clothing_col
                     continue
 
     return [base_row.to_dict() | new_row | {"id": id_} for new_row in new_rows]
+
+
+def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> list[dict]:
+    """Merges activities which are close together and have the same clothing and comfort label.
+
+    Also the activity must not be a race
+    """
+    data = data.copy()  # to avoid modifying the original dataframe
+    data["date_time_utc"] = pd.to_datetime(data["date_time"], utc=True)
+    data["end_time_utc"] = data["date_time_utc"] + pd.to_timedelta(data["elapsed_time"], unit="s")
+    new_rows = []
+    id_processed = set()
+
+    for id_, current_row in track(data.iterrows(), total=len(data),
+                                  description="Augmenting data with merged activities"):
+        if id_ not in id_processed:
+            similar_activities = cast(pd.DataFrame, data[
+                (data["comfort_int"] == current_row["comfort_int"])
+                & (data[encoded_clothing_columns] == current_row[encoded_clothing_columns]).all(axis=1)
+                & (
+                    (abs(data["date_time_utc"] - current_row["end_time_utc"]) <= assumptions.MAX_MERGE_TIME_DIFFERENCE)
+                    | (abs(current_row["date_time_utc"] - data["end_time_utc"]) <= assumptions.MAX_MERGE_TIME_DIFFERENCE)
+                )
+                & (~data["is_race"])
+            ])
+            if len(similar_activities) > 1:  # always contains itself
+                merged_row = assumptions.merge_activities(similar_activities)
+                new_rows.append(merged_row.to_dict() | {"id": id_})
+                id_processed.update(similar_activities.index)
+
+            #TODO: do this iteratively, i.e. after merging the first time, check if there are now new similar activities which can be merged as well (until no more merges are possible)
+
+    return new_rows
+
 
 def _new_label(row: pd.Series, encoded_clothing_columns: list[str], new_label: int) -> int:
     """Helper to determine whether the new should be changed to `zuHeiss`

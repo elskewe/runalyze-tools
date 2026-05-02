@@ -2,7 +2,7 @@
 import json
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import cache
 
 import numpy as np
@@ -38,6 +38,8 @@ INPUT_COLUMNS = {
     "is_race": 0}
 INVARIANT_DURATION_CHANGE = 0.1  # changing the duration by this relative amount does not change the label
 MAX_AUGMENTATION_FACTOR = 4  # maximum factor that is multiplied on the increments to augment the data
+# activities with less than this time difference can be merged if the clothing etc. is the same
+MAX_MERGE_TIME_DIFFERENCE = timedelta(minutes=15)
 
 # columns that are present in the raw Runalyze activity data but are not needed for the
 # clothing prediction pipeline and should be removed early to keep the dataframe small.
@@ -656,3 +658,18 @@ def get_note_sentiment(row: pd.Series) -> int:
         note_sentiment = 0
 
     return note_sentiment
+
+
+def merge_activities(data: pd.DataFrame) -> pd.Series:
+    """Merges the activities in the dataframe.
+
+    Assume the same clothing for every activity.
+    """
+    #TODO: merge all fields
+    result = data.loc[data["date_time"].idxmin()]
+    last_activity = data.loc[data["date_time"].idxmax()]
+    result["duration"] = data["duration"].sum()
+    result["elapsed_time"] = (last_activity["date_time"] - result["date_time"]).total_seconds() \
+        + last_activity["elapsed_time"]
+    result["stopped_time"] = data["stopped_time"].sum()
+    return result
