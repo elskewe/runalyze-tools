@@ -288,7 +288,7 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
                     processed_in_chain.update(similar_to_merged.index)
                 else:
                     break
-            new_rows.append(merged_row.to_dict() | {"id": id_})
+            new_rows.append(merged_row.to_dict() | {"id": merged_row.name})
         id_processed.update(processed_in_chain)
 
     return new_rows
