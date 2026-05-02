@@ -271,7 +271,7 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
 
     for id_, current_row in track(data.iterrows(), total=len(data),
                                   description="Augmenting data with merged activities"):
-        if id_ in id_processed:
+        if id_ in id_processed or current_row["is_race"]:
             continue
 
         group_ids = {id_}
