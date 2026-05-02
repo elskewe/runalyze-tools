@@ -10,8 +10,6 @@ import numpy as np
 import pandas as pd
 from geopy.geocoders import Nominatim
 
-from perfect_clothing.weather import get_radiation_data, wind_chill
-
 
 GEOPY_CACHE = "cache/geopy.json"
 MODEL_FILENAME = "cache/model.pickle"
@@ -664,73 +662,6 @@ def get_note_sentiment(row: pd.Series) -> int:
         note_sentiment = 0
 
     return note_sentiment
-
-
-def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> pd.Series:
-    """Merges the activities in the dataframe.
-
-    Assume the same clothing for every activity.
-    """
-
-    def weighted_average(df: pd.DataFrame, mean_key, weight_key):
-        return (df[mean_key] * df[weight_key]).sum() / df[weight_key].sum()
-
-    result = cast(pd.Series, data.loc[data["date_time"].idxmin()].copy())
-    last_activity = cast(pd.Series, data.loc[data["date_time"].idxmax()])
-    longest_activity = cast(pd.Series, data.loc[data["duration"].idxmax()])
-    result.name = longest_activity.name
-    for k in result.keys():
-        match k:
-            case x if x in encoded_clothing_columns | SORTED_CLOTHING.keys():
-                continue  # are the same
-            case "sport" | "sport_id" | "timezone_offset" | "cloud_cover" | "weather_condition" \
-                | "weather_condition_int" | "equipment" | "is_race" | "comfort" | "comfort_int":
-                continue  # are the same
-            case "date_time" | "date_time_utc" | "created_at" | "edited_at" | "is_augmented":
-                continue  # already handled by taking the first activity as the base
-            case "stopped_time" | "pace" | "variability_index_pace" | "x_pace_squared" | "wind_chill" | "ghi_start" \
-                | "ghi_middle" | "ghi_end":
-                continue  # handled below
-            case "end_time_utc":
-                result[k] = last_activity[k]
-            case "type" | "type_id" | "source" | "weather_source" | "location" | "latitude" | "longitude" | "tags":
-                result[k] = longest_activity[k]
-            case "distance" | "duration":
-                result[k] = data[k].sum()
-            case "hr_max" | "fit_trimp":
-                result[k] = data[k].max()
-            case "hr_avg" | "gap" | "x_pace" | "x_gap" | "temperature" | "wind_speed" | "humidity":
-                # hopefully this is close enough for the paces
-                result[k] = weighted_average(data, k, "duration")
-            case "is_track" | "is_night" | "has_trackdata":
-                result[k] = True if weighted_average(data, k, "duration") >= 0.5 else False
-            case "elapsed_time":
-                result[k] = (last_activity["date_time"] - result["date_time"]).total_seconds() \
-                    + last_activity["elapsed_time"]
-            case "note_sentiment":
-                note_sentiment = data[data["note_sentiment"] != 0]["note_sentiment"].unique()
-                result[k] = note_sentiment.item() if note_sentiment.size > 0 else 0
-            case "title":
-                result[k] = ". ".join(data[k].dropna())
-            case "note":
-                result[k] = "\n\n".join(data[k].dropna())
-            case _:
-                raise ValueError(f"Unknown column: {k}")
-
-    tmp_df = pd.DataFrame([result])
-    # the `group` is only to get the correct type (dataframe instead of series)
-    tmp_df[["ghi_start", "ghi_middle", "ghi_end"]] = \
-        tmp_df.groupby(["latitude", "longitude"], group_keys=False).apply(get_radiation_data, include_groups=False)
-    result.update({
-        "ghi_start": tmp_df["ghi_start"].iloc[0],
-        "ghi_middle": tmp_df["ghi_middle"].iloc[0],
-        "ghi_end": tmp_df["ghi_end"].iloc[0]})
-
-    result = calc_derived_columns(result)
-    if result["pace"] > result["x_pace"]:
-        raise ValueError(f"Invalid pace values: pace {result['pace']} is greater than x_pace {result['x_pace']}")
-    result["wind_chill"] = wind_chill(result["temperature"], result["wind_speed"])
-    return result
 
 
 def find_similar_activities(data: pd.DataFrame, row: pd.Series, encoded_clothing_columns: list[str],
