@@ -673,3 +673,20 @@ def merge_activities(data: pd.DataFrame) -> pd.Series:
         + last_activity["elapsed_time"]
     result["stopped_time"] = data["stopped_time"].sum()
     return result
+
+
+def find_similar_activities(data: pd.DataFrame, row: pd.Series, encoded_clothing_columns: list[str],
+                            excluded_ids: set[int]) -> pd.DataFrame:
+    """Finds activities similar to the given row, excluding the given ids.
+
+    Needs the additional columns `date_time_utc` and `end_time_utc`."""
+    return data[
+        (data["comfort_int"] == row["comfort_int"])
+        & (data[encoded_clothing_columns] == row[encoded_clothing_columns]).all(axis=1)
+        & (
+            (abs(data["date_time_utc"] - row["end_time_utc"]) <= MAX_MERGE_TIME_DIFFERENCE)
+            | (abs(row["date_time_utc"] - data["end_time_utc"]) <= MAX_MERGE_TIME_DIFFERENCE)
+        )
+        & (~data["is_race"])
+        & (~data.index.isin(excluded_ids))
+    ]

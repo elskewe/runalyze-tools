@@ -271,22 +271,25 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
 
     for id_, current_row in track(data.iterrows(), total=len(data),
                                   description="Augmenting data with merged activities"):
-        if id_ not in id_processed:
-            similar_activities = cast(pd.DataFrame, data[
-                (data["comfort_int"] == current_row["comfort_int"])
-                & (data[encoded_clothing_columns] == current_row[encoded_clothing_columns]).all(axis=1)
-                & (
-                    (abs(data["date_time_utc"] - current_row["end_time_utc"]) <= assumptions.MAX_MERGE_TIME_DIFFERENCE)
-                    | (abs(current_row["date_time_utc"] - data["end_time_utc"]) <= assumptions.MAX_MERGE_TIME_DIFFERENCE)
-                )
-                & (~data["is_race"])
-            ])
-            if len(similar_activities) > 1:  # always contains itself
-                merged_row = assumptions.merge_activities(similar_activities)
-                new_rows.append(merged_row.to_dict() | {"id": id_})
-                id_processed.update(similar_activities.index)
-
-            #TODO: do this iteratively, i.e. after merging the first time, check if there are now new similar activities which can be merged as well (until no more merges are possible)
+        if id_ in id_processed:
+            continue
+        similar_activities = assumptions.find_similar_activities(data, current_row, encoded_clothing_columns,
+                                                                 id_processed)
+        processed_in_chain = set(similar_activities.index)
+        if len(similar_activities) > 1:  # always contains itself
+            merged_row = assumptions.merge_activities(similar_activities)
+            # Iteratively merge the merged activity with additional similar activities
+            while True:
+                similar_to_merged = assumptions.find_similar_activities(data, merged_row, encoded_clothing_columns,
+                                                                        id_processed | processed_in_chain)
+                if len(similar_to_merged) > 0:
+                    merged_row = assumptions.merge_activities(pd.concat(
+                        [pd.DataFrame([merged_row.to_dict()]), similar_to_merged]))
+                    processed_in_chain.update(similar_to_merged.index)
+                else:
+                    break
+            new_rows.append(merged_row.to_dict() | {"id": id_})
+        id_processed.update(processed_in_chain)
 
     return new_rows
 
