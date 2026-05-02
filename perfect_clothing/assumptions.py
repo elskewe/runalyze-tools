@@ -697,3 +697,10 @@ def find_similar_activities(data: pd.DataFrame, row: pd.Series, encoded_clothing
         & (data["weather_condition"] == row["weather_condition"])
         & (~data.index.isin(excluded_ids))
     ]
+
+def calc_derived_columns(data_df):
+    data_df["pace"] = data_df["distance"]/(data_df["duration"]/3600)
+    data_df["variability_index_pace"] = data_df["x_pace"] / data_df["pace"]
+    data_df["x_pace_squared"] = data_df["x_pace"] ** 2
+    data_df["stopped_time"] = data_df["elapsed_time"] - data_df["duration"]
+    return data_df
