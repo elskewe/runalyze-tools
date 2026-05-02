@@ -70,6 +70,8 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
         e["comfort"] = comfort_tags[0] if comfort_tags else assumptions.OK_TEMPERATURE_LABEL
         if isinstance(tags := e.get("tags"), list):
             e["tags"] = tuple(tag["tag"] for tag in tags)  # type: ignore
+            if "laufbahn" in e["tags"]:
+                e["is_track"] = True
 
     # try filling missing location data
     for i, e in enumerate(data):
