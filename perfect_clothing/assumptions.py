@@ -4,6 +4,7 @@ import re
 import time
 from datetime import datetime, timedelta
 from functools import cache
+from typing import cast
 
 import numpy as np
 import pandas as pd
@@ -666,9 +667,9 @@ def merge_activities(data: pd.DataFrame) -> pd.Series:
     Assume the same clothing for every activity.
     """
     #TODO: merge all fields
-    result = data.loc[data["date_time"].idxmin()]
-    last_activity = data.loc[data["date_time"].idxmax()]
-    longest_activity = data.loc[data["duration"].idxmax()]
+    result = cast(pd.Series, data.loc[data["date_time"].idxmin()])
+    last_activity = cast(pd.Series, data.loc[data["date_time"].idxmax()])
+    longest_activity = cast(pd.Series, data.loc[data["duration"].idxmax()])
     result.name = longest_activity.name
     result["duration"] = data["duration"].sum()
     result["elapsed_time"] = (last_activity["date_time"] - result["date_time"]).total_seconds() \
