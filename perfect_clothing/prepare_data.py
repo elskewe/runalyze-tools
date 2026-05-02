@@ -21,6 +21,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
     """
     data_df = convert_to_df(data)
     data_df = remove_invalid_data(data_df)
+    data_df = remove_unused_columns(data_df)
     data_df["pace"] = data_df["distance"]/(data_df["duration"]/3600)
     data_df["variability_index_pace"] = data_df["x_pace"] / data_df["pace"]
     data_df["x_pace_squared"] = data_df["x_pace"] ** 2
@@ -98,6 +99,11 @@ def remove_invalid_data(data: pd.DataFrame) -> pd.DataFrame:
     return data  # noqa: RET504
 
 
+def remove_unused_columns(data: pd.DataFrame) -> pd.DataFrame:
+    """Drops columns that are not required for the clothing prediction workflow."""
+    return data.drop(columns=assumptions.UNUSED_COLUMNS, errors="ignore")
+
+
 def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple[pd.DataFrame, list[str]]:
     """Cleans the data
 
@@ -129,13 +135,6 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     columns_to_remove = [c for c in encoded_clothing_columns if (data[c] == 0).all()]
     data = data.drop(columns=columns_to_remove)
     encoded_clothing_columns = [c for c in encoded_clothing_columns if c not in columns_to_remove]
-    # remove unused columns to reduce pickle size
-    data = data.drop(columns=["avg_respiratory_rate", "climb_score", "climbs", "device_id", "downhill_efficiency",
-                              "elevation_down", "elevation_down_file", "elevation_source", "elevation_up",
-                              "elevation_up_file", "fit_hrv_analysis", "fit_recovery_time", "fit_sweat_loss",
-                              "fit_vo2max_estimate", "hr_recovery", "jumps", "ozone", "percentage_hilly",
-                              "recurring_route", "required_critical_pace", "required_critical_pace_vo2max",
-                              "required_critical_power", "swolf", "total_strokes", "uphill_efficiency", "wheel_size"])
     return data, encoded_clothing_columns
 
 

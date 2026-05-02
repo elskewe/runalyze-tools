@@ -38,6 +38,37 @@ INPUT_COLUMNS = {
 INVARIANT_DURATION_CHANGE = 0.1  # changing the duration by this relative amount does not change the label
 MAX_AUGMENTATION_FACTOR = 4  # maximum factor that is multiplied on the increments to augment the data
 
+# columns that are present in the raw Runalyze activity data but are not needed for the
+# clothing prediction pipeline and should be removed early to keep the dataframe small.
+UNUSED_COLUMNS = [
+    "avg_respiratory_rate",
+    "climb_score",
+    "climbs",
+    "device_id",
+    "downhill_efficiency",
+    "elevation_down",
+    "elevation_down_file",
+    "elevation_source",
+    "elevation_up",
+    "elevation_up_file",
+    "fit_hrv_analysis",
+    "fit_recovery_time",
+    "fit_sweat_loss",
+    "fit_vo2max_estimate",
+    "hr_recovery",
+    "jumps",
+    "ozone",
+    "percentage_hilly",
+    "recurring_route",
+    "required_critical_pace",
+    "required_critical_pace_vo2max",
+    "required_critical_power",
+    "swolf",
+    "total_strokes",
+    "uphill_efficiency",
+    "wheel_size",
+]
+
 # minimum required change of the average global horizontal irradiance when the only reason for
 # modifying the radiation values is the sentiment extracted from the note. If the computed
 # average change is less than or equal to this value the augmentation is skipped. The units are
