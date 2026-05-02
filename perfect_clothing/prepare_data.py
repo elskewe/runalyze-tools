@@ -130,13 +130,12 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     data = data.drop(columns=columns_to_remove)
     encoded_clothing_columns = [c for c in encoded_clothing_columns if c not in columns_to_remove]
     # remove unused columns to reduce pickle size
-    data = data.drop(columns=["elevation_up", "elevation_down", "elevation_up_file", "elevation_down_file",
-                              "elevation_source", "climb_score", "percentage_hilly", "fit_vo2max_estimate",
-                              "fit_recovery_time", "climbs", "hr_recovery", "avg_respiratory_rate",
-                              "recurring_route", "downhill_efficiency", "uphill_efficiency", "device_id",
-                              "required_critical_power", "required_critical_pace", "fit_sweat_loss", "wheel_size",
-                              "required_critical_pace_vo2max", "fit_hrv_analysis", "jumps", "total_strokes", "swolf",
-                              "ozone"])
+    data = data.drop(columns=["avg_respiratory_rate", "climb_score", "climbs", "device_id", "downhill_efficiency",
+                              "elevation_down", "elevation_down_file", "elevation_source", "elevation_up",
+                              "elevation_up_file", "fit_hrv_analysis", "fit_recovery_time", "fit_sweat_loss",
+                              "fit_vo2max_estimate", "hr_recovery", "jumps", "ozone", "percentage_hilly",
+                              "recurring_route", "required_critical_pace", "required_critical_pace_vo2max",
+                              "required_critical_power", "swolf", "total_strokes", "uphill_efficiency", "wheel_size"])
     return data, encoded_clothing_columns
 
 
