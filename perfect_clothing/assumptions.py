@@ -754,7 +754,18 @@ def find_similar_activities(data: pd.DataFrame, row: pd.Series, encoded_clothing
         & (~data.index.isin(excluded_ids))
     ]
 
+def get_utc_time_columns(date_time: pd.Timestamp, elapsed_time: float) -> dict[str, pd.Timestamp]:
+    date_time_utc = pd.to_datetime(date_time, utc=True)
+    return {
+        "date_time_utc": date_time_utc,
+        "end_time_utc": date_time_utc + pd.to_timedelta(elapsed_time, unit="s"),
+    }
+
+
 def calc_derived_columns(data_df):
+    utc_cols = get_utc_time_columns(data_df["date_time"], data_df["elapsed_time"])
+    data_df["date_time_utc"] = utc_cols["date_time_utc"]
+    data_df["end_time_utc"] = utc_cols["end_time_utc"]
     data_df["pace"] = data_df["distance"]/(data_df["duration"]/3600)
     data_df["variability_index_pace"] = data_df["x_pace"] / data_df["pace"]
     data_df["x_pace_squared"] = data_df["x_pace"] ** 2

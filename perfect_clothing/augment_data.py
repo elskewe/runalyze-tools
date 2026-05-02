@@ -210,6 +210,7 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                 if not _ghi_threshold_ok(base_row, tmp_df):
                     continue
                 new_rows.append({"date_time": new_date_time,
+                                 **assumptions.get_utc_time_columns(new_date_time, base_row["elapsed_time"]),
                                  "ghi_start": tmp_df["ghi_start"].iloc[0],
                                  "ghi_middle": tmp_df["ghi_middle"].iloc[0],
                                  "ghi_end": tmp_df["ghi_end"].iloc[0]})
@@ -263,9 +264,6 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
 
     Also the activity must not be a race
     """
-    data = data.copy()  # to avoid modifying the original dataframe
-    data["date_time_utc"] = pd.to_datetime(data["date_time"], utc=True)
-    data["end_time_utc"] = data["date_time_utc"] + pd.to_timedelta(data["elapsed_time"], unit="s")
     new_rows = []
     id_processed = set()
 
