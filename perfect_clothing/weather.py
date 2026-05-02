@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from typing import TypeVar, cast
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -26,6 +27,33 @@ def wind_chill(temperature: float, wind_speed: float) -> float:
         # windchill is not defined at this conditions
         return temperature
     return 13.12 + 0.6215 * temperature - 11.37 * wind_speed ** 0.16 + 0.3965 * temperature * wind_speed ** 0.16
+
+
+def get_radiation_data(data: pd.DataFrame) -> pd.DataFrame:
+    """Returns the radiation data for a given data frame.
+
+    The data frame must be grouped by the latitude and longitude (in this order!) as these values
+    are read from `data.name`."""
+    with warnings.catch_warnings():
+        # not worth preventing them as pandas datetime only works in UTC and thus would have to be
+        # converted back to tz-aware immediately afterwards
+        warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
+
+        latitude = data.name[0]
+        longitude = data.name[1]
+
+        # contains all `ghi_start`, then all `ghi_middle` and finally all `ghi_end`
+        radiation_data = get_radiation(
+            latitude, longitude,
+            pd.DatetimeIndex(pd.concat((data["date_time"],
+                                        data["date_time"] + pd.to_timedelta(data["elapsed_time"]/2, unit="s"),
+                                        data["date_time"] + pd.to_timedelta(data["elapsed_time"],   unit="s")))),
+            np.tile(data["cloud_cover"].to_numpy(), 3)
+        )
+
+        ghi_start, ghi_middle, ghi_end = np.split(radiation_data, 3)
+
+        return pd.DataFrame({"ghi_start": ghi_start, "ghi_middle": ghi_middle, "ghi_end": ghi_end}, index=data.index)
 
 
 def get_radiation(latitude: float, longitude: float, dates: pd.DatetimeIndex | datetime | list[datetime],

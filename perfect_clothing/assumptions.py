@@ -10,6 +10,9 @@ import numpy as np
 import pandas as pd
 from geopy.geocoders import Nominatim
 
+from perfect_clothing.weather import get_radiation_data, wind_chill
+
+
 GEOPY_CACHE = "cache/geopy.json"
 MODEL_FILENAME = "cache/model.pickle"
 ALTERNATIVE_MODEL_FILENAME = "cache/model_small.pickle"  # alternative model
@@ -668,11 +671,6 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
 
     Assume the same clothing for every activity.
     """
-
-    # not great to import them here but the easiest way to avoid circular imports for now
-    #TODO: restructure
-    from perfect_clothing.prepare_data import get_radiation_data
-    from perfect_clothing.weather import wind_chill
 
     def weighted_average(df: pd.DataFrame, mean_key, weight_key):
         return (df[mean_key] * df[weight_key]).sum() / df[weight_key].sum()

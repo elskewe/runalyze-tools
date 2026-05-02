@@ -5,7 +5,7 @@ Furthermore, the clothing is encoded for use with ML.
 
 import json
 import warnings
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import numpy as np
 import pandas as pd
@@ -29,7 +29,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
     data_df[["ghi_start", "ghi_middle", "ghi_end"]] = data_df.groupby(
         # grouping by timezone is necessary to construct a pd.DatetimeIndex object
         ["latitude", "longitude", "timezone_offset"],
-        sort=False, group_keys=False).apply(get_radiation_data, include_groups=False)
+        sort=False, group_keys=False).apply(weather.get_radiation_data, include_groups=False)
     data_df = data_df.dropna(subset=assumptions.INPUT_COLUMNS.keys()) # type: ignore
     data_df, encoded_clothing_columns = encode_clothing_layers(data_df)
     data_df, encoded_clothing_columns = clean_data(data_df, encoded_clothing_columns)
@@ -134,33 +134,6 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     data = data.drop(columns=columns_to_remove)
     encoded_clothing_columns = [c for c in encoded_clothing_columns if c not in columns_to_remove]
     return data, encoded_clothing_columns
-
-
-def get_radiation_data(data: pd.DataFrame) -> pd.DataFrame:
-    """Returns the radiation data for a given data frame.
-
-    The data frame must be grouped by the latitude and longitude (in this order!) as these values
-    are read from `data.name`."""
-    with warnings.catch_warnings():
-        # not worth preventing them as pandas datetime only works in UTC and thus would have to be
-        # converted back to tz-aware immediately afterwards
-        warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
-
-        latitude = data.name[0]
-        longitude = data.name[1]
-
-        # contains all `ghi_start`, then all `ghi_middle` and finally all `ghi_end`
-        radiation_data = weather.get_radiation(
-            latitude, longitude,
-            pd.DatetimeIndex(pd.concat((data["date_time"],
-                                        data["date_time"] + pd.to_timedelta(data["elapsed_time"]/2, unit="s"),
-                                        data["date_time"] + pd.to_timedelta(data["elapsed_time"],   unit="s")))),
-            np.tile(data["cloud_cover"].to_numpy(), 3)
-        )
-
-        ghi_start, ghi_middle, ghi_end = np.split(radiation_data, 3)
-
-        return pd.DataFrame({"ghi_start": ghi_start, "ghi_middle": ghi_middle, "ghi_end": ghi_end}, index=data.index)
 
 
 def encode_clothing_layers(data: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
