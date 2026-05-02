@@ -724,6 +724,8 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
         "ghi_end": tmp_df["ghi_end"].iloc[0]})
 
     result = calc_derived_columns(result)
+    if result["pace"] > result["x_pace"]:
+        raise ValueError(f"Invalid pace values: pace {result['pace']} is greater than x_pace {result['x_pace']}")
     result["wind_chill"] = wind_chill(result["temperature"], result["wind_speed"])
     return result
 
