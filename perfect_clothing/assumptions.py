@@ -684,7 +684,7 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
             case x if x in encoded_clothing_columns | SORTED_CLOTHING.keys():
                 continue  # are the same
             case "sport" | "sport_id" | "timezone_offset" | "cloud_cover" | "weather_condition" \
-                | "weather_condition_int" | "equipment" | "is_race" | "comfort" | "comfort_int" | "note_sentiment":
+                | "weather_condition_int" | "equipment" | "is_race" | "comfort" | "comfort_int":
                 continue  # are the same
             case "date_time" | "date_time_utc" | "created_at" | "edited_at" | "is_augmented":
                 continue  # already handled by taking the first activity as the base
@@ -707,6 +707,8 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
             case "elapsed_time":
                 result[k] = (last_activity["date_time"] - result["date_time"]).total_seconds() \
                     + last_activity["elapsed_time"]
+            case "note_sentiment":
+                result[k] = data[data["note_sentiment"] != 0]["note_sentiment"].unique()
             case "title":
                 result[k] = ". ".join(data[k].dropna())
             case "note":
