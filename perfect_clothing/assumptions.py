@@ -686,6 +686,7 @@ def find_similar_activities(data: pd.DataFrame, row: pd.Series, encoded_clothing
     return data[
         (data["sport"] == row["sport"])
         & (data["comfort_int"] == row["comfort_int"])
+        & (data["note_sentiment"] * row["note_sentiment"] >= 0)  # must not be contradictory
         & (data[encoded_clothing_columns] == row[encoded_clothing_columns]).all(axis=1)
         & (
             (abs(data["date_time_utc"] - row["end_time_utc"]) <= MAX_MERGE_TIME_DIFFERENCE)
