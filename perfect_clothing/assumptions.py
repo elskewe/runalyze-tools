@@ -708,7 +708,7 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
                 result[k] = (last_activity["date_time"] - result["date_time"]).total_seconds() \
                     + last_activity["elapsed_time"]
             case "note_sentiment":
-                result[k] = data[data["note_sentiment"] != 0]["note_sentiment"].unique()
+                result[k] = data[data["note_sentiment"] != 0]["note_sentiment"].unique().item()
             case "title":
                 result[k] = ". ".join(data[k].dropna())
             case "note":
