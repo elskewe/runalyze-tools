@@ -668,6 +668,8 @@ def merge_activities(data: pd.DataFrame) -> pd.Series:
     #TODO: merge all fields
     result = data.loc[data["date_time"].idxmin()]
     last_activity = data.loc[data["date_time"].idxmax()]
+    longest_activity = data.loc[data["duration"].idxmax()]
+    result.name = longest_activity.name
     result["duration"] = data["duration"].sum()
     result["elapsed_time"] = (last_activity["date_time"] - result["date_time"]).total_seconds() \
         + last_activity["elapsed_time"]
