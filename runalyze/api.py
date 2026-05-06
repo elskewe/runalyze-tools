@@ -38,6 +38,10 @@ def get_activities(credentials, page=1) -> list[ActivityType]:
     r = requests.get(RUNALYZE_API_ENDPOINT + "activity",
                      headers=credentials,
                      params={"page": page, "order[id]": "desc"})
+    if r.status_code != requests.codes.OK:
+        raise requests.exceptions.RequestException(
+            f"Error getting activities from Runalyze (response code: {r.status_code})"
+        )
     return r.json()
 
 def get_body_composition(credentials, page=1) -> list[ActivityType]:
@@ -51,4 +55,8 @@ def get_body_composition(credentials, page=1) -> list[ActivityType]:
     """
     r = requests.get(RUNALYZE_API_ENDPOINT + "metrics/bodyComposition",
                      headers=credentials, params={"page": page})
+    if r.status_code != requests.codes.OK:
+        raise requests.exceptions.RequestException(
+            f"Error getting body composition data from Runalyze (response code: {r.status_code})"
+        )
     return r.json()
