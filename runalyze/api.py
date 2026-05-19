@@ -40,7 +40,7 @@ def get_activities(credentials, page=1) -> list[ActivityType]:
                      params={"page": page, "order[id]": "desc"})
     if r.status_code != requests.codes.OK:
         raise requests.exceptions.RequestException(
-            f"Error getting activities from Runalyze (response code: {r.status_code})"
+            f"Error getting activities from Runalyze (response code: {r.status_code} {r.reason})"
         )
     return r.json()
 
