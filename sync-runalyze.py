@@ -20,7 +20,9 @@ def main():
     with open(CONFIG_FILE, "r", encoding="utf-8") as file:
         start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d %H:%M").replace(tzinfo=tz_info)
 
-    activities = get_activities(main_credentials)
+    # as syncing is rather frequent its sufficient to get only a limited number of activities to
+    # speed up the download
+    activities = get_activities(main_credentials, n=30)
     for activity in activities:
         if (activity_date := datetime.datetime.fromisoformat(activity["date_time"])) < start_time:
             continue  # ignore old activities to prevent duplicates
