@@ -163,6 +163,11 @@ def main():
     biking_data = extract_acitivity_segment_data(activity_data, BIKING_ACTIVITY_IDS)
     walking_data = extract_acitivity_segment_data(activity_data, WALKING_ACTIVITY_IDS)
 
+    def write_config(date: datetime.datetime):
+        next_date = date + datetime.timedelta(days=1)
+        with open(CONFIG_FILE, "w", encoding="utf-8") as file:
+            file.write(next_date.strftime("%Y-%m-%d"))
+
     for date in sorted(distance_data):
         distance_list = distance_data[date]
         distance = int(distance_list[0][0])  # use first and only element and cast it to int
@@ -186,15 +191,14 @@ def main():
         if confirmation and distance > MIN_DISTANCE_FOR_CONFIRMATION:
             answer, mode = get_user_confirmation(confirmation, "Please enter the correct distance in km: ")
             if mode == "skip":
+                write_config(date)
                 continue
             elif mode == "edit":
                 distance = int(float(answer)*1000)
 
         tcx_string = create_from_distance_and_pace(date, distance)
         upload_activity(tcx_string, credentials_runalyze)
-
-    with open(CONFIG_FILE, "w", encoding="utf-8") as file:
-        file.write(end_time.strftime("%Y-%m-%d"))
+        write_config(date)
 
     print("Done")
 
