@@ -163,7 +163,8 @@ def main():
     biking_data = extract_acitivity_segment_data(activity_data, BIKING_ACTIVITY_IDS)
     walking_data = extract_acitivity_segment_data(activity_data, WALKING_ACTIVITY_IDS)
 
-    for date, distance_list in distance_data.items():
+    for date in sorted(distance_data):
+        distance_list = distance_data[date]
         distance = int(distance_list[0][0])  # use first and only element and cast it to int
         confirmation = None
         if date in biking_data:
