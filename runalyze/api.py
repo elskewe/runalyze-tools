@@ -1,3 +1,6 @@
+import re
+from datetime import datetime
+
 import requests
 
 RUNALYZE_API_ENDPOINT = "https://runalyze.com/api/v1/"
@@ -7,11 +10,23 @@ PossibleDictValueTypes = int | float | str | bool
 ActivityType = dict[str, PossibleDictValueTypes | dict[str, PossibleDictValueTypes]]
 
 
+def _extract_tcx_start_time(tcx_string: str) -> str:
+    match = re.search(r"<Id>([^<]+)</Id>", tcx_string)
+    if not match:
+        return ""
+
+    timestamp = match.group(1).strip()
+    dt = datetime.fromisoformat(timestamp)
+    return dt.strftime("%Y-%m-%d_%H-%M")
+
+
 def upload_activity(tcx_string: str, credentials, title: str = "", note: str = ""):
     """Uploads an activity to Runalyze."""
+    start_time = _extract_tcx_start_time(tcx_string)
+
     r = requests.post(RUNALYZE_API_ENDPOINT + "activities/uploads",
                       headers=credentials,
-                      files={"file": ("activity.tcx", tcx_string)},
+                      files={"file": (f"{start_time}.tcx", tcx_string)},
                       data={"title": title, "note": note})
     print(r.text)
     if r.status_code != requests.codes.CREATED:
