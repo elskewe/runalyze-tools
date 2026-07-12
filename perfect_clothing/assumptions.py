@@ -204,7 +204,7 @@ TRACK_TAG = "laufbahn" # Tag for identifying track running activities
 # which were at the edge of being ok. If matches from both categories occur, they are not used as
 # the note is ambiguous.
 ALMOST_TOO_COLD_WORDS = ["kühl", "kalt"]
-ALMOST_TOO_WARM_WORDS = ["warm(?!.?up)", "heiß(?!t)"]
+ALMOST_TOO_WARM_WORDS = ["warm(?!.?up)", "hei(ß|ss)(?!t)"]
 
 
 WEATHER_CONDITION_MAPPING = [
