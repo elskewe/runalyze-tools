@@ -263,7 +263,7 @@ def get_shade_from_solar_elevation(solar_position: pd.DataFrame, cloud_cover: np
 def get_location(date: datetime, recurring_route: dict) -> tuple[str, float, float]:
     """Tries to guess the location.
 
-    If there is a recurring route, this is used, otherwise the location is guessed based on the date.
+    If there is a recurring route, this is used, otherwise an empty location is returned.
 
     Args:
         date (datetime): The date of the activity.
