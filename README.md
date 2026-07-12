@@ -18,10 +18,6 @@ This way, the Runalyze tools for analyzing TRIMP can be used with the Garmin TRI
 Uses the data from Runalyze to train an ML model which predicts which outfit should be worn given some conditions such as the temperature.
 The GUI for the prediction can be launched with `perfect-clothing-ui.py`.
 
-### 
-  - Starts a Gradio web interface for clothing prediction.
-  - Uses the trained model and data prepared by the CLI.
-
 ### `runalyze/`
 Runalyze API helper package which provides Python wrappers for some of the API endpoints.
 
