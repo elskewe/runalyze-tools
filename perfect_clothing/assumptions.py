@@ -164,7 +164,7 @@ SORTED_CLOTHING = {
 
 ALL_CLOTHING_ITEMS = [e for v in SORTED_CLOTHING.values() for e in v]
 
-CLOTHING_ABBREVIATIONS = {
+CLOTHING_ABBREVIATIONS = {  # only used in the UI for displaying purposes
     "Kompressionsstrümpfe": "Kompress.-Strümpfe",
     "Ganz kurze Hose": "Ganz ku. Hose",
     "Kurze Hose": "Ku. Hose",
