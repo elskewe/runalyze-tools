@@ -108,7 +108,7 @@ def train_core(data: pd.DataFrame, encoded_clothing_columns: list[str], n_estima
     find_problematic_regions(x_test, y_test, y_pred)
     # just calling this to set a debugger breakpoint is not nice, but I don't want to think of a
     # good output right now
-    problematic_entries = find_problematic_entries(clf, x_test, y_test, y_pred)
+    #problematic_entries = find_problematic_entries(clf, x_test, y_test, y_pred)
 
     # save model
     with open(model_filename, "wb") as f:
