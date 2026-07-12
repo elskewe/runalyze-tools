@@ -4,12 +4,10 @@ import re
 import time
 from datetime import datetime, timedelta
 from functools import cache
-from typing import cast
 
 import numpy as np
 import pandas as pd
 from geopy.geocoders import Nominatim
-
 
 GEOPY_CACHE = "cache/geopy.json"
 MODEL_FILENAME = "cache/model.pickle"
