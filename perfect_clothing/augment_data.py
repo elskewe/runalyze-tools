@@ -139,8 +139,8 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     # helper for the GHI threshold check. Returns True iff the augmentation should be kept.
     def _ghi_threshold_ok(base_row: pd.Series, tmp_df: pd.DataFrame) -> bool:
         if label == 0 and note_sentiment != 0:
-            base_avg = base_row[["ghi_start", "ghi_middle", "ghi_end"]].mean()
-            new_avg = tmp_df[["ghi_start", "ghi_middle", "ghi_end"]].iloc[0].mean()
+            base_avg = weather.ghi_mean(base_row)
+            new_avg = weather.ghi_mean(tmp_df.iloc[0])
             return abs(new_avg - base_avg) > assumptions.GHI_AUGMENTATION_THRESHOLD
         return True
 

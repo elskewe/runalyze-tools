@@ -29,6 +29,18 @@ def wind_chill(temperature: float, wind_speed: float) -> float:
     return 13.12 + 0.6215 * temperature - 11.37 * wind_speed ** 0.16 + 0.3965 * temperature * wind_speed ** 0.16
 
 
+def ghi_mean(row: pd.Series) -> float:
+    """Returns the mean GHI for a given row.
+
+    Args:
+        row (pd.Series): A row of a DataFrame containing the columns `ghi_start`, `ghi_middle` and `ghi_end`.
+
+    Returns:
+        float: The mean GHI.
+    """
+    return row[["ghi_start", "ghi_middle", "ghi_end"]].mean()
+
+
 def get_radiation_data(data: pd.DataFrame) -> pd.DataFrame:
     """Returns the radiation data for a given data frame.
 
