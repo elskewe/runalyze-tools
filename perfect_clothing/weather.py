@@ -41,6 +41,18 @@ def ghi_mean(row: pd.Series) -> float:
     return row[["ghi_start", "ghi_middle", "ghi_end"]].mean()
 
 
+def ghi_raw(row: pd.Series) -> pd.Series:
+    """Returns the raw GHI values for a given row.
+
+    Args:
+        row (pd.Series): A row of a DataFrame containing the columns `ghi_start`, `ghi_middle` and `ghi_end`.
+
+    Returns:
+        pd.Series: The raw GHI values.
+    """
+    return row[["ghi_start", "ghi_middle", "ghi_end"]]
+
+
 def get_radiation_data(data: pd.DataFrame) -> pd.DataFrame:
     """Returns the radiation data for a given data frame.
 
