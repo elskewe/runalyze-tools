@@ -139,8 +139,8 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     # helper for the GHI threshold check. Returns True iff the augmentation should be kept.
     def _ghi_threshold_ok(base_row: pd.Series, tmp_df: pd.DataFrame) -> bool:
         if label == 0 and note_sentiment != 0:
-            base_avg = base_row[["ghi_start", "ghi_middle", "ghi_end"]].mean()
-            new_avg = tmp_df[["ghi_start", "ghi_middle", "ghi_end"]].iloc[0].mean()
+            base_avg = weather.ghi_mean(base_row)
+            new_avg = weather.ghi_mean(tmp_df.iloc[0])
             return abs(new_avg - base_avg) > assumptions.GHI_AUGMENTATION_THRESHOLD
         return True
 
@@ -181,10 +181,10 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
             case "ghi_end":
                 # This is not quite the right place for changing the time (it might as well be for
                 # `ghi_start`), but the implementation is relatively straightforward this way.
-                if base_row["ghi_start"] > base_row["ghi_middle"] and base_row["ghi_middle"] >= base_row["ghi_end"]:
+                if base_row["ghi_start"] > 0 and base_row["ghi_end"] <= 0:
                     # after noon (the latter comparison can be equal when the sun sets during the activity)
                     direction = -1
-                elif base_row["ghi_start"] <= base_row["ghi_middle"] and base_row["ghi_middle"] < base_row["ghi_end"]:
+                elif base_row["ghi_start"] <= 0 and base_row["ghi_end"] > 0:
                     # before noon (the first comparison can be equal when the sun rises during the activity)
                     direction = 1
                 else:
@@ -199,7 +199,7 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                 tmp_df[ghi_columns] = tmp_df.groupby(["latitude", "longitude"], group_keys=False) \
                     .apply(weather.get_radiation_data, include_groups=False)
 
-                diff_sign = np.sign((tmp_df[ghi_columns] - base_row[ghi_columns]).iloc[0].to_numpy())
+                diff_sign = np.sign((weather.ghi_raw(tmp_df.iloc[0]) - weather.ghi_raw(base_row)).to_numpy())
                 if (np.sign(diff_sign + factor) != np.sign(factor)).any():
                     # The new radiation values don't all change in the right direction (or none
                     # change at all), thus this augmentation is dropped (this can e.g. occur when

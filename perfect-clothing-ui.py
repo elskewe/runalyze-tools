@@ -25,10 +25,16 @@ def format_pace(pace_min_km: float):
 def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: float, duration_min: float,
                    stopped_time_min: float, pace_min_km: float, variability_index_pace_: float, date_: datetime,
                    is_race: bool, include_compression_socks: bool, latitude_: float, longitude_: float):
-    ghi = weather.get_radiation(latitude_, longitude_,
-                                [date_, date_ + timedelta(minutes=duration_min)/2,
-                                 date_ + timedelta(minutes=duration_min)],
-                                cloud_cover_perc)
+    radiation_df = pd.DataFrame({
+        "date_time": date_,
+        "elapsed_time": [(duration_min + stopped_time_min) * 60],
+        "cloud_cover": cloud_cover_perc,
+        "latitude": latitude_,
+        "longitude": longitude_
+    })
+    ghi = radiation_df.groupby(["latitude", "longitude"], group_keys=False).apply(
+        weather.get_radiation_data, include_groups=False
+    )
     x_pace_min_km = pace_min_km/variability_index_pace_
     # Build your feature row from inputs
     features = pd.DataFrame([{
@@ -40,9 +46,9 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
         "x_pace": 60/pace_min_km,
         "pace": 60/pace_min_km,
         "variability_index_pace": variability_index_pace_,
-        "ghi_start": ghi[0],
-        "ghi_middle": ghi[1],
-        "ghi_end": ghi[2],
+        "ghi_start": ghi["ghi_start"].values[0],
+        "ghi_middle": ghi["ghi_middle"].values[0],
+        "ghi_end": ghi["ghi_end"].values[0],
         "is_race": is_race}])
     print(features)
     best_outfits = predict.recommend_best(features, MODEL, CANDIDATE_OUTFITS, top_k=100)
