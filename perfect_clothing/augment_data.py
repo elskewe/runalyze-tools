@@ -199,7 +199,7 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                 tmp_df[ghi_columns] = tmp_df.groupby(["latitude", "longitude"], group_keys=False) \
                     .apply(weather.get_radiation_data, include_groups=False)
 
-                diff_sign = np.sign((tmp_df[ghi_columns] - base_row[ghi_columns]).iloc[0].to_numpy())
+                diff_sign = np.sign((weather.ghi_raw(tmp_df.iloc[0]) - weather.ghi_raw(base_row)).to_numpy())
                 if (np.sign(diff_sign + factor) != np.sign(factor)).any():
                     # The new radiation values don't all change in the right direction (or none
                     # change at all), thus this augmentation is dropped (this can e.g. occur when
