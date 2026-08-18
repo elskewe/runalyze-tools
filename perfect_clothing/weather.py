@@ -30,7 +30,7 @@ def wind_chill(temperature: float, wind_speed: float) -> float:
 
 
 def ghi_mean(row: pd.Series) -> float:
-    """Returns the mean GHI for a given row.
+    """Returns the mean GHI for a given row with the differential GHI values.
 
     Args:
         row (pd.Series): A row of a DataFrame containing the columns `ghi_start`, `ghi_middle` and `ghi_end`.
@@ -38,11 +38,11 @@ def ghi_mean(row: pd.Series) -> float:
     Returns:
         float: The mean GHI.
     """
-    return row[["ghi_start", "ghi_middle", "ghi_end"]].mean()
+    return row["ghi_middle"] + (row[["ghi_start", "ghi_end"]].sum() / 3)
 
 
 def ghi_raw(row: pd.Series) -> pd.Series:
-    """Returns the raw GHI values for a given row.
+    """Returns the raw (i.e. the actual values in W, not the differential ones) GHI values for a given row.
 
     Args:
         row (pd.Series): A row of a DataFrame containing the columns `ghi_start`, `ghi_middle` and `ghi_end`.
@@ -50,7 +50,7 @@ def ghi_raw(row: pd.Series) -> pd.Series:
     Returns:
         pd.Series: The raw GHI values.
     """
-    return row[["ghi_start", "ghi_middle", "ghi_end"]]
+    return row[["ghi_start", "ghi_middle", "ghi_end"]] + row["ghi_middle"] * np.array([1, 0, 1])
 
 
 def get_radiation_data(data: pd.DataFrame) -> pd.DataFrame:
@@ -77,7 +77,10 @@ def get_radiation_data(data: pd.DataFrame) -> pd.DataFrame:
 
         ghi_start, ghi_middle, ghi_end = np.split(radiation_data, 3)
 
-        return pd.DataFrame({"ghi_start": ghi_start, "ghi_middle": ghi_middle, "ghi_end": ghi_end}, index=data.index)
+        return pd.DataFrame({"ghi_start": ghi_start - ghi_middle,
+                             "ghi_middle": ghi_middle,
+                             "ghi_end": ghi_end - ghi_middle
+                            }, index=data.index)
 
 
 def get_radiation(latitude: float, longitude: float, dates: pd.DatetimeIndex | datetime | list[datetime],

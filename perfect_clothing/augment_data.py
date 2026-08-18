@@ -181,10 +181,10 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
             case "ghi_end":
                 # This is not quite the right place for changing the time (it might as well be for
                 # `ghi_start`), but the implementation is relatively straightforward this way.
-                if base_row["ghi_start"] > base_row["ghi_middle"] and base_row["ghi_middle"] >= base_row["ghi_end"]:
+                if base_row["ghi_start"] > 0 and base_row["ghi_end"] <= 0:
                     # after noon (the latter comparison can be equal when the sun sets during the activity)
                     direction = -1
-                elif base_row["ghi_start"] <= base_row["ghi_middle"] and base_row["ghi_middle"] < base_row["ghi_end"]:
+                elif base_row["ghi_start"] <= 0 and base_row["ghi_end"] > 0:
                     # before noon (the first comparison can be equal when the sun rises during the activity)
                     direction = 1
                 else:
