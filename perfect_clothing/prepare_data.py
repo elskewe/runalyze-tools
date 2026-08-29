@@ -112,7 +112,7 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     """
     # When "zuHeiss" is set despite being able to shed another layer change the label to
     # "zuWarmAngezogen"
-    data.loc[(~data.apply(lambda r: assumptions.can_outfit_be_toHeiss(r[encoded_clothing_columns], r["is_race"]), axis=1))
+    data.loc[(~data.apply(lambda r: assumptions.can_outfit_be_zuHeiss(r[encoded_clothing_columns], r["is_race"]), axis=1))
              & (data["comfort"] == "zuHeiss"), "comfort"] = "zuWarmAngezogen"
 
     # Remove data with outfits that only occur infrequently. An exception is made for combinations

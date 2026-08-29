@@ -123,7 +123,7 @@ def generate_new_outfit_ok(id_: int, base_row: pd.Series, encoded_clothing_colum
         if all(v <= outfit[k] for k, v in candidate_outfit.items())
            and outfit != candidate_outfit
            and sum(candidate_outfit.values()) - sum(outfit.values()) == -1
-           and assumptions.can_outfit_be_toHeiss(candidate_outfit, base_row["is_race"])
+           and assumptions.can_outfit_be_zuHeiss(candidate_outfit, base_row["is_race"])
     ]
 
     return [base_row.to_dict() | new_row
@@ -410,5 +410,5 @@ def _new_label(row: pd.Series, encoded_clothing_columns: list[str], new_label: s
     """
     return "zuHeiss" \
         if (assumptions.TEMPERATURE_LABEL_MAPPING[new_label] > assumptions.TEMPERATURE_LABEL_MAPPING["ok"]
-            and assumptions.can_outfit_be_toHeiss(row[encoded_clothing_columns].to_dict(), row["is_race"])) \
+            and assumptions.can_outfit_be_zuHeiss(row[encoded_clothing_columns].to_dict(), row["is_race"])) \
         else new_label

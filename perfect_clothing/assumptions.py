@@ -391,8 +391,8 @@ def outfit_to_string(outfit_encoding: dict[str, int], abbreviate = False):
         clothing = [CLOTHING_ABBREVIATIONS.get(c, c) for c in clothing]
     return ", ".join(clothing)
 
-def can_outfit_be_toHeiss(outfit: dict[str, int], is_race: bool) -> bool:
-    """Checks if the outfit can be toHeiss.
+def can_outfit_be_zuHeiss(outfit: dict[str, int], is_race: bool) -> bool:
+    """Checks if the outfit can be zuHeiss.
 
     Args:
         outfit (dict[str, int]): The outfit with the keys being the layers and the values being the
@@ -400,7 +400,7 @@ def can_outfit_be_toHeiss(outfit: dict[str, int], is_race: bool) -> bool:
         is_race (bool): Whether this is a race or not
 
     Returns:
-        bool: True if the outfit can be toHeiss, False otherwise
+        bool: True if the outfit can be zuHeiss, False otherwise
     """
 
     return (
