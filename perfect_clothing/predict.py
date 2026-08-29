@@ -56,18 +56,17 @@ def recommend_best(input_data: pd.DataFrame, model, candidate_outfits, top_k=1) 
                         "zuHeiss": assumptions.can_outfit_be_zuHeiss(outfit, is_race)}
                     for outfit, p in zip(valid_outfits, probs)])
 
-    df["sum_ok"] = df["P(ok)"] + df["P(warm)"] * df["zuHeiss"]
     # delta between too warm and too cold, positive means outfit is on the warmer side
     df["Δ"] = df["P(warm)"] - df["P(kalt)"]
     # move 'zuHeiss' to the last column (after all columns have been added)
     df["zuHeiss"] = df.pop("zuHeiss")
-    # This sorts the results descending by `sum_ok - abs(Δ)`, which is the same as sorting ascending
-    # by `abs(Δ) - sum_ok` which is easier to implement (as `sum_ok` can stay unchanged). This means
-    # that the best result is the one where `sum_ok` is the highest while the outfit is overall
+    # This sorts the results descending by `P(ok) - abs(Δ)`, which is the same as sorting ascending
+    # by `abs(Δ) - P(ok)` which is easier to implement (as `P(ok)` can stay unchanged). This means
+    # that the best result is the one where `P(ok)` is the highest while the outfit is overall
     # balanced
-    df = df.sort_values("sum_ok", ignore_index=True, key=df["Δ"].abs().sub)
+    df = df.sort_values("P(ok)", ignore_index=True, key=df["Δ"].abs().sub)
     # convert to percent
     for col in df.columns:
-        if col.startswith("P(") or col in ["sum_ok", "Δ"]:
+        if col.startswith("P(") or col in ["Δ"]:
             df[col] = df[col].transform(lambda x: int(x*100))
     return df[:top_k]   # best outfit(s) with probabilities and zuHeiss flag
