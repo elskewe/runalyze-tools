@@ -126,9 +126,13 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     # information in the note is present (but the label is `ok`) return if the augmentation factor
     # is 1 or less as with that factor it is not certain enough that the label actually changes.
     # Also don't make the imbalance worse by adding new rows of the already most frequent label.
+    # Furthermore (and unfortunately this is a hardcoded thing where I don't have a good idea how to
+    # put it into the assumptions) "oberkörperfrei" mostly occurs for "zuHeiss" in the augmented
+    # data. Thus limit this to an augmentation factor of 1 to not make this too bad.
     if (label == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL]
         and (note_sentiment == label or augmentation_factor <= 1))\
-            or label == most_frequent_comfort_label:
+            or label == most_frequent_comfort_label \
+            or (label == assumptions.TEMPERATURE_LABEL_MAPPING["zuHeiss"] and augmentation_factor > 1):
         return []
 
     new_label_direction = np.sign(label + note_sentiment).item()
