@@ -58,8 +58,7 @@ def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
         tags = tuple(tag["tag"] for tag in e.get("tags", [])) if isinstance(e.get("tags"), list) else ()  # type: ignore
         e["tags"] = tags # type: ignore
 
-        # Extract comfort label from tags
-        comfort_tags = [tag for tag in tags if assumptions.TEMPERATURE_LABEL_MAPPING.get(tag) is not None]
+        comfort_tags = [tag for tag in tags if tag in assumptions.VALID_COMFORT_TAGS]
         if len(comfort_tags) > 1:
             print(f"Activity {e['id']} has multiple comfort tags: {comfort_tags}.")
             # make this activity invalid as it is not clear which tag is correct
@@ -105,15 +104,14 @@ def remove_unused_columns(data: pd.DataFrame) -> pd.DataFrame:
 def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple[pd.DataFrame, list[str]]:
     """Cleans the data
 
-    - fixes the case that "zuHeiss" is set despite being able to shed another layer
+    - relabels all "zuHeiss" instances to "zuWarmAngezogen" (zuHeiss is deterministic in UI only)
     - removes outfits that only occur infrequently (except those used in races)
         - then removes clothing encoding columns which are now superfluous
     - removes unused columns
     """
-    # When "zuHeiss" is set despite being able to shed another layer change the label to
-    # "zuWarmAngezogen"
-    data.loc[(~data.apply(lambda r: assumptions.can_outfit_be_toHeiss(r[encoded_clothing_columns], r["is_race"]), axis=1))
-             & (data["comfort"] == "zuHeiss"), "comfort"] = "zuWarmAngezogen"
+    # Relabel all "zuHeiss" to "zuWarmAngezogen" since zuHeiss is determined deterministically in
+    # the UI based on outfit feasibility, not predicted by the ML model
+    data.loc[data["comfort"] == "zuHeiss", "comfort"] = "zuWarmAngezogen"
 
     # Remove data with outfits that only occur infrequently. An exception is made for combinations
     # which are valid for races (i.e. the have the necessary equipment from

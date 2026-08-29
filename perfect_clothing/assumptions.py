@@ -192,9 +192,10 @@ CLOTHING_REPLACEMENTS_MULTI = {
     ("Kurze Hose", "Oberkörperfrei"): ("Ganz kurze Hose", "Oberkörperfrei"),
 }
 
-TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
+TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1}
 REVERSE_TEMPERATURE_LABEL_MAPPING = {v: k for k, v in TEMPERATURE_LABEL_MAPPING.items()}
 OK_TEMPERATURE_LABEL = "ok"
+VALID_COMFORT_TAGS = set(TEMPERATURE_LABEL_MAPPING.keys()) | {"zuHeiss"}
 
 TRACK_TAG = "laufbahn" # Tag for identifying track running activities
 
@@ -391,8 +392,8 @@ def outfit_to_string(outfit_encoding: dict[str, int], abbreviate = False):
         clothing = [CLOTHING_ABBREVIATIONS.get(c, c) for c in clothing]
     return ", ".join(clothing)
 
-def can_outfit_be_toHeiss(outfit: dict[str, int], is_race: bool) -> bool:
-    """Checks if the outfit can be toHeiss.
+def can_outfit_be_zuHeiss(outfit: dict[str, int], is_race: bool) -> bool:
+    """Checks if the outfit can be zuHeiss.
 
     Args:
         outfit (dict[str, int]): The outfit with the keys being the layers and the values being the
@@ -400,7 +401,7 @@ def can_outfit_be_toHeiss(outfit: dict[str, int], is_race: bool) -> bool:
         is_race (bool): Whether this is a race or not
 
     Returns:
-        bool: True if the outfit can be toHeiss, False otherwise
+        bool: True if the outfit can be zuHeiss, False otherwise
     """
 
     return (
@@ -411,6 +412,12 @@ def can_outfit_be_toHeiss(outfit: dict[str, int], is_race: bool) -> bool:
             or (outfit["upper_body_layer1"] <= SORTED_CLOTHING["upper_body"].index("Singlet")+1 and is_race))
         # 2. lower body
         and outfit["lower_body_layer1"] <= SORTED_CLOTHING["lower_body"].index("Ganz kurze Hose")+1
+        # 3. Other clothing layers must be zero
+        and all(
+            v == 0
+            for k, v in outfit.items()
+            if k.startswith(tuple(SORTED_CLOTHING.keys())) and k not in {"upper_body_layer1", "lower_body_layer1"}
+        )
     )
 
 def get_note_sentiment(row: pd.Series) -> int:
