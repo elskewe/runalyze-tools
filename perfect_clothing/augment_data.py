@@ -26,6 +26,7 @@ def augment_data(data: pd.DataFrame, encoded_clothing_columns: list[str],
     for id_, current_row in track(data.iterrows(), total=len(data),
                                   description="Augmenting data with new outfits and durations"):
         new_rows.extend(generate_new_outfit(id_, current_row, encoded_clothing_columns, candidate_outfits))
+        new_rows.extend(generate_new_outfit_ok(id_, current_row, encoded_clothing_columns, candidate_outfits))
         new_rows.extend(generate_new_duration(id_, current_row))
 
     with Progress() as progress:
@@ -98,6 +99,39 @@ def generate_new_outfit(id_: int, base_row: pd.Series, encoded_clothing_columns:
             | {"comfort": new_label, "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[new_label],
                "id": id_}
             for new_row in new_rows]
+
+
+def generate_new_outfit_ok(id_: int, base_row: pd.Series, encoded_clothing_columns: list[str],
+                           candidate_outfits: list[dict[str, int]]) -> list[dict]:
+    """Generates new outfits with the label "ok" based on the note sentiment of the base row.
+
+    This is currently only done when the note sentiment is "tooWarm" , but the label is ok (i.e. the
+    outfit is only slightly too warm) and the new outfit would get the label "zuHeiss" as those
+    outfits are lacking other labels. In this case it's reasonable to assume that the new outfit is
+    "ok".
+    """
+    # Only apply when base label is ok and note indicates too warm
+    if base_row["comfort_int"] != assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL] \
+            or base_row["note_sentiment"] <= 0:
+        return []
+
+    outfit = base_row[encoded_clothing_columns].to_dict()
+
+    # Candidate outfits that are cooler (each item <=) and only a single item changes
+    new_rows = [
+        candidate_outfit for candidate_outfit in candidate_outfits
+        if all(v <= outfit[k] for k, v in candidate_outfit.items())
+           and outfit != candidate_outfit
+           and sum(candidate_outfit.values()) - sum(outfit.values()) == -1
+           and assumptions.can_outfit_be_toHeiss(candidate_outfit, base_row["is_race"])
+    ]
+
+    return [base_row.to_dict() | new_row
+            | {"comfort": assumptions.OK_TEMPERATURE_LABEL,
+            "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL],
+            "id": id_}
+            for new_row in new_rows
+    ]
 
 
 def generate_new_duration(id_: int, base_row: pd.Series) -> list[dict]:
