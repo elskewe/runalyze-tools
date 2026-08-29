@@ -412,6 +412,12 @@ def can_outfit_be_zuHeiss(outfit: dict[str, int], is_race: bool) -> bool:
             or (outfit["upper_body_layer1"] <= SORTED_CLOTHING["upper_body"].index("Singlet")+1 and is_race))
         # 2. lower body
         and outfit["lower_body_layer1"] <= SORTED_CLOTHING["lower_body"].index("Ganz kurze Hose")+1
+        # 3. Other clothing layers must be zero
+        and all(
+            v == 0
+            for k, v in outfit.items()
+            if k.startswith(tuple(SORTED_CLOTHING.keys())) and k not in {"upper_body_layer1", "lower_body_layer1"}
+        )
     )
 
 def get_note_sentiment(row: pd.Series) -> int:
