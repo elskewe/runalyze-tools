@@ -166,7 +166,9 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
     if (label == assumptions.TEMPERATURE_LABEL_MAPPING[assumptions.OK_TEMPERATURE_LABEL]
         and (note_sentiment == label or augmentation_factor <= 1))\
             or label == most_frequent_comfort_label \
-            or (label == assumptions.TEMPERATURE_LABEL_MAPPING["zuHeiss"] and augmentation_factor > 1):
+            or (label == assumptions.TEMPERATURE_LABEL_MAPPING["zuWarmAngezogen"]
+                and assumptions.can_outfit_be_zuHeiss(base_row[encoded_clothing_columns].to_dict(), base_row["is_race"])
+                and augmentation_factor > 1):
         return []
 
     new_label_direction = np.sign(label + note_sentiment).item()
@@ -265,10 +267,9 @@ def generate_new_features(id_: int, base_row: pd.Series, most_frequent_comfort_l
                 new_rows.append({feature: base_row[feature] + direction * factor})
 
     new_label = assumptions.REVERSE_TEMPERATURE_LABEL_MAPPING[new_label_direction]
-    new_label_adjusted = _new_label(base_row, encoded_clothing_columns, new_label)
     return [base_row.to_dict() | new_row |
-                {"id": id_, "comfort": new_label_adjusted,
-                 "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[new_label_adjusted]}
+                {"id": id_, "comfort": new_label,
+                 "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[new_label]}
             for new_row in new_rows]
 
 
@@ -293,8 +294,8 @@ def generate_new_features_ok(id_: int, base_row: pd.Series, encoded_clothing_col
                     new_temperature = base_row["temperature"] + direction * factor
                     new_rows.append({"temperature": new_temperature,
                                     "wind_chill": weather.wind_chill(new_temperature, base_row["wind_speed"]),
-                                    "comfort": (comfort := _new_label(base_row, encoded_clothing_columns, new_comfort)),
-                                    "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[comfort]})
+                                    "comfort": new_comfort,
+                                    "comfort_int": assumptions.TEMPERATURE_LABEL_MAPPING[new_comfort]})
                 case _:  # it's not certain enough that the new features change the label
                     continue
 
@@ -405,10 +406,4 @@ def merge_activities(data: pd.DataFrame, encoded_clothing_columns: list[str]) ->
     return result
 
 
-def _new_label(row: pd.Series, encoded_clothing_columns: list[str], new_label: str) -> str:
-    """Helper to determine whether the new should be changed to `zuHeiss`
-    """
-    return "zuHeiss" \
-        if (assumptions.TEMPERATURE_LABEL_MAPPING[new_label] > assumptions.TEMPERATURE_LABEL_MAPPING["ok"]
-            and assumptions.can_outfit_be_zuHeiss(row[encoded_clothing_columns].to_dict(), row["is_race"])) \
-        else new_label
+

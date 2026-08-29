@@ -126,6 +126,7 @@ The categories are dynamic and can be chosen arbitrarily except for `lower_body`
 The temperature feeling is then encoded as tags which are defined in `assumptions.TEMPERATURE_LABEL_MAPPING`.
 No tag means the temperature was ok.
 `zuHeiss` means that it was too warm but this was not due to clothing (i.e. there no clothing left to lose) while `zuWarmAngezogen` means less clothing would have been possible.
+Internally, they are handled exchangeable and only determined during the final prediction using `assumptions.can_outfit_be_zuHeiss` (i.e. deterministically).
 If the temperature was on the edge this currently encoded by the activity note.
 If it contains any of the strings in `assumptions.ALMOST_TOO_COLD_WORDS` or `assumptions.ALMOST_TOO_WARM_WORDS`, the current outfit is labeled as fine, but anything slightly warmer (or colder, depending on the words) is labeled as too warm/cold.
 

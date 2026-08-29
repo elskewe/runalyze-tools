@@ -192,9 +192,10 @@ CLOTHING_REPLACEMENTS_MULTI = {
     ("Kurze Hose", "Oberkörperfrei"): ("Ganz kurze Hose", "Oberkörperfrei"),
 }
 
-TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1, 'zuHeiss': 2}
+TEMPERATURE_LABEL_MAPPING = {'zuKaltAngezogen': -1, 'ok': 0, 'zuWarmAngezogen': 1}
 REVERSE_TEMPERATURE_LABEL_MAPPING = {v: k for k, v in TEMPERATURE_LABEL_MAPPING.items()}
 OK_TEMPERATURE_LABEL = "ok"
+VALID_COMFORT_TAGS = set(TEMPERATURE_LABEL_MAPPING.keys()) | {"zuHeiss"}
 
 TRACK_TAG = "laufbahn" # Tag for identifying track running activities
 
