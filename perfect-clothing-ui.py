@@ -53,6 +53,9 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
     print(features)
     best_outfits = predict.recommend_best(features, MODEL, CANDIDATE_OUTFITS, top_k=100)
     best_outfits_alternative = predict.recommend_best(features, ALTERNATIVE_MODEL, CANDIDATE_OUTFITS, top_k=100)
+    for df in [best_outfits, best_outfits_alternative]:
+        df.rename(columns={"zuHeiss": "zh"}, inplace=True)
+        df["zh"] = df["zh"].map({True: "🔥", False: ""})
     return filter_compression_socks(best_outfits, include_compression_socks), \
            filter_compression_socks(best_outfits_alternative, include_compression_socks), \
            format_pace(pace_min_km), format_pace(x_pace_min_km), np.average(ghi)
