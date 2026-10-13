@@ -20,13 +20,31 @@ def _extract_tcx_start_time(tcx_string: str) -> str:
     return dt.strftime("%Y-%m-%d_%H-%M")
 
 
-def upload_activity(tcx_string: str, credentials, title: str = "", note: str = ""):
-    """Uploads an activity to Runalyze."""
-    start_time = _extract_tcx_start_time(tcx_string)
+def upload_activity(activity_data: str | bytes, credentials, title: str = "", note: str = "", file_type: str = "tcx"):
+    """Uploads an activity to Runalyze.
+
+    Args:
+        activity_data: The raw activity payload, either as a TCX XML string, raw FIT bytes, or an original Garmin ZIP payload.
+        credentials: Runalyze API headers.
+        title: Optional Runalyze title.
+        note: Optional Runalyze note.
+        file_type: The file extension to use for the upload. Defaults to "tcx".
+    """
+    file_type = file_type.lower().lstrip(".")
+    if file_type == "tcx":
+        if not isinstance(activity_data, str):
+            raise TypeError("TCX uploads require a string payload.")
+        file_name = f"{_extract_tcx_start_time(activity_data)}.tcx"
+    elif file_type in {"fit", "zip"}:
+        if not isinstance(activity_data, bytes):
+            raise TypeError("FIT/ZIP uploads require a bytes payload.")
+        file_name = f"activity.{file_type}"
+    else:
+        raise ValueError(f"Unsupported file_type '{file_type}'. Supported types: tcx, fit, zip")
 
     r = requests.post(RUNALYZE_API_ENDPOINT + "activities/uploads",
                       headers=credentials,
-                      files={"file": (f"{start_time}.tcx", tcx_string)},
+                      files={"file": (file_name, activity_data)},
                       data={"title": title, "note": note})
     print(r.text)
     if r.status_code != requests.codes.CREATED:
@@ -59,6 +77,7 @@ def get_activities(credentials, page=1, n=100) -> list[ActivityType]:
             f"Error getting activities from Runalyze (response code: {r.status_code} {r.reason})"
         )
     return r.json()
+
 
 def get_body_composition(credentials, page=1) -> list[ActivityType]:
     """Returns the last 100 body composition data points.

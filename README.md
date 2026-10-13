@@ -11,8 +11,9 @@ Syncs walking data from Google Fit to Runalyze to also have these included in th
 Reads a Libra weight CSV export and uploads missing weight entries to Runalyze.
 
 ### `sync-runalyze.py`
-Copies Garmin TRIMP data from a primary Runalyze account to a secondary one.
-This way, the Runalyze tools for analyzing TRIMP can be used with the Garmin TRIMP values.
+Uploads original Garmin activity data to Runalyze.
+This way, data that is omitted by the official Garmin sync (such as Garmin's VO2max estimates) is added to Runalyze.
+Optionally, it can copy Garmin TRIMP values from the main account to a secondary Runalyze account when run with `--sync-secondary`.
 
 ### `perfect-clothing.py` and `perfect-clothing-ui.py`
 Uses the data from Runalyze to train an ML model which predicts which outfit should be worn given some conditions such as the temperature.
@@ -42,8 +43,8 @@ Runalyze API helper package which provides Python wrappers for some of the API e
      This can be obtained from [console.cloud.google.com](https://console.cloud.google.com/)
    - `runalyze_credentials.json` for the primary Runalyze account.
      This can be created from [runalyze.com/settings/personal-api](https://runalyze.com/settings/personal-api) and is used by all tools.
-     Please note that free users can't read data from Runalyze and thus can only use `google-fit-to-runalyze.py`.
-   - `runalyze_credentials_secondary.json` for the secondary Runalyze account (the sync target in `sync-runalyze.py`)
+     Please note that free users can't read data from Runalyze and thus can only use `google-fit-to-runalyze.py` and `sync-runalyze.py` (without the `--sync-secondary` switch).
+   - `runalyze_credentials_secondary.json` for the secondary Runalyze account (the sync target in `sync-runalyze.py` when used with `--sync-secondary`).
 
 > Keep credential files private and do not commit them to version control.
 
@@ -73,15 +74,16 @@ This script will:
 - compare weight entries against existing Runalyze body composition data
 - upload only missing entries
 
-### Sync secondary Runalyze account
+### Sync Garmin Connect to Runalyze (and optionally copy TRIMP to secondary Runalyze account)
 
 ```bash
 python sync-runalyze.py
 ```
 
 This script will:
-- read activities from the main Runalyze account
-- copy Garmin TRIMP values to the secondary account as time in minutes (using a max HR of 198bpm and an average activity HR of 131bpm this results in the Runalyze TRIMP on the secondary account being exactly the same as the duration in minutes)
+- upload original Garmin activity data to the main Runalyze account.
+  This adds data such as Garmin's VO2max estimates.
+- optionally copy Garmin TRIMP values from the main Runalyze account to a secondary Runalyze account as time in minutes when run with `--sync-secondary` (using a max HR of 198bpm and an average activity HR of 131bpm this results in the Runalyze TRIMP on the secondary account being exactly the same as the duration in minutes)
 
 ### Perfect Clothing
 
