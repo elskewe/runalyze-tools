@@ -83,6 +83,9 @@ This script will:
 - read activities from the main Runalyze account
 - copy Garmin TRIMP values to the secondary account as time in minutes (using a max HR of 198bpm and an average activity HR of 131bpm this results in the Runalyze TRIMP on the secondary account being exactly the same as the duration in minutes)
 
+With the `--upload-original` flag, the original Garmin activity data is also fetched from Garmin Connect and uploaded to the main Runalyze account.
+This way, data like the Garmin VO2max estimate are added to Runalyze.
+
 ### Perfect Clothing
 
 The perfect-clothing tools are meant to be used together:
