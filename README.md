@@ -43,8 +43,8 @@ Runalyze API helper package which provides Python wrappers for some of the API e
      This can be obtained from [console.cloud.google.com](https://console.cloud.google.com/)
    - `runalyze_credentials.json` for the primary Runalyze account.
      This can be created from [runalyze.com/settings/personal-api](https://runalyze.com/settings/personal-api) and is used by all tools.
-     Please note that free users can't read data from Runalyze and thus can only use `google-fit-to-runalyze.py`.
-   - `runalyze_credentials_secondary.json` for the secondary Runalyze account (the sync target in `sync-runalyze.py`)
+     Please note that free users can't read data from Runalyze and thus can only use `google-fit-to-runalyze.py` and `sync-runalyze.py` (without the `--sync-secondary` switch).
+   - `runalyze_credentials_secondary.json` for the secondary Runalyze account (the sync target in `sync-runalyze.py` when used with `--sync-secondary`).
 
 > Keep credential files private and do not commit them to version control.
 
