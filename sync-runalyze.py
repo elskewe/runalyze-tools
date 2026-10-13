@@ -111,7 +111,6 @@ def main():
 
     if args.upload_original:
         upload_garmin_original_to_main(main_credentials, start_time)
-        return
 
     with open("runalyze_credentials_secondary.json", encoding="utf-8") as f:
         secondary_credentials = json.load(f)
