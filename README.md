@@ -13,6 +13,7 @@ Reads a Libra weight CSV export and uploads missing weight entries to Runalyze.
 ### `sync-runalyze.py`
 Copies Garmin TRIMP data from a primary Runalyze account to a secondary one.
 This way, the Runalyze tools for analyzing TRIMP can be used with the Garmin TRIMP values.
+Furthermore, there is an option to also sync the original data from Garmin Connect.
 
 ### `perfect-clothing.py` and `perfect-clothing-ui.py`
 Uses the data from Runalyze to train an ML model which predicts which outfit should be worn given some conditions such as the temperature.
@@ -73,7 +74,7 @@ This script will:
 - compare weight entries against existing Runalyze body composition data
 - upload only missing entries
 
-### Sync secondary Runalyze account
+### Sync secondary Runalyze account (and optionally Garmin Connect)
 
 ```bash
 python sync-runalyze.py
