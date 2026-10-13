@@ -99,9 +99,9 @@ def main():
         )
     )
     parser.add_argument(
-        "--upload-original",
+        "--sync-secondary",
         action="store_true",
-        help="Upload recent original Garmin fit files to the main Runalyze account.",
+        help="Copy Garmin TRIMP values to a secondary Runalyze account as Runalyze TRIMP.",
     )
     args = parser.parse_args()
 
@@ -112,13 +112,12 @@ def main():
     with open("runalyze_credentials.json", encoding="utf-8") as f:
         main_credentials = json.load(f)
 
-    if args.upload_original:
-        upload_garmin_original_to_main(main_credentials, start_time)
+    upload_garmin_original_to_main(main_credentials, start_time)
 
-    with open("runalyze_credentials_secondary.json", encoding="utf-8") as f:
-        secondary_credentials = json.load(f)
-
-    sync_trimp_to_secondary(main_credentials, secondary_credentials, start_time)
+    if args.sync_secondary:
+        with open("runalyze_credentials_secondary.json", encoding="utf-8") as f:
+            secondary_credentials = json.load(f)
+        sync_trimp_to_secondary(main_credentials, secondary_credentials, start_time)
 
     with open(CONFIG_FILE, "w", encoding="utf-8") as file:
         file.write(datetime.datetime.now(tz=tz_info).strftime("%Y-%m-%d %H:%M"))

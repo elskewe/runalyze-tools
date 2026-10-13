@@ -11,9 +11,9 @@ Syncs walking data from Google Fit to Runalyze to also have these included in th
 Reads a Libra weight CSV export and uploads missing weight entries to Runalyze.
 
 ### `sync-runalyze.py`
-Copies Garmin TRIMP data from a primary Runalyze account to a secondary one.
-This way, the Runalyze tools for analyzing TRIMP can be used with the Garmin TRIMP values.
-Furthermore, there is an option to also sync the original data from Garmin Connect.
+Uploads original Garmin activity data to Runalyze.
+This way, data that is omitted by the official Garmin sync (such as Garmin's VO2max estimates) is added to Runalyze.
+Optionally, it can copy Garmin TRIMP values from the main account to a secondary Runalyze account when run with `--sync-secondary`.
 
 ### `perfect-clothing.py` and `perfect-clothing-ui.py`
 Uses the data from Runalyze to train an ML model which predicts which outfit should be worn given some conditions such as the temperature.
@@ -74,18 +74,16 @@ This script will:
 - compare weight entries against existing Runalyze body composition data
 - upload only missing entries
 
-### Sync secondary Runalyze account (and optionally Garmin Connect)
+### Sync Garmin Connect to Runalyze (and optionally copy TRIMP to secondary Runalyze account)
 
 ```bash
 python sync-runalyze.py
 ```
 
 This script will:
-- read activities from the main Runalyze account
-- copy Garmin TRIMP values to the secondary account as time in minutes (using a max HR of 198bpm and an average activity HR of 131bpm this results in the Runalyze TRIMP on the secondary account being exactly the same as the duration in minutes)
-
-With the `--upload-original` flag, the original Garmin activity data is also fetched from Garmin Connect and uploaded to the main Runalyze account.
-This way, data like the Garmin VO2max estimate are added to Runalyze.
+- upload original Garmin activity data to the main Runalyze account.
+  This adds data such as Garmin's VO2max estimates.
+- optionally copy Garmin TRIMP values from the main Runalyze account to a secondary Runalyze account as time in minutes when run with `--sync-secondary` (using a max HR of 198bpm and an average activity HR of 131bpm this results in the Runalyze TRIMP on the secondary account being exactly the same as the duration in minutes)
 
 ### Perfect Clothing
 
