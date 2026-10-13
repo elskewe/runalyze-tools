@@ -16,7 +16,7 @@ CONFIG_FILE = "sync-runalyze-config.txt"
 
 def login_to_garmin(email: str | None = None, password: str | None = None) -> Garmin:
     """Initialize Garmin API with smart error handling and recovery."""
-    TOKEN_STORE = "~/.garminconnect"
+    TOKEN_STORE = os.path.expanduser("~/.garminconnect")
     # First try to login with stored tokens
     try:
         garmin = Garmin()
