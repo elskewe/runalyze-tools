@@ -105,7 +105,7 @@ def main():
     )
     args = parser.parse_args()
 
-    tz_info = datetime.timezone(datetime.timedelta(hours=1), "Europe/Berlin")
+    tz_info = datetime.timezone.utc
     with open(CONFIG_FILE, encoding="utf-8") as file:
         start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d %H:%M").replace(tzinfo=tz_info)
 
