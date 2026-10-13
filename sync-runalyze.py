@@ -65,6 +65,11 @@ def upload_garmin_original_to_main(runalyze_credentials, start_time: datetime.da
     end_date = datetime.date.today().isoformat()
     activities = garmin.get_activities_by_date(start_date, end_date)
     for activity in activities:
+        if "endTimeGMT" in activity:
+            activity_end_time = datetime.datetime.fromisoformat(activity["endTimeGMT"]) \
+                .replace(tzinfo=datetime.timezone.utc)
+            if activity_end_time < start_time:
+                continue  # ignore old activities to prevent superfluous uploads
         activity_id = activity["activityId"]
         original_activity = garmin.download_activity(
             str(activity_id),
