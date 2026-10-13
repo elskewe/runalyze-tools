@@ -41,7 +41,10 @@ def login_to_garmin(email: str | None = None, password: str | None = None) -> Ga
             garmin.login()
 
             # Save tokens for future use
-            garmin.client.dump(TOKEN_STORE)
+            try:
+                garmin.client.dump(TOKEN_STORE)
+            except Exception: # If dump fails, don't prevent the login from succeeding
+                print("Warning: failed to persist Garmin tokens to token store.")
             print(f"Login successful! Tokens saved to: {TOKEN_STORE}")
 
             return garmin
