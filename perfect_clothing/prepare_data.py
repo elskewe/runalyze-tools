@@ -4,6 +4,7 @@ Furthermore, the clothing is encoded for use with ML.
 """
 
 import json
+from typing import Any
 import warnings
 from datetime import datetime
 
@@ -41,7 +42,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
     return data_df, encoded_clothing_columns
 
 
-def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
+def convert_to_df(data: list[dict[str, Any]]) -> pd.DataFrame:
     """Converts the json data to a pandas dataframe."""
     for e in data:
         e["sport"] = e["sport"]["name"]  # type: ignore
