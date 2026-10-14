@@ -4,11 +4,9 @@ Furthermore, the clothing is encoded for use with ML.
 """
 
 import json
-from typing import Any
-import warnings
 from datetime import datetime
+from typing import Any
 
-import numpy as np
 import pandas as pd
 
 from perfect_clothing import assumptions, weather
