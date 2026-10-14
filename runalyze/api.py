@@ -1,13 +1,22 @@
 import re
 from datetime import datetime
+from typing import TypedDict, cast
 
 import requests
 
 RUNALYZE_API_ENDPOINT = "https://runalyze.com/api/v1/"
 
-PossibleDictValueTypes = int | float | str | bool
-# return type of the `activity` endpoint
-ActivityType = dict[str, PossibleDictValueTypes | dict[str, PossibleDictValueTypes]]
+
+class SportType(TypedDict):
+    name: str
+
+
+class ActivityType(TypedDict):
+    id: int
+    date_time: str
+    fit_trimp: int
+    title: str
+    sport: SportType
 
 
 def _extract_tcx_start_time(tcx_string: str) -> str:
@@ -76,7 +85,7 @@ def get_activities(credentials, page=1, n=100) -> list[ActivityType]:
         raise requests.exceptions.RequestException(
             f"Error getting activities from Runalyze (response code: {r.status_code} {r.reason})"
         )
-    return r.json()
+    return cast(list[ActivityType], r.json())
 
 
 def get_body_composition(credentials, page=1) -> list[ActivityType]:
