@@ -18,7 +18,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
 
     Also adds encoding for clothing layers etc. and returns the names of these new columns.
     """
-    data_df = convert_to_df(data)
+    data_df = convert_to_df(data) # type: ignore
     data_df = remove_invalid_data(data_df)
     data_df = remove_unused_columns(data_df)
     data_df = assumptions.calc_derived_columns(data_df)
