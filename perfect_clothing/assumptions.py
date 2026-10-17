@@ -50,6 +50,7 @@ UNUSED_COLUMNS = [
     "climb_score",
     "climbs",
     "device_id",
+    "device_name",
     "downhill_efficiency",
     "elevation_down_file",
     "elevation_down",
@@ -66,8 +67,11 @@ UNUSED_COLUMNS = [
     "fit_vo2max_estimate",
     "hr_recovery",
     "is_power_calculated",
+    "is_virtual",
     "jumps",
+    "kcal",
     "ozone",
+    "peak_epoc_estimate",
     "percentage_hilly",
     "power_with_zero",
     "power",
@@ -77,6 +81,7 @@ UNUSED_COLUMNS = [
     "required_critical_pace_vo2max",
     "required_critical_pace",
     "required_critical_power",
+    "route_name",
     "rpe",
     "subjective_feeling",
     "swolf",
@@ -92,6 +97,9 @@ UNUSED_COLUMNS = [
     "wind_degree",
     "x_power_with_zero",
     "x_power",
+    "zone_distribution_hr",
+    "zone_distribution_pace",
+    "zone_distribution_power"
 ]
 
 # minimum required change of the average global horizontal irradiance when the only reason for
