@@ -4,10 +4,9 @@ Furthermore, the clothing is encoded for use with ML.
 """
 
 import json
-import warnings
 from datetime import datetime
+from typing import Any
 
-import numpy as np
 import pandas as pd
 
 from perfect_clothing import assumptions, weather
@@ -19,7 +18,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
 
     Also adds encoding for clothing layers etc. and returns the names of these new columns.
     """
-    data_df = convert_to_df(data)
+    data_df = convert_to_df(data) # type: ignore
     data_df = remove_invalid_data(data_df)
     data_df = remove_unused_columns(data_df)
     data_df = assumptions.calc_derived_columns(data_df)
@@ -41,7 +40,7 @@ def prepare_data(data: list[api.ActivityType]) -> tuple[pd.DataFrame, list[str]]
     return data_df, encoded_clothing_columns
 
 
-def convert_to_df(data: list[api.ActivityType]) -> pd.DataFrame:
+def convert_to_df(data: list[dict[str, Any]]) -> pd.DataFrame:
     """Converts the json data to a pandas dataframe."""
     for e in data:
         e["sport"] = e["sport"]["name"]  # type: ignore

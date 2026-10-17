@@ -21,7 +21,7 @@ from sklearn.model_selection import GridSearchCV, StratifiedGroupKFold
 
 from perfect_clothing import assumptions, load_data
 from perfect_clothing.augment_data import augment_data
-from perfect_clothing.prepare_data import prepare_data, save_candidate_outfits, filter_close_activities
+from perfect_clothing.prepare_data import filter_close_activities, prepare_data, save_candidate_outfits
 
 
 def train():
