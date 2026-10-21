@@ -115,6 +115,7 @@ GHI_AUGMENTATION_THRESHOLD = 150
 MAX_CLOTHING_DISTANCE = range(-20, 15)
 
 OUTFIT_FREQUENCY_THRESHOLD = 10  # outfits that occur less than this number of times are removed
+OUTFIT_RECENCY_THRESHOLD_YEARS = 3  # outfits that have been used in this time frame are always kept
 OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS = [ # consider outfits even if they occur less if they contain any of these items
     "Kompressionsstrümpfe"
 ]

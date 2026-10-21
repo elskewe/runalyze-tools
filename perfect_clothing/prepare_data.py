@@ -104,7 +104,8 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     """Cleans the data
 
     - relabels all "zuHeiss" instances to "zuWarmAngezogen" (zuHeiss is deterministic in UI only)
-    - removes outfits that only occur infrequently (except those used in races)
+    - removes infrequent outfits except valid race outfits, configured item exceptions,
+      and activities within the configured recency window
         - then removes clothing encoding columns which are now superfluous
     - removes unused columns
     """
@@ -116,15 +117,19 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     # which are valid for races (i.e. the have the necessary equipment from
     # `assumptions.NECESSARY_EQUIPMENT_FOR_RACES`) because otherwise there is too little data for
     # these outfits as well as items specified in
-    # `assumptions.OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS`.
+    # `assumptions.OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS`. Also keep activities within the
+    # configured recency window.
     e = data["equipment"]
+    recent_cutoff = pd.Timestamp.now(tz="UTC") - pd.DateOffset(
+        years=assumptions.OUTFIT_RECENCY_THRESHOLD_YEARS)
     data = data[(e.map(e.value_counts()) >= assumptions.OUTFIT_FREQUENCY_THRESHOLD)
                 | (data[encoded_clothing_columns].apply(
                     lambda r: assumptions.valid_outfits([r.to_dict()], True), axis=1)
                     # The return is either the (valid) outfit or an empty list. This truthy and
                     # can thus be converted to bool directly
                     .apply(bool))
-                | e.apply(lambda x: any(set(x).intersection(assumptions.OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS)))]
+                | e.apply(lambda x: any(set(x).intersection(assumptions.OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS)))
+                | (pd.to_datetime(data["date_time"], utc=True) >= recent_cutoff)]
     # remove clothing encoding columns which are now superfluous due to not having any outfits with
     # that many layers
     columns_to_remove = [c for c in encoded_clothing_columns if (data[c] == 0).all()]
