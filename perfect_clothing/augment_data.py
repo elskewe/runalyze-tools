@@ -323,6 +323,7 @@ def generate_merged_activities(data: pd.DataFrame, encoded_clothing_columns: lis
 
         while queue:
             row = queue.pop()
+            # find additional activities which are similar to `row` but not to `current_row` or previous values of `row`
             similar_to_row = assumptions.find_similar_activities(data, row, encoded_clothing_columns,
                                                                  id_processed | group_ids)
             new_ids = set(similar_to_row.index) - group_ids
