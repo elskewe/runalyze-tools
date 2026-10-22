@@ -104,7 +104,8 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     """Cleans the data
 
     - relabels all "zuHeiss" instances to "zuWarmAngezogen" (zuHeiss is deterministic in UI only)
-    - removes outfits that only occur infrequently (except those used in races)
+    - removes infrequent outfits except valid race outfits, configured item exceptions,
+      and activities within the configured recency window
         - then removes clothing encoding columns which are now superfluous
     - removes unused columns
     """
@@ -116,15 +117,24 @@ def clean_data(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> tuple
     # which are valid for races (i.e. the have the necessary equipment from
     # `assumptions.NECESSARY_EQUIPMENT_FOR_RACES`) because otherwise there is too little data for
     # these outfits as well as items specified in
-    # `assumptions.OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS`.
+    # `assumptions.OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS`. Also keep activities within the
+    # configured recency window.
     e = data["equipment"]
-    data = data[(e.map(e.value_counts()) >= assumptions.OUTFIT_FREQUENCY_THRESHOLD)
+    worn_counts = e.map(e.value_counts())
+    last_worn = pd.to_datetime(data["date_time"], utc=True).groupby(e).transform("max")
+    outfits = data[encoded_clothing_columns].to_dict(orient="records")
+    available_for_non_races = pd.Series(
+        [assumptions.outfit_is_available_for_non_races(count, outfit, last_date)
+         for count, outfit, last_date in zip(worn_counts, outfits, last_worn)],
+        index=data.index,
+    )
+    data = data[available_for_non_races
                 | (data[encoded_clothing_columns].apply(
                     lambda r: assumptions.valid_outfits([r.to_dict()], True), axis=1)
                     # The return is either the (valid) outfit or an empty list. This truthy and
                     # can thus be converted to bool directly
                     .apply(bool))
-                | e.apply(lambda x: any(set(x).intersection(assumptions.OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS)))]
+                ]
     # remove clothing encoding columns which are now superfluous due to not having any outfits with
     # that many layers
     columns_to_remove = [c for c in encoded_clothing_columns if (data[c] == 0).all()]
@@ -153,19 +163,23 @@ def encode_clothing_layers(data: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]
 
 def save_candidate_outfits(data: pd.DataFrame, encoded_clothing_columns: list[str]) -> list[dict[str, int]]:
     """Saves the candidate outfits to a json file for later use."""
-    outfits_df = data[encoded_clothing_columns].value_counts().reset_index(name="n_worn")
-    # I don't like that these conditions are very similar to those in `clean_data`, but they are not
-    # quite the same s.t. moving them to a function is hard and the available data is just not the
-    # same here
-    outfits_df["race_only"] = ((outfits_df["n_worn"] < assumptions.OUTFIT_FREQUENCY_THRESHOLD)
-                               & ~(outfits_df.apply(assumptions.outfit_to_string, axis=1)
-                                   .str.contains("|".join(assumptions.OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS))))
-    outfits = outfits_df.to_dict(orient='records')
+    outfits_df = data.assign(date_time=pd.to_datetime(data["date_time"], utc=True)).groupby(
+        encoded_clothing_columns, as_index=False, sort=False).agg(
+        n_worn=("date_time", "size"),
+        last_worn=("date_time", "max"),
+    ).sort_values(by="n_worn", ascending=False)
+    outfits_df["race_only"] = ~outfits_df.apply(
+        lambda row: assumptions.outfit_is_available_for_non_races(
+            row["n_worn"], row[encoded_clothing_columns].to_dict(), row["last_worn"]),
+        axis=1,
+    )
+    outfits_df["last_worn"] = outfits_df["last_worn"].dt.strftime("%Y-%m-%d")
+    outfits = outfits_df.to_dict(orient="records")
 
     with open(assumptions.CANDIDATE_OUTFITS_FILENAME, "w", encoding="utf-8") as f:
         json.dump(outfits, f, indent=4)
 
-    return [{k: v for k, v in d.items() if k not in ("n_worn", "race_only")} for d in outfits]  # type: ignore
+    return [{k: v for k, v in d.items() if k not in ("n_worn", "race_only", "last_worn")} for d in outfits]  # type: ignore
 
 
 def filter_close_activities(data_df: pd.DataFrame) -> pd.DataFrame:

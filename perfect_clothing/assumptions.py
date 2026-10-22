@@ -115,9 +115,23 @@ GHI_AUGMENTATION_THRESHOLD = 150
 MAX_CLOTHING_DISTANCE = range(-20, 15)
 
 OUTFIT_FREQUENCY_THRESHOLD = 10  # outfits that occur less than this number of times are removed
+OUTFIT_RECENCY_THRESHOLD_YEARS = 3  # outfits that have been used in this time frame are always kept
 OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS = [ # consider outfits even if they occur less if they contain any of these items
     "Kompressionsstrümpfe"
 ]
+
+
+def outfit_is_available_for_non_races(n_worn: int, outfit: dict[str, int],
+                                      last_worn: pd.Timestamp) -> bool:
+    """Returns whether an outfit meets the non-race frequency, item-exception, or recency criteria."""
+    outfit_description = outfit_to_string(outfit)
+    return (
+        n_worn >= OUTFIT_FREQUENCY_THRESHOLD
+        or any(item in outfit_description for item in OUTFIT_FREQUENCY_THRESHOLD_EXCEPTIONS)
+        or last_worn >= pd.Timestamp.now(tz="UTC") - pd.DateOffset(years=OUTFIT_RECENCY_THRESHOLD_YEARS)
+    )
+
+
 INVALID_CLOTHING = [
     "Trainingshose",  # only for warm up and not representative
     "Trainingsjacke",  # only for warm up and not representative
@@ -392,7 +406,7 @@ def valid_outfits(candidate_outfits: list[dict[str, int]], is_race: bool) -> lis
 def outfit_to_string(outfit_encoding: dict[str, int], abbreviate = False):
     clothing = []
     for category, item in outfit_encoding.items():
-        if item > 0 and category.startswith(tuple(SORTED_CLOTHING.keys())):
+        if category.startswith(tuple(SORTED_CLOTHING.keys())) and item > 0:
             category = re.sub(r"_layer\d", "", category)
             clothing.append(SORTED_CLOTHING[category][item-1])
 
