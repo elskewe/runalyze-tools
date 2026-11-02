@@ -4,6 +4,7 @@ import os
 import warnings
 
 import googleapiclient.discovery
+import googleapiclient.errors
 import humanize
 from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
@@ -23,6 +24,7 @@ MAX_DISTANCE_WITHOUT_CONFIRMATION = 8000  # maximum walking distance which is sy
 # asking the user is not worth it)
 MIN_DISTANCE_FOR_CONFIRMATION = 500
 FASTEST_NORMAL_WALKING_PACE = 7.0  # in minutes per kilometer
+MIN_AGGREGATE_SPLIT_DAYS = 2
 
 # https://developers.google.com/fit/rest/v1/reference/activity-types
 BIKING_ACTIVITY_IDS = [1]
@@ -56,24 +58,42 @@ def authorize_with_google(scopes: list[str], credentials_cache_file: str):
 
 def get_aggregated_data_from_google_fit(credentials, data_source_id, start_time, end_time):
     fitness_service = googleapiclient.discovery.build('fitness', 'v1', credentials=credentials)
+    pending_ranges = [(start_time, end_time)]
+    buckets = []
 
-    aggregated_data = fitness_service.users().dataset().aggregate(
-       userId='me',
-       body={
-           'aggregateBy': [{
-              "dataSourceId": data_source_id
-           }],
-           'bucketByTime': {"period": {
-              "type": "day",
-              "value": 1,
-              "timeZoneId": "Europe/Berlin"}
-           },
-           'startTimeMillis': start_time.timestamp() * 1000,
-           'endTimeMillis': end_time.timestamp() * 1000
-       }
-    ).execute()
+    while pending_ranges:
+        range_start, range_end = pending_ranges.pop()
+        try:
+            aggregated_data = fitness_service.users().dataset().aggregate(
+               userId='me',
+               body={
+                   'aggregateBy': [{
+                      "dataSourceId": data_source_id
+                   }],
+                   'bucketByTime': {"period": {
+                      "type": "day",
+                      "value": 1,
+                      "timeZoneId": "Europe/Berlin"}
+                   },
+                   'startTimeMillis': range_start.timestamp() * 1000,
+                   'endTimeMillis': (range_end - datetime.timedelta(milliseconds=1)).timestamp() * 1000
+               }
+            ).execute()
+        except googleapiclient.errors.HttpError as error:
+            if "aggregate duration too large" not in str(error).lower():
+                raise
 
-    return aggregated_data
+            day_count = (range_end.date() - range_start.date()).days
+            if day_count < MIN_AGGREGATE_SPLIT_DAYS:
+                raise
+
+            midpoint = range_start + datetime.timedelta(days=day_count // 2)
+            pending_ranges.append((midpoint, range_end))
+            pending_ranges.append((range_start, midpoint))
+        else:
+            buckets.extend(aggregated_data.get("bucket", []))
+
+    return {"bucket": buckets}
 
 
 def extract_data_from_aggregated_data(aggregated_data: dict) -> dict[datetime.datetime, list[list[int | float]]]:
