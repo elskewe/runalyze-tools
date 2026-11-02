@@ -199,6 +199,8 @@ def main():
                 f" Is the total distance of {distance/1000} km correct nevertheless? "
         elif distance > MAX_DISTANCE_WITHOUT_CONFIRMATION:
             confirmation = f"On {date.strftime('%Y-%m-%d')} you walked {distance/1000} km. Is this correct? "
+        elif distance == 0:
+            continue  # no distance to sync, so skip this day
         elif date in walking_data:
             pace = (walking_data[date]['duration']/1000/60) / (distance/1000)
             if pace < FASTEST_NORMAL_WALKING_PACE:
