@@ -1,0 +1,44 @@
+{
+  "dataPoints": [
+    {
+      "exercise": {
+        "exerciseType": "WALKING",
+        "interval": {
+          "civilStartTime": {
+            "date": {"year": 2026, "month": 11, "day": 1}
+          },
+          "startTime": "2026-11-01T09:00:00Z",
+          "endTime": "2026-11-01T09:30:00Z"
+        },
+        "activeDuration": "1800s"
+      }
+    },
+    {
+      "exercise": {
+        "exerciseType": "RUNNING",
+        "interval": {
+          "civilStartTime": {
+            "date": {"year": 2026, "month": 11, "day": 1}
+          },
+          "startTime": "2026-11-01T10:00:00Z",
+          "endTime": "2026-11-01T10:45:00Z"
+        },
+        "activeDuration": "2700s"
+      }
+    },
+    {
+      "exercise": {
+        "exerciseType": "BIKING",
+        "interval": {
+          "civilStartTime": {
+            "date": {"year": 2026, "month": 11, "day": 2}
+          },
+          "startTime": "2026-11-02T12:00:00Z",
+          "endTime": "2026-11-02T13:00:00Z"
+        },
+        "activeDuration": "3600s"
+      }
+    }
+  ],
+  "nextPageToken": ""
+}
