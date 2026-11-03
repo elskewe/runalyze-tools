@@ -5,7 +5,7 @@ A collection of Python utilities which use the Runalyze personal API.
 ## What is included
 
 ### `google-fit-to-runalyze.py`
-Syncs walking data from Google Fit to Runalyze to also have these included in the TRIMP calculations.
+Syncs walking data from Google Health to Runalyze to also have these included in the TRIMP calculations.
 
 ### `libra-csv-to-runalyze.py`
 Reads a Libra weight CSV export and uploads missing weight entries to Runalyze.
@@ -39,8 +39,12 @@ Runalyze API helper package which provides Python wrappers for some of the API e
    ```
 
 3. Make sure the following credential files are available in the repository root (depending on the tools you want to use):
-   - `client_secret.json` for Google OAuth (used by `google-fit-to-runalyze.py`).
-     This can be obtained from [console.cloud.google.com](https://console.cloud.google.com/)
+   - `client_secret.json` for Google Health OAuth (used by `google-fit-to-runalyze.py`).
+     Enable the Google Health API in a Google Cloud project and create an **installed app** OAuth client.
+     Register `http://localhost:8080/` as an authorized redirect URI; it must match `GOOGLE_REDIRECT_URI` in the script.
+     Add your Google account as a test user and enable the `googlehealth.activity_and_fitness.readonly` scope in the consent configuration.
+     First sign in to the Google Health mobile app with the same account to link its Health profile.
+     See the [Google Health setup guide](https://developers.google.com/health/setup).
    - `runalyze_credentials.json` for the primary Runalyze account.
      This can be created from [runalyze.com/settings/personal-api](https://runalyze.com/settings/personal-api) and is used by all tools.
      Please note that free users can't read data from Runalyze and thus can only use `google-fit-to-runalyze.py` and `sync-runalyze.py` (without the `--sync-secondary` switch).
@@ -50,14 +54,14 @@ Runalyze API helper package which provides Python wrappers for some of the API e
 
 ## Usage
 
-### Google Fit to Runalyze
+### Google Health to Runalyze
 
 ```bash
 python google-fit-to-runalyze.py
 ```
 
 This script will:
-- authorize with Google Fit using `client_secret.json`
+- authorize with Google Health using `client_secret.json`
 - read walking and biking distance data
 - prompt for confirmation for unusual values
 - upload TCX activities for walking to Runalyze using `runalyze_credentials.json`.
