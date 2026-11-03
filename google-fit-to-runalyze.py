@@ -18,7 +18,7 @@ from runalyze.tcx import create_from_distance_and_pace
 
 SCOPES = ["https://www.googleapis.com/auth/googlehealth.activity_and_fitness.readonly"]
 GOOGLE_CREDENTIALS_CACHE_FILE = "google_credentials.json"
-GOOGLE_CLIENT_SECRETS_FILE = "client_secret.json"
+GOOGLE_CLIENT_SECRETS_FILE = "google_client_secret.json"
 GOOGLE_REDIRECT_URI = "http://localhost:8080/"
 GOOGLE_HEALTH_SERVICE_NAME = "health"
 GOOGLE_HEALTH_API_VERSION = "v4"
