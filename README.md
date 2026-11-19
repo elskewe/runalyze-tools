@@ -94,7 +94,13 @@ This script will:
 
 #### Download matching Zwift rides
 
-Set `ZWIFT_USERNAME` and `ZWIFT_PASSWORD`, then run:
+Save your Zwift login once in Windows Credential Manager. Replace `YOUR_ZWIFT_EMAIL` with your Zwift email and enter the password at the prompt:
+
+```bash
+python -m keyring set runalyze-tools-zwift YOUR_ZWIFT_EMAIL
+```
+
+Run the same setup command again if your password changes. To sync:
 
 ```bash
 python sync-runalyze.py --sync-zwift

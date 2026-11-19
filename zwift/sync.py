@@ -1,6 +1,5 @@
 """Match Zwift rides to Runalyze activities and download FIT files for manual merging."""
 
-import os
 import re
 import warnings
 from collections import Counter
@@ -9,10 +8,13 @@ from pathlib import Path
 from typing import TypedDict
 from urllib.parse import quote
 
+import keyring
 import requests
+from keyring.errors import KeyringError
 
 ZWIFT_API = "https://us-or-rly101.zwift.com/api"
 ZWIFT_TOKEN_URL = "https://secure.zwift.com/auth/realms/zwift/protocol/openid-connect/token"
+ZWIFT_KEYRING_SERVICE = "runalyze-tools-zwift"
 START_TOLERANCE = timedelta(minutes=10)
 DOWNLOAD_DIR = Path("cache", "zwift")
 TIMEOUT = 30
@@ -34,18 +36,23 @@ def _utc_datetime(value: str) -> datetime:
 
 
 def _get_zwift_rides() -> list[ZwiftRide]:
-    username = os.environ.get("ZWIFT_USERNAME")
-    password = os.environ.get("ZWIFT_PASSWORD")
-    if not username or not password:
-        raise RuntimeError("Set ZWIFT_USERNAME and ZWIFT_PASSWORD before using --sync-zwift.")
+    try:
+        credential = keyring.get_credential(ZWIFT_KEYRING_SERVICE, None)
+    except KeyringError as exc:
+        raise RuntimeError(f"Could not read the Zwift login from the system credential store: {exc}") from exc
+    if credential is None or not credential.username or not credential.password:
+        raise RuntimeError(
+            "No saved Zwift login. Run "
+            f"python -m keyring set {ZWIFT_KEYRING_SERVICE} YOUR_ZWIFT_EMAIL"
+        )
 
     response = requests.post(
         ZWIFT_TOKEN_URL,
         data={
             "client_id": "Zwift Game Client",
             "grant_type": "password",
-            "username": username,
-            "password": password,
+            "username": credential.username,
+            "password": credential.password,
         },
         timeout=TIMEOUT,
         allow_redirects=False,

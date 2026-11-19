@@ -16,3 +16,4 @@ gradio
 tzlocal
 pyperclip
 garminconnect
+keyring

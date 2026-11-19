@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
+from keyring.credentials import SimpleCredential
 
 from zwift import sync as zwift
 
@@ -30,9 +31,23 @@ def zwift_ride(ride_id, start, *, sport="CYCLING"):
 
 def test_empty_ride_selection_does_not_contact_zwift(monkeypatch):
     login = Mock()
+    get_credential = Mock()
+    monkeypatch.setattr(zwift.keyring, "get_credential", get_credential)
     monkeypatch.setattr(zwift.requests, "post", login)
 
     zwift.sync_zwift_rides({})
+
+    get_credential.assert_not_called()
+    login.assert_not_called()
+
+
+def test_missing_saved_login_explains_setup_without_contacting_zwift(monkeypatch):
+    monkeypatch.setattr(zwift.keyring, "get_credential", Mock(return_value=None))
+    login = Mock()
+    monkeypatch.setattr(zwift.requests, "post", login)
+
+    with pytest.raises(RuntimeError, match="python -m keyring set runalyze-tools-zwift"):
+        zwift.sync_zwift_rides({1: datetime.now(timezone.utc)})
 
     login.assert_not_called()
 
@@ -42,8 +57,8 @@ def test_downloads_unique_match_and_prints_manual_merge_link(monkeypatch, tmp_pa
     local_start = start.astimezone(timezone(timedelta(hours=1)))
     virtual_rides = {1: local_start}
     monkeypatch.setattr(zwift, "DOWNLOAD_DIR", tmp_path)
-    monkeypatch.setenv("ZWIFT_USERNAME", "test-user")
-    monkeypatch.setenv("ZWIFT_PASSWORD", "test-password")
+    get_credential = Mock(return_value=SimpleCredential("test-user", "test-password"))
+    monkeypatch.setattr(zwift.keyring, "get_credential", get_credential)
     token = Mock(status_code=200)
     token.json.return_value = {"access_token": "test-token"}
     login = Mock(return_value=token)
@@ -62,6 +77,9 @@ def test_downloads_unique_match_and_prints_manual_merge_link(monkeypatch, tmp_pa
     zwift.sync_zwift_rides(virtual_rides)
     zwift.sync_zwift_rides(virtual_rides)
 
+    get_credential.assert_called_with("runalyze-tools-zwift", None)
+    assert login.call_args.kwargs["data"]["username"] == "test-user"
+    assert login.call_args.kwargs["data"]["password"] == "test-password"
     path = tmp_path / "runalyze-1_zwift-7.fit"
     assert list(tmp_path.iterdir()) == [path]
     assert path.read_bytes() == fit.content
