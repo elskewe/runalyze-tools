@@ -11,7 +11,11 @@ class SportType(TypedDict):
     name: str
 
 
-class ActivityType(TypedDict):
+class _OptionalActivityFields(TypedDict, total=False):
+    is_virtual: bool | None
+
+
+class ActivityType(_OptionalActivityFields):
     id: int
     date_time: str
     fit_trimp: int
