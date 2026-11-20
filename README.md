@@ -14,6 +14,7 @@ Reads a Libra weight CSV export and uploads missing weight entries to Runalyze.
 Uploads original Garmin activity data to Runalyze.
 This way, data that is omitted by the official Garmin sync (such as Garmin's VO2max estimates) is added to Runalyze.
 Optionally, it can copy Garmin TRIMP values from the main account to a secondary Runalyze account when run with `--sync-secondary`.
+Use `--sync-zwift` to download and merge matching Zwift rides into existing Runalyze activities.
 
 ### `perfect-clothing.py` and `perfect-clothing-ui.py`
 Uses the data from Runalyze to train an ML model which predicts which outfit should be worn given some conditions such as the temperature.
@@ -24,6 +25,8 @@ Runalyze API helper package which provides Python wrappers for some of the API e
 
 
 ## Setup
+
+`sync-runalyze.py` requires Python 3.11 or later.
 
 1. (Optional) Create and activate a Python virtual environment.
 
@@ -47,7 +50,7 @@ Runalyze API helper package which provides Python wrappers for some of the API e
      See the [Google Health setup guide](https://developers.google.com/health/setup).
    - `runalyze_credentials.json` for the primary Runalyze account.
      This can be created from [runalyze.com/settings/personal-api](https://runalyze.com/settings/personal-api) and is used by all tools.
-     Please note that free users can't read data from Runalyze and thus can only use `google-fit-to-runalyze.py` and `sync-runalyze.py` (without the `--sync-secondary` switch).
+     Please note that free users can't read data from Runalyze and thus can only use `google-fit-to-runalyze.py` and `sync-runalyze.py` (without `--sync-secondary` or `--sync-zwift`).
    - `runalyze_credentials_secondary.json` for the secondary Runalyze account (the sync target in `sync-runalyze.py` when used with `--sync-secondary`).
 
 > Keep credential files private and do not commit them to version control.
@@ -88,6 +91,33 @@ This script will:
 - upload original Garmin activity data to the main Runalyze account.
   This adds data such as Garmin's VO2max estimates.
 - optionally copy Garmin TRIMP values from the main Runalyze account to a secondary Runalyze account as time in minutes when run with `--sync-secondary` (using a max HR of 198bpm and an average activity HR of 131bpm this results in the Runalyze TRIMP on the secondary account being exactly the same as the duration in minutes)
+
+#### Download matching Zwift rides
+
+Save your Zwift login once in Windows Credential Manager. Replace `YOUR_ZWIFT_EMAIL` with your Zwift email and enter the password at the prompt:
+
+```bash
+python -m keyring set runalyze-tools-zwift YOUR_ZWIFT_EMAIL
+```
+
+Run the same setup command again if your password changes. To sync:
+
+```bash
+python sync-runalyze.py --sync-zwift
+```
+
+The script checks Runalyze for virtual rides since the last sync and downloads a FIT file to `cache/zwift/` when it finds a unique Zwift ride that started within ten minutes.
+
+On first use, Playwright opens Chromium.
+Sign in to Runalyze once.
+Install the browser once with:
+
+```bash
+python -m playwright install chromium
+```
+
+The session is saved in `%LOCALAPPDATA%\runalyze-tools\playwright-profile`.
+Each match is merged by date, replacing GPS path, altitude, original pace, and total distance.
 
 ### Perfect Clothing
 
