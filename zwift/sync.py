@@ -59,7 +59,10 @@ def _get_zwift_rides() -> list[ZwiftRide]:
     )
     if response.status_code != 200:
         raise RuntimeError(f"Zwift login failed (HTTP {response.status_code}).")
-    headers = {"Authorization": f"Bearer {response.json()['access_token']}"}
+    headers = {
+        "Authorization": f"Bearer {response.json()['access_token']}",
+        "Accept": "application/json",
+    }
 
     response = requests.get(f"{ZWIFT_API}/profiles/me", headers=headers, timeout=TIMEOUT)
     response.raise_for_status()

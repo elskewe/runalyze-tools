@@ -80,6 +80,8 @@ def test_downloads_unique_match_and_prints_manual_merge_link(monkeypatch, tmp_pa
     get_credential.assert_called_with("runalyze-tools-zwift", None)
     assert login.call_args.kwargs["data"]["username"] == "test-user"
     assert login.call_args.kwargs["data"]["password"] == "test-password"
+    assert get.call_args_list[0].kwargs["headers"]["Accept"] == "application/json"
+    assert get.call_args_list[1].kwargs["headers"]["Accept"] == "application/json"
     path = tmp_path / "runalyze-1_zwift-7.fit"
     assert list(tmp_path.iterdir()) == [path]
     assert path.read_bytes() == fit.content
