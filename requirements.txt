@@ -17,3 +17,4 @@ tzlocal
 pyperclip
 garminconnect
 keyring
+playwright

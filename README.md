@@ -14,7 +14,7 @@ Reads a Libra weight CSV export and uploads missing weight entries to Runalyze.
 Uploads original Garmin activity data to Runalyze.
 This way, data that is omitted by the official Garmin sync (such as Garmin's VO2max estimates) is added to Runalyze.
 Optionally, it can copy Garmin TRIMP values from the main account to a secondary Runalyze account when run with `--sync-secondary`.
-Use `--sync-zwift` to download matching Zwift rides for manual merging into existing Runalyze activities.
+Use `--sync-zwift` to download and merge matching Zwift rides into existing Runalyze activities.
 
 ### `perfect-clothing.py` and `perfect-clothing-ui.py`
 Uses the data from Runalyze to train an ML model which predicts which outfit should be worn given some conditions such as the temperature.
@@ -108,7 +108,16 @@ python sync-runalyze.py --sync-zwift
 
 The script checks Runalyze for virtual rides since the last sync and downloads a FIT file to `cache/zwift/` when it finds a unique Zwift ride that started within ten minutes.
 
-To merge the FIT file, open the printed Runalyze activity link and choose [**Merge file into activity**](https://runalyze.com/help/article/merge-activity-file-into-existing-activity) from the wrench menu.
+On first use, Playwright opens Chromium.
+Sign in to Runalyze once.
+Install the browser once with:
+
+```bash
+python -m playwright install chromium
+```
+
+The session is saved in `%LOCALAPPDATA%\runalyze-tools\playwright-profile`.
+Each match is merged by date, replacing GPS path, altitude, original pace, and total distance.
 
 ### Perfect Clothing
 
