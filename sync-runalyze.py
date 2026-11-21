@@ -3,6 +3,7 @@ import argparse
 import datetime
 import json
 import os
+import stat
 import warnings
 from getpass import getpass
 
@@ -51,7 +52,11 @@ def _load_runalyze_credentials(credentials_file: str) -> dict[str, object]:
         token = getpass(f"Runalyze API token for {credentials_file}: ").strip()
         if not token:
             raise ValueError("Runalyze API token cannot be empty.")
-        with open(credentials_file, "x", encoding="utf-8") as file:
+
+        with open(
+            credentials_file, "x", encoding="utf-8",
+            opener=lambda path, flags: os.open(path, flags, stat.S_IRUSR | stat.S_IWUSR),
+        ) as file:
             json.dump({"token": token}, file, indent=2)
             file.write("\n")
         print(f"Created {credentials_file}.")

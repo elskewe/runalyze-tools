@@ -1,6 +1,8 @@
 import datetime
 import json
+import os
 import runpy
+import stat
 from pathlib import Path
 
 import pytest
@@ -35,6 +37,8 @@ def test_missing_runalyze_credentials_are_created_from_prompt(monkeypatch, tmp_p
 
     assert credentials == {"token": "test-token"}
     assert json.loads(credentials_file.read_text(encoding="utf-8")) == credentials
+    if os.name != "nt":
+        assert stat.S_IMODE(credentials_file.stat().st_mode) == 0o600
 
 
 @pytest.mark.parametrize("content", ['{"token": 123}', "not json"])
