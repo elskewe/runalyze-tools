@@ -3,6 +3,7 @@ import argparse
 import datetime
 import json
 import os
+import stat
 import warnings
 from getpass import getpass
 
@@ -12,6 +13,72 @@ from runalyze.api import get_activities, upload_activity
 from runalyze.tcx import create, translate_activity_type
 
 CONFIG_FILE = "sync-runalyze-config.txt"
+RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
+SECONDARY_RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials_secondary.json"
+
+
+def _load_sync_start_time(
+    config_file: str = CONFIG_FILE,
+    now: datetime.datetime | None = None,
+) -> datetime.datetime:
+    try:
+        with open(config_file, encoding="utf-8") as file:
+            config_value = file.readline().strip()
+    except FileNotFoundError:
+        now = now or datetime.datetime.now(tz=datetime.UTC)
+        start_time = now.astimezone(datetime.UTC).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        with open(config_file, "x", encoding="utf-8") as file:
+            file.write(start_time.strftime("%Y-%m-%d %H:%M"))
+        print(
+            f"Created {config_file}, starting with today at 00:00 UTC. "
+            "Set an earlier date and run again to import older activities."
+        )
+        return start_time
+
+    try:
+        return datetime.datetime.strptime(config_value, "%Y-%m-%d %H:%M").replace(
+            tzinfo=datetime.UTC
+        )
+    except ValueError as error:
+        raise ValueError(
+            f"{config_file} must contain a date and time in YYYY-MM-DD HH:MM format."
+        ) from error
+
+
+def _load_runalyze_credentials(credentials_file: str) -> dict[str, object]:
+    if not os.path.exists(credentials_file):
+        token = getpass(f"Runalyze API token for {credentials_file}: ").strip()
+        if not token:
+            raise ValueError("Runalyze API token cannot be empty.")
+
+        with open(
+            credentials_file, "x", encoding="utf-8",
+            opener=lambda path, flags: os.open(path, flags, stat.S_IRUSR | stat.S_IWUSR),
+        ) as file:
+            json.dump({"token": token}, file, indent=2)
+            file.write("\n")
+        print(f"Created {credentials_file}.")
+
+    try:
+        with open(credentials_file, encoding="utf-8") as file:
+            credentials = json.load(file)
+    except json.JSONDecodeError as error:
+        raise ValueError(
+            f"{credentials_file} must contain valid JSON with a non-empty 'token' string, "
+            'for example: {"token": "MYTOKEN"}.'
+        ) from error
+    if (
+        not isinstance(credentials, dict)
+        or not isinstance(credentials.get("token"), str)
+        or not credentials["token"].strip()
+    ):
+        raise ValueError(
+            f"{credentials_file} must contain a non-empty 'token' string, "
+            'for example: {"token": "MYTOKEN"}.'
+        )
+    return credentials
 
 
 def login_to_garmin(email: str | None = None, password: str | None = None) -> Garmin:
@@ -111,17 +178,13 @@ def main():
     args = parser.parse_args()
 
     tz_info = datetime.timezone.utc
-    with open(CONFIG_FILE, encoding="utf-8") as file:
-        start_time = datetime.datetime.strptime(file.readline().strip(), "%Y-%m-%d %H:%M").replace(tzinfo=tz_info)
-
-    with open("runalyze_credentials.json", encoding="utf-8") as f:
-        main_credentials = json.load(f)
+    start_time = _load_sync_start_time()
+    main_credentials = _load_runalyze_credentials(RUNALYZE_CREDENTIALS_FILE)
 
     upload_garmin_original_to_main(main_credentials, start_time)
 
     if args.sync_secondary:
-        with open("runalyze_credentials_secondary.json", encoding="utf-8") as f:
-            secondary_credentials = json.load(f)
+        secondary_credentials = _load_runalyze_credentials(SECONDARY_RUNALYZE_CREDENTIALS_FILE)
         sync_trimp_to_secondary(main_credentials, secondary_credentials, start_time)
 
     with open(CONFIG_FILE, "w", encoding="utf-8") as file:
