@@ -50,8 +50,10 @@ Runalyze API helper package which provides Python wrappers for some of the API e
      See the [Google Health setup guide](https://developers.google.com/health/setup).
    - `runalyze_credentials.json` for the primary Runalyze account.
      This can be created from [runalyze.com/settings/personal-api](https://runalyze.com/settings/personal-api) and is used by all tools.
-     Please note that free users can't read data from Runalyze and thus can only use `google-fit-to-runalyze.py` and `sync-runalyze.py` (without `--sync-secondary` or `--sync-zwift`).
+     The file must contain the API token as JSON, for example `{"token": "MYTOKEN"}`. If it is missing, `sync-runalyze.py` prompts for the token and creates it; other tools require the file to already exist.
+     Please note that free users can't read data from Runalyze and thus can only use `google-fit-to-runalyze.py` and `sync-runalyze.py` (without `--sync-secondary` or  or `--sync-zwift`).
    - `runalyze_credentials_secondary.json` for the secondary Runalyze account (the sync target in `sync-runalyze.py` when used with `--sync-secondary`).
+     If this file is missing, `sync-runalyze.py --sync-secondary` prompts for its API token and creates it.
 
 > Keep credential files private and do not commit them to version control.
 
@@ -91,6 +93,7 @@ This script will:
 - upload original Garmin activity data to the main Runalyze account.
   This adds data such as Garmin's VO2max estimates.
 - optionally copy Garmin TRIMP values from the main Runalyze account to a secondary Runalyze account as time in minutes when run with `--sync-secondary` (using a max HR of 198bpm and an average activity HR of 131bpm this results in the Runalyze TRIMP on the secondary account being exactly the same as the duration in minutes)
+- create `sync-runalyze-config.txt` on the first run, starting from 00:00 UTC that day. To import older activities, set an earlier `YYYY-MM-DD HH:MM` value in the generated file and run the sync again.
 
 #### Download matching Zwift rides
 
@@ -169,4 +172,3 @@ If it contains any of the strings in `assumptions.ALMOST_TOO_COLD_WORDS` or `ass
 ## Notes
 
 - The repository currently uses local credential JSON files and config text files for state.
-- I haven't tested setting this up from scratch -- if you should encounter any issues please create an issue and I will be happy to help and possibly update this readme.
