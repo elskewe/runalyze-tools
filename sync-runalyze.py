@@ -224,20 +224,13 @@ def main():
     if args.sync_secondary or args.sync_zwift:
         page = 1
         while True:
-            page_activities = get_activities(main_credentials, page=page, n=30)
+            page_activities = get_activities(main_credentials, page=page, n=30, start_time=start_time)
             if not page_activities:
                 break
 
-            reached_cutoff_boundary = False
             for activity in page_activities:
                 activity_date = datetime.datetime.fromisoformat(activity["date_time"])
-                if activity_date >= start_time:
-                    activities.append((activity, activity_date))
-                else:
-                    reached_cutoff_boundary = True
-
-            if reached_cutoff_boundary:
-                break
+                activities.append((activity, activity_date))
             page += 1
 
     if args.sync_secondary:
