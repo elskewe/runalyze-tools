@@ -23,10 +23,7 @@ CYCLING_SPORTS = {"cycling", "biking", "virtual ride", "virtual cycling", "radfa
 ZWIFT_START_TOLERANCE = datetime.timedelta(minutes=10)
 
 
-def _load_sync_start_time(
-    config_file: str = CONFIG_FILE,
-    now: datetime.datetime | None = None,
-) -> datetime.datetime:
+def _load_sync_start_time(config_file: str = CONFIG_FILE, now: datetime.datetime | None = None) -> datetime.datetime:
     try:
         with open(config_file, encoding="utf-8") as file:
             config_value = file.readline().strip()
@@ -42,13 +39,9 @@ def _load_sync_start_time(
         return start_time
 
     try:
-        return datetime.datetime.strptime(config_value, "%Y-%m-%d %H:%M").replace(
-            tzinfo=datetime.UTC
-        )
+        return datetime.datetime.strptime(config_value, "%Y-%m-%d %H:%M").replace(tzinfo=datetime.UTC)
     except ValueError as error:
-        raise ValueError(
-            f"{config_file} must contain a date and time in YYYY-MM-DD HH:MM format."
-        ) from error
+        raise ValueError(f"{config_file} must contain a date and time in YYYY-MM-DD HH:MM format.") from error
 
 
 def _load_runalyze_credentials(credentials_file: str) -> dict[str, object]:
