@@ -32,9 +32,7 @@ def _load_sync_start_time(
             config_value = file.readline().strip()
     except FileNotFoundError:
         now = now or datetime.datetime.now(tz=datetime.UTC)
-        start_time = now.astimezone(datetime.UTC).replace(
-            hour=0, minute=0, second=0, microsecond=0
-        )
+        start_time = now.astimezone(datetime.UTC).replace(hour=0, minute=0)
         with open(config_file, "x", encoding="utf-8") as file:
             file.write(start_time.strftime("%Y-%m-%d %H:%M"))
         print(
