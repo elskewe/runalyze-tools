@@ -49,7 +49,7 @@ def sync_zwift_rides(virtual_rides: dict[int, datetime.datetime]) -> None:
         ride = zwift_rides[zwift_id][0]
         destination = zwift_sync.DOWNLOAD_DIR / f"runalyze-{runalyze_id}_zwift-{zwift_id}.fit"
         if not destination.is_file() and not zwift_sync.download_fit(ride, destination):
-            continue
+            raise RuntimeError(f"Zwift ride {zwift_id} has no FIT file yet; retry the sync later.")
         if destination.read_bytes()[8:12] != b".FIT":
             raise ValueError(f"Cached Zwift ride {zwift_id} is not a FIT file.")
         merge_activity_file(runalyze_id, destination)
