@@ -83,9 +83,10 @@ def sync_zwift_rides(virtual_rides: dict[int, datetime.datetime]) -> None:
         print("No Runalyze virtual rides since the sync cutoff to match with Zwift.")
         return
 
+    earliest_ride = min(virtual_rides.values()) - ZWIFT_START_TOLERANCE
     zwift_rides = {
         int(ride["id"]): (ride, zwift_sync.ride_start_time(ride))
-        for ride in zwift_sync.get_zwift_rides()
+        for ride in zwift_sync.get_zwift_rides(start_time=earliest_ride)
         if ride["sport"] == "CYCLING"
     }
     matches = {
@@ -221,10 +222,23 @@ def main():
 
     activities = []
     if args.sync_secondary or args.sync_zwift:
-        for activity in get_activities(main_credentials, n=30):
-            activity_date = datetime.datetime.fromisoformat(activity["date_time"])
-            if activity_date >= start_time:
-                activities.append((activity, activity_date))
+        page = 1
+        while True:
+            page_activities = get_activities(main_credentials, page=page, n=30)
+            if not page_activities:
+                break
+
+            reached_cutoff_boundary = False
+            for activity in page_activities:
+                activity_date = datetime.datetime.fromisoformat(activity["date_time"])
+                if activity_date >= start_time:
+                    activities.append((activity, activity_date))
+                else:
+                    reached_cutoff_boundary = True
+
+            if reached_cutoff_boundary:
+                break
+            page += 1
 
     if args.sync_secondary:
         secondary_credentials = _load_runalyze_credentials(SECONDARY_RUNALYZE_CREDENTIALS_FILE)

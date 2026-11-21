@@ -2,7 +2,7 @@
 
 import re
 import warnings
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from pathlib import Path
 from typing import TypedDict
 from urllib.parse import quote
@@ -34,7 +34,7 @@ def ride_start_time(ride: ZwiftRide) -> datetime:
     return timestamp.astimezone(timezone.utc)
 
 
-def get_zwift_rides() -> list[ZwiftRide]:
+def get_zwift_rides(start_time: datetime | None = None) -> list[ZwiftRide]:
     try:
         credential = keyring.get_credential(ZWIFT_KEYRING_SERVICE, None)
     except KeyringError as exc:
@@ -66,17 +66,34 @@ def get_zwift_rides() -> list[ZwiftRide]:
     response = requests.get(f"{ZWIFT_API}/profiles/me", headers=headers, timeout=TIMEOUT)
     response.raise_for_status()
     profile_id = int(response.json()["id"])
-    response = requests.get(
-        f"{ZWIFT_API}/profiles/{profile_id}/activities/",
-        headers=headers,
-        params={"start": 0, "limit": 50},
-        timeout=TIMEOUT,
-    )
-    response.raise_for_status()
-    rides = response.json()
-    if not isinstance(rides, list):
-        raise ValueError("Zwift did not return an activity list.")
-    return rides
+    rides: list[ZwiftRide] = []
+    page_start = 0
+    page_size = 50
+    cutoff = start_time.astimezone(UTC) if start_time is not None else None
+
+    while True:
+        response = requests.get(
+            f"{ZWIFT_API}/profiles/{profile_id}/activities/",
+            headers=headers,
+            params={"start": page_start, "limit": page_size},
+            timeout=TIMEOUT,
+        )
+        response.raise_for_status()
+        page = response.json()
+        if not isinstance(page, list):
+            raise ValueError("Zwift did not return an activity list.")
+        rides.extend(page)
+
+        if len(page) < page_size:
+            break
+        if cutoff is not None:
+            oldest_page_start = min(ride_start_time(ride) for ride in page)
+            if oldest_page_start < cutoff:
+                break
+        page_start += page_size
+    if cutoff is None:
+        return rides
+    return [ride for ride in rides if ride_start_time(ride) >= cutoff]
 
 
 def download_fit(ride: ZwiftRide, destination: Path) -> bool:

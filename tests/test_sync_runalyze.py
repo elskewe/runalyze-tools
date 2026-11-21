@@ -49,3 +49,25 @@ def test_invalid_runalyze_credentials_explain_required_format(tmp_path, content)
 
     with pytest.raises(ValueError, match="non-empty 'token' string"):
         sync_runalyze["_load_runalyze_credentials"](str(credentials_file))
+
+
+def test_missing_zwift_fit_propagates_retry_error(monkeypatch, tmp_path):
+    sync_runalyze = load_sync_runalyze()
+    start = datetime.datetime(2026, 1, 1, tzinfo=datetime.timezone.utc)
+    ride = {
+        "id": 7,
+        "sport": "CYCLING",
+        "startDate": start.isoformat(),
+        "fitFileBucket": "s3-fit-zwift",
+        "fitFileKey": "prod/123/7",
+    }
+    monkeypatch.setattr(
+        sync_runalyze["zwift_sync"],
+        "get_zwift_rides",
+        lambda **_kwargs: [ride],
+    )
+    monkeypatch.setattr(sync_runalyze["zwift_sync"], "DOWNLOAD_DIR", tmp_path)
+    monkeypatch.setattr(sync_runalyze["zwift_sync"], "download_fit", lambda *_args: False)
+
+    with pytest.raises(RuntimeError, match="no FIT file yet"):
+        sync_runalyze["sync_zwift_rides"]({1: start})

@@ -45,6 +45,41 @@ def test_empty_ride_selection_does_not_contact_zwift(monkeypatch):
     get_rides.assert_not_called()
 
 
+def test_zwift_activity_pagination_stops_before_selected_window(monkeypatch):
+    get_credential = Mock(return_value=SimpleCredential("test-user", "test-password"))
+    monkeypatch.setattr(zwift.keyring, "get_credential", get_credential)
+    token = Mock(status_code=200)
+    token.json.return_value = {"access_token": "test-token"}
+    monkeypatch.setattr(zwift.requests, "post", Mock(return_value=token))
+
+    cutoff = datetime(2026, 1, 1, tzinfo=timezone.utc)
+    first_page = [
+        zwift_ride(ride_id, cutoff + timedelta(days=49 - ride_id))
+        for ride_id in range(50)
+    ]
+    second_page = [
+        zwift_ride(50, cutoff - timedelta(minutes=11)),
+    ]
+    profile = Mock()
+    profile.json.return_value = {"id": 123}
+    second = Mock()
+    second.json.return_value = second_page
+    second.status_code = 200
+    first = Mock()
+    first.json.return_value = first_page
+    first.status_code = 200
+    get = Mock(side_effect=[profile, first, second])
+    monkeypatch.setattr(zwift.requests, "get", get)
+
+    rides = zwift.get_zwift_rides(start_time=cutoff)
+
+    assert [ride["id"] for ride in rides] == list(range(50))
+    assert [call.kwargs["params"] for call in get.call_args_list[1:]] == [
+        {"start": 0, "limit": 50},
+        {"start": 50, "limit": 50},
+    ]
+
+
 def test_missing_saved_login_explains_setup_without_contacting_zwift(monkeypatch):
     monkeypatch.setattr(zwift.keyring, "get_credential", Mock(return_value=None))
     login = Mock()
@@ -195,7 +230,7 @@ def test_cli_selects_runalyze_activities_for_both_syncs(monkeypatch, tmp_path, s
     garmin_upload.assert_called_once()
     assert checkpoint.read_text(encoding="utf-8") != previous_checkpoint
     if switches:
-        get_activities.assert_called_once_with({"token": "test"}, n=30)
+        get_activities.assert_called_once_with({"token": "test"}, page=1, n=30)
     else:
         get_activities.assert_not_called()
     if "--sync-secondary" in switches:
