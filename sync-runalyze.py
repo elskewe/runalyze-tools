@@ -1,34 +1,35 @@
-"""Sync Garmin TRIMP data to a secondary Runalyze account and optionally enrich the main account with original Garmin uploads."""
+"""Upload original Garmin activities and optionally sync TRIMP and match Zwift rides."""
 import argparse
 import datetime
 import json
 import os
 import stat
 import warnings
+from collections import Counter
 from getpass import getpass
 
 from garminconnect import Garmin, GarminConnectAuthenticationError, GarminConnectConnectionError
 
-from runalyze.api import get_activities, upload_activity
+from runalyze.api import ActivityType, get_activities, upload_activity
+from runalyze.browser import merge_activity_file
 from runalyze.tcx import create, translate_activity_type
+from zwift import sync as zwift_sync
 
 CONFIG_FILE = "sync-runalyze-config.txt"
 RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials.json"
 SECONDARY_RUNALYZE_CREDENTIALS_FILE = "runalyze_credentials_secondary.json"
 
+CYCLING_SPORTS = {"cycling", "biking", "virtual ride", "virtual cycling", "radfahren", "virtuelles radfahren"}
+ZWIFT_START_TOLERANCE = datetime.timedelta(minutes=10)
 
-def _load_sync_start_time(
-    config_file: str = CONFIG_FILE,
-    now: datetime.datetime | None = None,
-) -> datetime.datetime:
+
+def _load_sync_start_time(config_file: str = CONFIG_FILE, now: datetime.datetime | None = None) -> datetime.datetime:
     try:
         with open(config_file, encoding="utf-8") as file:
             config_value = file.readline().strip()
     except FileNotFoundError:
         now = now or datetime.datetime.now(tz=datetime.UTC)
-        start_time = now.astimezone(datetime.UTC).replace(
-            hour=0, minute=0, second=0, microsecond=0
-        )
+        start_time = now.astimezone(datetime.UTC).replace(hour=0, minute=0, second=0, microsecond=0)
         with open(config_file, "x", encoding="utf-8") as file:
             file.write(start_time.strftime("%Y-%m-%d %H:%M"))
         print(
@@ -38,13 +39,9 @@ def _load_sync_start_time(
         return start_time
 
     try:
-        return datetime.datetime.strptime(config_value, "%Y-%m-%d %H:%M").replace(
-            tzinfo=datetime.UTC
-        )
+        return datetime.datetime.strptime(config_value, "%Y-%m-%d %H:%M").replace(tzinfo=datetime.UTC)
     except ValueError as error:
-        raise ValueError(
-            f"{config_file} must contain a date and time in YYYY-MM-DD HH:MM format."
-        ) from error
+        raise ValueError(f"{config_file} must contain a date and time in YYYY-MM-DD HH:MM format.") from error
 
 
 def _load_runalyze_credentials(credentials_file: str) -> dict[str, object]:
@@ -79,6 +76,44 @@ def _load_runalyze_credentials(credentials_file: str) -> dict[str, object]:
             'for example: {"token": "MYTOKEN"}.'
         )
     return credentials
+
+
+def sync_zwift_rides(virtual_rides: dict[int, datetime.datetime]) -> None:
+    if not virtual_rides:
+        print("No Runalyze virtual rides since the sync cutoff to match with Zwift.")
+        return
+
+    earliest_ride = min(virtual_rides.values()) - ZWIFT_START_TOLERANCE
+    zwift_rides = {
+        int(ride["id"]): (ride, zwift_sync.ride_start_time(ride))
+        for ride in zwift_sync.get_zwift_rides(start_time=earliest_ride)
+        if ride["sport"] == "CYCLING"
+    }
+    matches = {
+        runalyze_id: [
+            zwift_id for zwift_id, (_, zwift_start) in zwift_rides.items()
+            if abs(runalyze_start - zwift_start) <= ZWIFT_START_TOLERANCE
+        ]
+        for runalyze_id, runalyze_start in virtual_rides.items()
+    }
+    match_counts = Counter(zwift_id for candidates in matches.values() for zwift_id in candidates)
+    for runalyze_id, candidates in matches.items():
+        activity_url = f"https://runalyze.com/activity/{runalyze_id}"
+        if not candidates:
+            print(f"No matching Zwift ride for {activity_url}.")
+            continue
+        if len(candidates) != 1 or match_counts[candidates[0]] != 1:
+            warnings.warn(f"Ambiguous Zwift match for {activity_url}; skipping.", stacklevel=2)
+            continue
+        zwift_id = candidates[0]
+        ride = zwift_rides[zwift_id][0]
+        destination = zwift_sync.DOWNLOAD_DIR / f"runalyze-{runalyze_id}_zwift-{zwift_id}.fit"
+        if not destination.is_file() and not zwift_sync.download_fit(ride, destination):
+            raise RuntimeError(f"Zwift ride {zwift_id} has no FIT file yet; retry the sync later.")
+        if destination.read_bytes()[8:12] != b".FIT":
+            raise ValueError(f"Cached Zwift ride {zwift_id} is not a FIT file.")
+        merge_activity_file(runalyze_id, destination)
+        print(f"{activity_url}: merged Zwift ride {zwift_id} from {destination.resolve()}.")
 
 
 def login_to_garmin(email: str | None = None, password: str | None = None) -> Garmin:
@@ -149,15 +184,12 @@ def upload_garmin_original_to_main(runalyze_credentials, start_time: datetime.da
         upload_activity(original_activity, runalyze_credentials, file_type="zip")
 
 
-def sync_trimp_to_secondary(main_credentials, secondary_credentials, start_time: datetime.datetime) -> None:
-    # as syncing is rather frequent its sufficient to get only a limited number of activities to
-    # speed up the download
-    activities = get_activities(main_credentials, n=30)
-    for activity in activities:
-        if (activity_date := datetime.datetime.fromisoformat(activity["date_time"])) < start_time:
-            continue  # ignore old activities to prevent duplicates
+def sync_trimp_to_secondary(
+    activities: list[tuple[ActivityType, datetime.datetime]], secondary_credentials
+) -> None:
+    for activity, activity_date in activities:
         if "fit_trimp" not in activity:
-            warnings.warn(f"Activity at {datetime.datetime.fromisoformat(activity['date_time']) } has no fit file TRIMP, skipping.")
+            warnings.warn(f"Activity at {activity_date} has no fit file TRIMP, skipping.")
             continue
         tcx_string = create(activity_date, activity["fit_trimp"]*60, translate_activity_type(activity["sport"]["name"]))
         upload_activity(tcx_string, secondary_credentials, title=activity["title"])
@@ -166,14 +198,19 @@ def sync_trimp_to_secondary(main_credentials, secondary_credentials, start_time:
 def main():
     parser = argparse.ArgumentParser(
         description=(
-            "Sync Garmin TRIMP values to a secondary Runalyze account and optionally enrich the "
-            "main account with original Garmin uploads."
+            "Upload original Garmin activities to Runalyze, optionally copy TRIMP to a secondary "
+            "account, and download and merge matching Zwift rides."
         )
     )
     parser.add_argument(
         "--sync-secondary",
         action="store_true",
         help="Copy Garmin TRIMP values to a secondary Runalyze account as Runalyze TRIMP.",
+    )
+    parser.add_argument(
+        "--sync-zwift",
+        action="store_true",
+        help="Download and merge FIT files matching recent Runalyze virtual rides.",
     )
     args = parser.parse_args()
 
@@ -183,9 +220,30 @@ def main():
 
     upload_garmin_original_to_main(main_credentials, start_time)
 
+    activities = []
+    if args.sync_secondary or args.sync_zwift:
+        page = 1
+        while True:
+            page_activities = get_activities(main_credentials, page=page, n=30, start_time=start_time)
+            if not page_activities:
+                break
+
+            for activity in page_activities:
+                activity_date = datetime.datetime.fromisoformat(activity["date_time"])
+                activities.append((activity, activity_date))
+            page += 1
+
     if args.sync_secondary:
         secondary_credentials = _load_runalyze_credentials(SECONDARY_RUNALYZE_CREDENTIALS_FILE)
-        sync_trimp_to_secondary(main_credentials, secondary_credentials, start_time)
+        sync_trimp_to_secondary(activities, secondary_credentials)
+
+    if args.sync_zwift:
+        virtual_rides = {
+            activity["id"]: activity_date
+            for activity, activity_date in activities
+            if activity.get("is_virtual") and activity["sport"]["name"].strip().casefold() in CYCLING_SPORTS
+        }
+        sync_zwift_rides(virtual_rides)
 
     with open(CONFIG_FILE, "w", encoding="utf-8") as file:
         file.write(datetime.datetime.now(tz=tz_info).strftime("%Y-%m-%d %H:%M"))

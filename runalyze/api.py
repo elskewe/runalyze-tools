@@ -11,7 +11,11 @@ class SportType(TypedDict):
     name: str
 
 
-class ActivityType(TypedDict):
+class _OptionalActivityFields(TypedDict, total=False):
+    is_virtual: bool | None
+
+
+class ActivityType(_OptionalActivityFields):
     id: int
     date_time: str
     fit_trimp: int
@@ -70,17 +74,21 @@ def upload_body_composition(data: dict, credentials):
         raise requests.exceptions.RequestException("Error uploading body composition data to Runalyze")
 
 
-def get_activities(credentials, page=1, n=100) -> list[ActivityType]:
+def get_activities(credentials, page=1, n=100, start_time: datetime | None = None) -> list[ActivityType]:
     """Returns the last n activities.
 
     Args:
         credentials (dict): The credentials for the Runalyze API.
         page (int, optional): The page to get. Defaults to 1.
         n (int, optional): The number of activities to get. Defaults to 100. Note that big values (like 500) might lead to a 524 response code
+        start_time (datetime, optional): Only return activities at or after this time.
     """
+    params = {"page": page, "order[id]": "desc", "itemsPerPage": n}
+    if start_time is not None:
+        params["time[gte]"] = int(start_time.timestamp())
     r = requests.get(RUNALYZE_API_ENDPOINT + "activity",
                      headers=credentials,
-                     params={"page": page, "order[id]": "desc", "itemsPerPage": n})
+                     params=params)
     if r.status_code != requests.codes.OK:
         raise requests.exceptions.RequestException(
             f"Error getting activities from Runalyze (response code: {r.status_code} {r.reason})"
