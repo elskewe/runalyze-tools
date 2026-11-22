@@ -106,6 +106,7 @@ def merge_activity_file(activity_id: int, fit_path: Path) -> None:
                 re.compile(rf"https://runalyze\.com/activity/{activity_id}/merge/.+"),
                 timeout=PAGE_TIMEOUT,
             )
-            page.get_by_role("heading", name="Overview", exact=True).wait_for(timeout=PAGE_TIMEOUT)
+            # Runalyze redirects to the dashboard after merging, so the URL change is the success signal.
+            page.wait_for_load_state("domcontentloaded", timeout=PAGE_TIMEOUT)
         finally:
             context.close()
