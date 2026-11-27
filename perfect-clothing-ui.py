@@ -84,8 +84,10 @@ with gr.Blocks(fill_width=True) as demo:
                     compression_socks = gr.Checkbox(label="Compression socks")
                 ghi = gr.Number(label="GHI (W/m^2)", min_width=100)
             with gr.Row():
-                latitude = gr.Number(label="Latitude", value=47.7664456)
-                longitude = gr.Number(label="Longitude", value=9.1605106)
+                latitude = gr.Number(label="Latitude", value=47.7664456, min_width=100)
+                longitude = gr.Number(label="Longitude", value=9.1605106, min_width=100)
+                current_location = gr.Button("📍", size="lg", scale=0, min_width=36)
+            location_status = gr.Markdown(visible=False)
         with gr.Column(scale=7):
             output_df = gr.DataFrame(show_row_numbers=True)
             output_df_alternative = gr.DataFrame(show_row_numbers=True)
@@ -96,5 +98,30 @@ with gr.Blocks(fill_width=True) as demo:
                    "outputs": [output_df, output_df_alternative, pace_display, x_pace_display, ghi]}
     for i in inputs:
         i.change(**change_args)
+
+    current_location.click(
+        fn=None,
+        inputs=[latitude, longitude],
+        outputs=[latitude, longitude, location_status],
+        js="""async (latitude, longitude) => {
+            if (!navigator.geolocation) {
+                return [latitude, longitude, {__type__: "update", visible: true,
+                    value: "Location is unavailable. Use HTTPS or localhost and enter coordinates manually."}];
+            }
+            try {
+                const position = await new Promise((resolve, reject) =>
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {timeout: 15000})
+                );
+                return [position.coords.latitude, position.coords.longitude, {__type__: "update", visible: false}];
+            } catch (error) {
+                const message = error.code === 1 ? "Location permission denied." :
+                                error.code === 2 ? "Location unavailable." :
+                                error.code === 3 ? "Location request timed out." :
+                                "Could not retrieve location.";
+                return [latitude, longitude, {__type__: "update", visible: true,
+                    value: message + " You can enter coordinates manually."}];
+            }
+        }""",
+    )
 
 demo.launch()
