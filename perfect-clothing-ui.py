@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from functools import lru_cache
+from pathlib import Path
 
 import gradio as gr
 import pandas as pd
@@ -85,7 +86,8 @@ with gr.Blocks(fill_width=True) as demo:
             with gr.Row():
                 latitude = gr.Number(label="Latitude", value=47.7664456, min_width=100)
                 longitude = gr.Number(label="Longitude", value=9.1605106, min_width=100)
-                current_location = gr.Button("📍", size="lg", scale=0, min_width=36)
+                current_location = gr.Button("", icon=Path(__file__).parent / "perfect_clothing" / "my-location.svg",
+                                             size="lg", scale=0, min_width=56)
             location_status = gr.Markdown(visible=False)
         with gr.Column(scale=7):
             output_df = gr.DataFrame(show_row_numbers=True)
