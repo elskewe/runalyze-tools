@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from functools import lru_cache
 
 import gradio as gr
-import numpy as np
 import pandas as pd
 from tzlocal import get_localzone
 
@@ -58,7 +57,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
         df["zh"] = df["zh"].map({True: "🔥", False: ""})
     return filter_compression_socks(best_outfits, include_compression_socks), \
            filter_compression_socks(best_outfits_alternative, include_compression_socks), \
-           format_pace(pace_min_km), format_pace(x_pace_min_km), np.average(ghi)
+           format_pace(pace_min_km), format_pace(x_pace_min_km), weather.ghi_mean(ghi.iloc[0])
 
 
 with gr.Blocks(fill_width=True) as demo:
