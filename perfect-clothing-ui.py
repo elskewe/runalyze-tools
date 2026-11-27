@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 from functools import lru_cache
+from pathlib import Path
 
 import gradio as gr
-import numpy as np
 import pandas as pd
 from tzlocal import get_localzone
 
@@ -58,7 +58,7 @@ def predict_outfit(temperature: float, wind_speed_: float, cloud_cover_perc: flo
         df["zh"] = df["zh"].map({True: "🔥", False: ""})
     return filter_compression_socks(best_outfits, include_compression_socks), \
            filter_compression_socks(best_outfits_alternative, include_compression_socks), \
-           format_pace(pace_min_km), format_pace(x_pace_min_km), np.average(ghi)
+           format_pace(pace_min_km), format_pace(x_pace_min_km), weather.ghi_mean(ghi.iloc[0])
 
 
 with gr.Blocks(fill_width=True) as demo:
@@ -84,8 +84,11 @@ with gr.Blocks(fill_width=True) as demo:
                     compression_socks = gr.Checkbox(label="Compression socks")
                 ghi = gr.Number(label="GHI (W/m^2)", min_width=100)
             with gr.Row():
-                latitude = gr.Number(label="Latitude", value=47.7664456)
-                longitude = gr.Number(label="Longitude", value=9.1605106)
+                latitude = gr.Number(label="Latitude", value=47.7664456, min_width=100)
+                longitude = gr.Number(label="Longitude", value=9.1605106, min_width=100)
+                current_location = gr.Button("", icon=Path(__file__).parent / "perfect_clothing" / "my-location.svg",
+                                             size="lg", scale=0, min_width=56)
+            location_status = gr.Markdown(visible=False)
         with gr.Column(scale=7):
             output_df = gr.DataFrame(show_row_numbers=True)
             output_df_alternative = gr.DataFrame(show_row_numbers=True)
@@ -96,5 +99,30 @@ with gr.Blocks(fill_width=True) as demo:
                    "outputs": [output_df, output_df_alternative, pace_display, x_pace_display, ghi]}
     for i in inputs:
         i.change(**change_args)
+
+    current_location.click(
+        fn=None,
+        inputs=[latitude, longitude],
+        outputs=[latitude, longitude, location_status],
+        js="""async (latitude, longitude) => {
+            if (!navigator.geolocation) {
+                return [latitude, longitude, {__type__: "update", visible: true,
+                    value: "Location is unavailable. Use HTTPS or localhost and enter coordinates manually."}];
+            }
+            try {
+                const position = await new Promise((resolve, reject) =>
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {timeout: 15000})
+                );
+                return [position.coords.latitude, position.coords.longitude, {__type__: "update", visible: false}];
+            } catch (error) {
+                const message = error.code === 1 ? "Location permission denied." :
+                                error.code === 2 ? "Location unavailable." :
+                                error.code === 3 ? "Location request timed out." :
+                                "Could not retrieve location.";
+                return [latitude, longitude, {__type__: "update", visible: true,
+                    value: message + " You can enter coordinates manually."}];
+            }
+        }""",
+    )
 
 demo.launch()
